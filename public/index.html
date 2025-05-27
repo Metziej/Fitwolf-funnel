@@ -11,6 +11,15 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+           @keyframes fadeInBackground {
+              0% {
+                opacity: 0;
+                      }
+              100% {
+                opacity: 1;
+          }
+        }
+
         }
         
         body {
@@ -19,6 +28,7 @@
             overflow-x: hidden;
             line-height: 1.6;
 
+            <div id="bg-image"></div>
             background-image: url("/fenrir_ref_pose01 uitgeknipt.png");
             background-size: contain;
             background-position: center;
@@ -172,9 +182,9 @@
     <!-- SCÈNE 1: Intro -->
     <div class="scene" id="scene1">
         <div class="fenrir"></div>
-        <h1>Elke man heeft een beest in zich...</h1>
+        <h1>Iedereen heeft een beest in zich...</h1>
         <p>De vraag is: laat jij hem los?</p>
-        <button class="cta-button" onclick="nextScene()">Ja, stuur me de gratis gids</button>
+        <button class="cta-button" onclick="nextScene()">Ja, </button>
     </div>
     
     <!-- SCÈNE 2: Lead Capture Form -->
