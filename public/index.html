@@ -257,10 +257,12 @@ wrapper.addEventListener('touchend', e => {
 // Fade background when switching to scene 2
 const observer = new MutationObserver(() => {
   const scene2 = document.getElementById('scene2');
-  if (scene2.style.display !== 'none') {
+  if (scene2 && window.getComputedStyle(scene2).display !== 'none') {
     const bg = document.getElementById('bg-image');
-    if (bg) bg.style.transition = 'opacity 2s ease';
-    if (bg) bg.style.opacity = '0';
+    if (bg) {
+      bg.style.transition = 'opacity 2s ease';
+      bg.style.opacity = '0';
+    }
     document.body.style.overflow = 'hidden';
   }
 });
