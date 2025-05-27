@@ -73,7 +73,7 @@
 
         .scene {
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -120,7 +120,7 @@
             transition: all 0.3s;
             opacity: 0;
             animation: fadeIn 2s forwards 1.5s;
-            margin-top: 10px;
+            margin-top: -20px;
         }
 
         .cta-button:hover {
@@ -137,11 +137,12 @@
         }
 
         #scene2 .swiper-slide img {
-    margin-top: 0;
-    animation: slideInFromRight 1s ease-out;
-}
+            margin-top: 0;
+            animation: slideInFromRight 1s ease-out;
+        }
+
         #scene2 .cta-button {
-            margin-top: -10px;
+            margin-top: -20px;
         }
 
         @media (min-width: 768px) {
@@ -165,16 +166,16 @@
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
-        <p style="animation: fadeIn 3s forwards;">Wie wil je zijn?</p>
-        <div class="swiper-container" style="margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
+        <p style="animation: fadeIn 3s forwards; font-size: 2rem;">Wie wil je zijn?</p>
+        <div class="swiper-container" style="margin-top: 10px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
             <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
                 <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1;">
                     <img src="/Fenrir-aankomen2.png" alt="Monster" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
-                    <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+                    <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 5px;">EEN MONSTER</p>
                 </div>
                 <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;">
                     <img src="/Fenrir-afvallen2.png" alt="Half-God" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
-                    <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
+                    <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 5px; font-style: italic;">EEN HALF-GOD</p>
                 </div>
             </div>
             <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">◀</button>
@@ -220,7 +221,7 @@
         if (bg) {
             bg.classList.add('fade-out');
         }
-        const currentScene = document.querySelector('.scene:not([style*="none"]');
+        const currentScene = document.querySelector('.scene:not([style*="none"])');
         const nextScene = currentScene.nextElementSibling;
 
         if (nextScene) {
