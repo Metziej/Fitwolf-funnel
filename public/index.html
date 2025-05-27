@@ -213,11 +213,14 @@
                     <label for="height">Lengte (cm):</label>
                     <input type="number" id="height" required>
                 </div>
-                
-                <div class="form-group">
-                    <label for="weight">Gewicht (kg):</label>
-                    <input type="number" id="weight" required>
-                </div>
+
+<div class="form-group">
+  <label for="weight">Gewicht:</label>
+  <div style="display: flex; align-items: center;">
+    <input type="number" id="weight" name="activity" required
+           style="width: 60px; padding: 10px; border-radius: 5px; appearance: textfield; -moz-appearance: textfield; -webkit-appearance: none; background-color: rgba(0,0,0,0.5); border: 1px solid #333; color: white; margin-right: 10px;" />
+    <span style="color: #ff0000; font-weight: bold;">keer</span>
+  </div>
                 
 <div class="form-group">
   <label for="activity">Hoe vaak sport je per week?</label>
@@ -227,6 +230,7 @@
     <span style="color: #ff0000; font-weight: bold;">keer</span>
   </div>
 </div>
+                
                 
                 <button type="submit" class="cta-button">Ontvang Mijn Gids</button>
             </form>
