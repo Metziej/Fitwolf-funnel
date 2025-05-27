@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitWolf | Ontketen het Beest in Jou</title>
+    <style>
+        /* Reset & Base Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Anime Mist Effect */
+        #mist {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%);
+            z-index: -1;
+            opacity: 0.7;
+            animation: mistMove 20s infinite linear;
+        }
+        
+        @keyframes mistMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        /* Scene Container */
+        .scene {
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Fenrir Silhouette */
+        .fenrir {
+            width: 200px;
+            height: 300px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150"><path d="M50,10 L60,50 L80,60 L70,80 L75,120 L50,140 L25,120 L30,80 L20,60 L40,50 Z" fill="none" stroke="%23ff0000" stroke-width="2"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 10px rgba(255,0,0,0.7));
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            opacity: 0;
+            animation: fadeIn 2s forwards 0.5s;
+        }
+        
+        p {
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 2s forwards 1s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            background: linear-gradient(45deg, #ff0000, #800000);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeIn 2s forwards 1.5s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255,0,0,0.6);
+        }
+        
+        /* Form Styling */
+        .form-container {
+            background-color: rgba(30, 30, 40, 0.8);
+            border: 1px solid #ff0000;
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 0.5s;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #800000);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .fenrir {
+                width: 300px;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="mist"></div>
+    
+    <!-- SCÈNE 1: Intro -->
+    <div class="scene" id="scene1">
+        <div class="fenrir"></div>
+        <h1>Elke man heeft een beest in zich...</h1>
+        <p>De vraag is: laat jij hem los?</p>
+        <button class="cta-button" onclick="nextScene()">Ja, stuur me de gratis gids</button>
+    </div>
+    
+    <!-- SCÈNE 2: Lead Capture Form -->
+    <div class="scene" id="scene2" style="display: none;">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <h1>Jouw Transformatie Begint Hier</h1>
+        <p>Vul deze details in om je gepersonaliseerde Wolf's Gids te ontvangen:</p>
+        
+        <div class="form-container">
+            <form id="leadForm">
+                <div class="form-group">
+                    <label for="name">Voornaam:</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mailadres:</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="height">Lengte (cm):</label>
+                    <input type="number" id="height" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Gewicht (kg):</label>
+                    <input type="number" id="weight" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="activity">Beweeg je veel?</label>
+                    <select id="activity" required>
+                        <option value="no">Nee</option>
+                        <option value="some">Af en toe</option>
+                        <option value="yes">Ja, regelmatig</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="cta-button">Ontvang Mijn Gids</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- SCÈNE 3: Bedankt + Aanbod -->
+    <div class="scene" id="scene3" style="display: none;">
+        <h1>Goede keuze, krijger.</h1>
+        <p>Je hebt nu het eerste wapen... maar om echt te transformeren, heb je meer nodig.</p>
+        
+        <div class="form-container">
+            <h2 style="color: #ff0000; margin-bottom: 20px;">FitWolf Starterpack</h2>
+            <ul style="text-align: left; margin-bottom: 20px;">
+                <li>⚔️ Zwarte stalen bidon</li>
+                <li>🩹 Premium gripwraps</li>
+                <li>📜 Motivatiekaarten set</li>
+                <li>💊 Anime pre-workout samples</li>
+                <li>🐺 Digitale Wolf Mindset gids</li>
+            </ul>
+            
+            <p><strong>Laatste 12 beschikbaar!</strong></p>
+            <button class="cta-button">Ja, ik wil het starterpack</button>
+        </div>
+    </div>
+
+    <script>
+        // Scene Navigation
+        function nextScene() {
+            const currentScene = document.querySelector('.scene:not([style*="none"])');
+            const nextScene = currentScene.nextElementSibling;
+            
+            if (nextScene) {
+                currentScene.style.display = 'none';
+                nextScene.style.display = 'flex';
+                document.getElementById('progress').style.width = '50%';
+            }
+        }
+        
+        // Form Submission
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            setTimeout(() => {
+                document.getElementById('scene2').style.display = 'none';
+                document.getElementById('scene3').style.display = 'flex';
+                document.getElementById('progress').style.width = '100%';
+                
+                // Here you would typically send the data to your backend/Mailchimp
+                console.log('Form submitted:', {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    // ... other fields
+                });
+            }, 1000);
+        });
+        
+        // Initialize first scene animations
+        window.onload = function() {
+            document.getElementById('progress').style.width = '0%';
+        };
+    </script>
+</body>
+</html>
