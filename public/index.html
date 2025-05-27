@@ -24,6 +24,11 @@
             100% { opacity: 1; }
         }
 
+        @keyframes fadeOutBackground {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         #bg-image {
             position: fixed;
             top: 0;
@@ -38,6 +43,10 @@
             z-index: -2;
             opacity: 0;
             animation: fadeInBackground 2s ease-in-out forwards;
+        }
+
+        #bg-image.fade-out {
+            animation: fadeOutBackground 2s ease-in-out forwards;
         }
 
         #mist {
@@ -192,8 +201,7 @@
     function nextScene() {
         const bg = document.getElementById('bg-image');
         if (bg) {
-            bg.style.transition = 'opacity 2s ease';
-            bg.style.opacity = '0';
+            bg.classList.add('fade-out');
         }
         const currentScene = document.querySelector('.scene:not([style*="none"])');
         const nextScene = currentScene.nextElementSibling;
