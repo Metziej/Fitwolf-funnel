@@ -29,6 +29,11 @@
             100% { opacity: 0; }
         }
 
+        @keyframes slideInFromRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
         #bg-image {
             position: fixed;
             top: 0;
@@ -46,7 +51,7 @@
         }
 
         #bg-image.fade-out {
-            animation: fadeOutBackground 1s ease-in-out forwards;
+            animation: fadeOutBackground 2s ease-in-out forwards;
         }
 
         #mist {
@@ -115,6 +120,7 @@
             transition: all 0.3s;
             opacity: 0;
             animation: fadeIn 2s forwards 1.5s;
+            margin-top: 10px;
         }
 
         .cta-button:hover {
@@ -124,6 +130,19 @@
 
         .swiper-slide {
             transition: opacity 0.3s;
+        }
+
+        #scene2 p {
+            font-size: 1.8rem;
+        }
+
+        #scene2 .swiper-slide img {
+            margin-top: -60px;
+            animation: slideInFromRight 1s ease-out;
+        }
+
+        #scene2 .cta-button {
+            margin-top: -10px;
         }
 
         @media (min-width: 768px) {
@@ -163,7 +182,7 @@
             <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">◀</button>
             <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">▶</button>
         </div>
-        <button class="cta-button" onclick="confirmPath()" style="margin-top: 30px;">Kies dit pad</button>
+        <button class="cta-button" onclick="confirmPath()">Kies dit pad</button>
     </div>
 
     <script>
@@ -203,7 +222,7 @@
         if (bg) {
             bg.classList.add('fade-out');
         }
-        const currentScene = document.querySelector('.scene:not([style*="none"])');
+        const currentScene = document.querySelector('.scene:not([style*="none"]');
         const nextScene = currentScene.nextElementSibling;
 
         if (nextScene) {
