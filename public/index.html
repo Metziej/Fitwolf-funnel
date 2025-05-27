@@ -195,7 +195,7 @@
     </div>
     
     <!-- SCÈNE 2: Lead Capture Form -->
-<div class="scene" id="scene2" style="display: none;">
+<div class="scene" id="scene2" style="display: none; overflow: hidden; touch-action: pan-y;">
   <div class="progress-bar">
     <div class="progress" id="progress"></div>
   </div>
@@ -203,19 +203,19 @@
   <h1 style="animation: fadeIn 2s forwards;">JOUW TRANSFORMATIE BEGINT HIER</h1>
   <p style="animation: fadeIn 3s forwards;">Wat wil je worden?</p>
 
-  <div class="swiper-container" style="margin-top: 30px; width: 90vw; max-width: 600px; overflow: hidden; position: relative;">
+  <div class="swiper-container" style="margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
     <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
-      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 70vw; max-width: 300px;" />
-        <p style="font-family: 'Impact', sans-serif; font-size: 2rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1;">
+        <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
+        <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
       </div>
-      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 70vw; max-width: 300px;" />
-        <p style="font-family: 'Georgia', serif; font-size: 2rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
+      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;">
+        <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
+        <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
       </div>
     </div>
-    <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer;">◀</button>
-    <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer;">▶</button>
+    <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">◀</button>
+    <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">▶</button>
   </div>
   <button class="cta-button" onclick="confirmPath()" style="margin-top: 30px;">Kies dit pad</button>
 </div>
@@ -223,19 +223,36 @@
 <script>
 let currentIndex = 0;
 const wrapper = document.querySelector('.swiper-wrapper');
+const slides = document.querySelectorAll('.swiper-slide');
+function updateSlideStyles() {
+  slides.forEach((slide, idx) => {
+    slide.style.opacity = idx === currentIndex ? '1' : '0.5';
+  });
+  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+}
 document.getElementById('swipe-left').onclick = () => {
   if (currentIndex > 0) currentIndex--;
-  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+  updateSlideStyles();
 };
 document.getElementById('swipe-right').onclick = () => {
-  if (currentIndex < 1) currentIndex++;
-  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+  if (currentIndex < slides.length - 1) currentIndex++;
+  updateSlideStyles();
 };
 function confirmPath() {
   const currentSlide = currentIndex === 0 ? 'MONSTER' : 'HALF-GOD';
   console.log('Gekozen pad:', currentSlide);
   nextScene();
 }
+
+// Touch swipe support
+let startX = 0;
+wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+wrapper.addEventListener('touchend', e => {
+  const endX = e.changedTouches[0].clientX;
+  if (startX - endX > 50 && currentIndex < slides.length - 1) currentIndex++;
+  else if (endX - startX > 50 && currentIndex > 0) currentIndex--;
+  updateSlideStyles();
+});
 
 // Fade background when switching to scene 2
 const observer = new MutationObserver(() => {
@@ -244,6 +261,7 @@ const observer = new MutationObserver(() => {
     const bg = document.getElementById('bg-image');
     if (bg) bg.style.transition = 'opacity 2s ease';
     if (bg) bg.style.opacity = '0';
+    document.body.style.overflow = 'hidden';
   }
 });
 observer.observe(document.body, { attributes: true, childList: true, subtree: true });
@@ -255,6 +273,7 @@ observer.observe(document.body, { attributes: true, childList: true, subtree: tr
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
 
     
     <!-- SCÈNE 3: Bedankt + Aanbod -->
