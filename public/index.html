@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitWolf | Ontketen het Beest in Jou</title>
     <style>
-        /* Reset & Base Styling */
         * {
             margin: 0;
             padding: 0;
@@ -41,7 +40,6 @@
             animation: fadeInBackground 2s ease-in-out forwards;
         }
 
-        /* Anime Mist Effect */
         #mist {
             position: fixed;
             top: 0;
@@ -59,7 +57,6 @@
             100% { background-position: 1000px 0; }
         }
 
-        /* Scene Container */
         .scene {
             min-height: 100vh;
             padding: 20px;
@@ -72,7 +69,6 @@
             overflow: hidden;
         }
 
-        /* Typography */
         h1 {
             font-size: 1.8rem;
             margin-bottom: 20px;
@@ -95,7 +91,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CTA Button */
         .cta-button {
             background: linear-gradient(45deg, #ff0000, #800000);
             color: white;
@@ -118,67 +113,13 @@
             box-shadow: 0 8px 20px rgba(255,0,0,0.6);
         }
 
-        /* Form Styling */
-        .form-container {
-            background-color: rgba(30, 30, 40, 0.8);
-            border: 1px solid #ff0000;
-            border-radius: 10px;
-            padding: 20px;
-            width: 90%;
-            max-width: 500px;
-            margin-top: 20px;
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.5s;
+        .swiper-slide {
+            transition: opacity 0.3s;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #ff0000;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            background-color: rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            color: white;
-            border-radius: 5px;
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #333;
-            border-radius: 5px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #ff0000, #800000);
-            width: 0%;
-            transition: width 0.5s;
-        }
-
-        /* Responsive Adjustments */
         @media (min-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .fenrir {
-                width: 300px;
-                height: 400px;
-            }
+            h1 { font-size: 2.5rem; }
+            .fenrir { width: 300px; height: 400px; }
         }
     </style>
 </head>
@@ -186,152 +127,83 @@
     <div id="bg-image"></div>
     <div id="mist"></div>
 
-    <!-- SCÈNE 1: Intro -->
     <div class="scene" id="scene1">
         <div class="fenrir"></div>
         <h1>Iedereen heeft een beest in zich...</h1>
         <p>De vraag is: laat jij hem los?</p>
         <button class="cta-button" onclick="nextScene()">Ja, IK NEEM ACTIE!</button>
     </div>
-    
-    <!-- SCÈNE 2: Lead Capture Form -->
-<div class="scene" id="scene2" style="display: none; overflow: hidden; touch-action: pan-y; position: relative;">
-  <div class="progress-bar">
-    <div class="progress" id="progress"></div>
-  </div>
 
-  <h1 style="animation: fadeIn 2s forwards;">JOUW TRANSFORMATIE BEGINT HIER</h1>
-  <p style="animation: fadeIn 3s forwards;">Wat wil je worden?</p>
-
-  <div class="swiper-container" style="margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
-    <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
-      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1;">
-        <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
-        <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
-      </div>
-      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;">
-        <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
-        <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
-      </div>
-    </div>
-    <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">◀</button>
-    <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">▶</button>
-  </div>
-  <button class="cta-button" onclick="confirmPath()" style="margin-top: 30px;">Kies dit pad</button>
-</div>
-
-<script>
-let currentIndex = 0;
-const wrapper = document.querySelector('.swiper-wrapper');
-const slides = document.querySelectorAll('.swiper-slide');
-function updateSlideStyles() {
-  slides.forEach((slide, idx) => {
-    slide.style.opacity = idx === currentIndex ? '1' : '0.5';
-  });
-  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-}
-document.getElementById('swipe-left').onclick = () => {
-  if (currentIndex > 0) currentIndex--;
-  updateSlideStyles();
-};
-document.getElementById('swipe-right').onclick = () => {
-  if (currentIndex < slides.length - 1) currentIndex++;
-  updateSlideStyles();
-};
-function confirmPath() {
-  const currentSlide = currentIndex === 0 ? 'MONSTER' : 'HALF-GOD';
-  console.log('Gekozen pad:', currentSlide);
-  nextScene();
-}
-
-// Touch swipe support
-let startX = 0;
-wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-wrapper.addEventListener('touchend', e => {
-  const endX = e.changedTouches[0].clientX;
-  if (startX - endX > 50 && currentIndex < slides.length - 1) currentIndex++;
-  else if (endX - startX > 50 && currentIndex > 0) currentIndex--;
-  updateSlideStyles();
-});
-
-// Fade background when switching to scene 2
-const observer = new MutationObserver(() => {
-  const scene2 = document.getElementById('scene2');
-  if (scene2 && window.getComputedStyle(scene2).display !== 'none') {
-    const bg = document.getElementById('bg-image');
-    if (bg) {
-      bg.style.transition = 'opacity 2s ease';
-      bg.style.opacity = '0';
-    }
-    document.body.style.overflow = 'hidden';
-  }
-});
-observer.observe(document.body, { attributes: true, childList: true, subtree: true });
-</script>
-
-<style>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
-
-    <!-- SCÈNE 3: Bedankt + Aanbod -->
-    <div class="scene" id="scene3" style="display: none;">
-        <h1>Goede keuze, krijger.</h1>
-        <p>Je hebt nu het eerste wapen... maar om echt te transformeren, heb je meer nodig.</p>
-        
-        <div class="form-container">
-            <h2 style="color: #ff0000; margin-bottom: 20px;">FitWolf Starterpack</h2>
-            <ul style="text-align: left; margin-bottom: 20px;">
-                <li>⚔️ Zwarte stalen bidon</li>
-                <li>🩹 Premium gripwraps</li>
-                <li>📜 Motivatiekaarten set</li>
-                <li>💊 Anime pre-workout samples</li>
-                <li>🐺 Digitale Wolf Mindset gids</li>
-            </ul>
-            
-            <p><strong>Laatste 12 beschikbaar!</strong></p>
-            <button class="cta-button">Ja, ik wil het starterpack</button>
+    <div class="scene" id="scene2" style="display: none; overflow: hidden; touch-action: pan-y; position: relative;">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
         </div>
+        <h1 style="animation: fadeIn 2s forwards;">JOUW TRANSFORMATIE BEGINT HIER</h1>
+        <p style="animation: fadeIn 3s forwards;">Wat wil je worden?</p>
+        <div class="swiper-container" style="margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
+            <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
+                <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1;">
+                    <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
+                    <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+                </div>
+                <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;">
+                    <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
+                    <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
+                </div>
+            </div>
+            <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">◀</button>
+            <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer; z-index: 10;">▶</button>
+        </div>
+        <button class="cta-button" onclick="confirmPath()" style="margin-top: 30px;">Kies dit pad</button>
     </div>
 
     <script>
-        // Scene Navigation
-        function nextScene() {
-            const currentScene = document.querySelector('.scene:not([style*="none"])');
-            const nextScene = currentScene.nextElementSibling;
-            
-            if (nextScene) {
-                currentScene.style.display = 'none';
-                nextScene.style.display = 'flex';
-                document.getElementById('progress').style.width = '50%';
-            }
-        }
-        
-        // Form Submission
-        document.getElementById('leadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Simulate form submission
-            setTimeout(() => {
-                document.getElementById('scene2').style.display = 'none';
-                document.getElementById('scene3').style.display = 'flex';
-                document.getElementById('progress').style.width = '100%';
-                
-                // Here you would typically send the data to your backend/Mailchimp
-                console.log('Form submitted:', {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    // ... other fields
-                });
-            }, 1000);
+    let currentIndex = 0;
+    const wrapper = document.querySelector('.swiper-wrapper');
+    const slides = document.querySelectorAll('.swiper-slide');
+    function updateSlideStyles() {
+        slides.forEach((slide, idx) => {
+            slide.style.opacity = idx === currentIndex ? '1' : '0.5';
         });
-        
-        // Initialize first scene animations
-        window.onload = function() {
-            document.getElementById('progress').style.width = '0%';
-        };
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    document.getElementById('swipe-left').onclick = () => {
+        if (currentIndex > 0) currentIndex--;
+        updateSlideStyles();
+    };
+    document.getElementById('swipe-right').onclick = () => {
+        if (currentIndex < slides.length - 1) currentIndex++;
+        updateSlideStyles();
+    };
+    function confirmPath() {
+        const currentSlide = currentIndex === 0 ? 'MONSTER' : 'HALF-GOD';
+        console.log('Gekozen pad:', currentSlide);
+        nextScene();
+    }
+    let startX = 0;
+    wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    wrapper.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50 && currentIndex < slides.length - 1) currentIndex++;
+        else if (endX - startX > 50 && currentIndex > 0) currentIndex--;
+        updateSlideStyles();
+    });
+
+    function nextScene() {
+        const bg = document.getElementById('bg-image');
+        if (bg) {
+            bg.style.transition = 'opacity 2s ease';
+            bg.style.opacity = '0';
+        }
+        const currentScene = document.querySelector('.scene:not([style*="none"])');
+        const nextScene = currentScene.nextElementSibling;
+
+        if (nextScene) {
+            currentScene.style.display = 'none';
+            nextScene.style.display = 'flex';
+            document.getElementById('progress').style.width = '50%';
+        }
+    }
     </script>
 </body>
 </html>
