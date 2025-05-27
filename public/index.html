@@ -29,11 +29,6 @@
             100% { opacity: 0; }
         }
 
-        @keyframes slideInFromRight {
-            0% { transform: translateX(100%) translateY(-20px); opacity: 0; }
-            100% { transform: translateX(0) translateY(-20px); opacity: 1; }
-        }
-
         #bg-image {
             position: fixed;
             top: 0;
@@ -51,7 +46,7 @@
         }
 
         #bg-image.fade-out {
-            animation: fadeOutBackground 2s ease-in-out forwards;
+            animation: fadeOutBackground 1s ease-in-out forwards;
         }
 
         #mist {
@@ -131,10 +126,6 @@
             transition: opacity 0.3s;
         }
 
-        .swiper-slide.animate-in {
-            animation: slideInFromRight 1s ease-out forwards;
-        }
-
         @media (min-width: 768px) {
             h1 { font-size: 2.5rem; }
             .fenrir { width: 300px; height: 400px; }
@@ -158,13 +149,13 @@
         </div>
         <h1 style="animation: fadeIn 2s forwards;">JOUW TRANSFORMATIE BEGINT HIER</h1>
         <p style="animation: fadeIn 3s forwards;">Wat wil je worden?</p>
-        <div class="swiper-container" style="margin-top: 10px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
+        <div class="swiper-container" style="margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative;">
             <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
-                <div class="swiper-slide animate-in" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 1; margin-top: -40px;">
+                <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 1;">
                     <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
                     <p style="font-family: 'Impact', sans-serif; font-size: 2.5rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
                 </div>
-                <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; margin-top: -40px;">
+                <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;">
                     <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 90vw; max-width: 400px; transition: transform 0.3s;" />
                     <p style="font-family: 'Georgia', serif; font-size: 2.5rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
                 </div>
