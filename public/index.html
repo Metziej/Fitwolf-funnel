@@ -200,32 +200,62 @@
     <div class="progress" id="progress"></div>
   </div>
 
-  <h1>JOUW TRANSFORMATIE BEGINT HIER</h1>
-  <p>Wat wil je worden?</p>
+  <h1 style="animation: fadeIn 2s forwards;">JOUW TRANSFORMATIE BEGINT HIER</h1>
+  <p style="animation: fadeIn 3s forwards;">Wat wil je worden?</p>
 
-  <div class="form-container" style="display: flex; justify-content: center; align-items: center; gap: 50px;">
-    <div class="option" style="animation: slideInRight 2s forwards; text-align: center;">
-      <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 120px;" />
-      <p style="font-family: 'Impact', sans-serif; font-size: 1.2rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+  <div class="swiper-container" style="margin-top: 30px; width: 90vw; max-width: 600px; overflow: hidden; position: relative;">
+    <div class="swiper-wrapper" style="display: flex; transition: transform 0.5s ease;">
+      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 70vw; max-width: 300px;" />
+        <p style="font-family: 'Impact', sans-serif; font-size: 2rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+      </div>
+      <div class="swiper-slide" style="min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 70vw; max-width: 300px;" />
+        <p style="font-family: 'Georgia', serif; font-size: 2rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
+      </div>
     </div>
-    <div class="option" style="animation: slideInLeft 2s forwards; text-align: center;">
-      <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 120px;" />
-      <p style="font-family: 'Georgia', serif; font-size: 1.2rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
-    </div>
+    <button class="swipe-button" id="swipe-left" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer;">◀</button>
+    <button class="swipe-button" id="swipe-right" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer;">▶</button>
   </div>
+  <button class="cta-button" onclick="confirmPath()" style="margin-top: 30px;">Kies dit pad</button>
 </div>
 
-<style>
-@keyframes slideInRight {
-  0% { transform: translateX(100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+<script>
+let currentIndex = 0;
+const wrapper = document.querySelector('.swiper-wrapper');
+document.getElementById('swipe-left').onclick = () => {
+  if (currentIndex > 0) currentIndex--;
+  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+};
+document.getElementById('swipe-right').onclick = () => {
+  if (currentIndex < 1) currentIndex++;
+  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+};
+function confirmPath() {
+  const currentSlide = currentIndex === 0 ? 'MONSTER' : 'HALF-GOD';
+  console.log('Gekozen pad:', currentSlide);
+  nextScene();
 }
 
-@keyframes slideInLeft {
-  0% { transform: translateX(-100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+// Fade background when switching to scene 2
+const observer = new MutationObserver(() => {
+  const scene2 = document.getElementById('scene2');
+  if (scene2.style.display !== 'none') {
+    const bg = document.getElementById('bg-image');
+    if (bg) bg.style.transition = 'opacity 2s ease';
+    if (bg) bg.style.opacity = '0';
+  }
+});
+observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+</script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
     
     <!-- SCÈNE 3: Bedankt + Aanbod -->
     <div class="scene" id="scene3" style="display: none;">
