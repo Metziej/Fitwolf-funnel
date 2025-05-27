@@ -195,58 +195,37 @@
     </div>
     
     <!-- SCÈNE 2: Lead Capture Form -->
-    <div class="scene" id="scene2" style="display: none;">
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-        
-        <h1>Jouw Transformatie Begint Hier</h1>
-        <p>Vul deze details in om je gepersonaliseerde Wolf's Gids te ontvangen:</p>
-        
-        <div class="form-container">
-            <form id="leadForm">
-                <div class="form-group">
-                    <label for="name">Voornaam:</label>
-                    <input type="text" id="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">E-mailadres:</label>
-                    <input type="email" id="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="name">Wat doe je voor werk?:</label>
-                    <input type="text" id="work" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="height">Lengte (cm):</label>
-                    <input type="number" id="height" required>
-                </div>
-
-<div class="form-group">
-  <label for="weight">Gewicht:</label>
-  <div style="display: flex; align-items: center;">
-    <input type="number" id="weight" name="activity" required
-           style="width: 60px; padding: 10px; border-radius: 5px; appearance: textfield; -moz-appearance: textfield; -webkit-appearance: none; background-color: rgba(0,0,0,0.5); border: 1px solid #333; color: white; margin-right: 10px;" />
-    <span style="color: #ff0000; font-weight: bold;">keer</span>
+<div class="scene" id="scene2" style="display: none;">
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
   </div>
-                
-<div class="form-group">
-  <label for="activity">Hoe vaak sport je per week?</label>
-  <div style="display: flex; align-items: center;">
-    <input type="number" id="activity" name="activity" min="0" max="7" required
-           style="width: 60px; padding: 10px; border-radius: 5px; appearance: textfield; -moz-appearance: textfield; -webkit-appearance: none; background-color: rgba(0,0,0,0.5); border: 1px solid #333; color: white; margin-right: 10px;" />
-    <span style="color: #ff0000; font-weight: bold;">keer</span>
+
+  <h1>JOUW TRANSFORMATIE BEGINT HIER</h1>
+  <p>Wat wil je worden?</p>
+
+  <div class="form-container" style="display: flex; justify-content: center; align-items: center; gap: 50px;">
+    <div class="option" style="animation: slideInRight 2s forwards; text-align: center;">
+      <img src="/Fenrir-aankomen.png" alt="Monster" style="width: 120px;" />
+      <p style="font-family: 'Impact', sans-serif; font-size: 1.2rem; color: #ff0000; margin-top: 10px;">EEN MONSTER</p>
+    </div>
+    <div class="option" style="animation: slideInLeft 2s forwards; text-align: center;">
+      <img src="/Fenrir-afvallen.png" alt="Half-God" style="width: 120px;" />
+      <p style="font-family: 'Georgia', serif; font-size: 1.2rem; color: #fff; margin-top: 10px; font-style: italic;">EEN HALF-GOD</p>
+    </div>
   </div>
 </div>
-                
-                
-                <button type="submit" class="cta-button">Ontvang Mijn Gids</button>
-            </form>
-        </div>
-    </div>
+
+<style>
+@keyframes slideInRight {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  0% { transform: translateX(-100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+</style>
     
     <!-- SCÈNE 3: Bedankt + Aanbod -->
     <div class="scene" id="scene3" style="display: none;">
