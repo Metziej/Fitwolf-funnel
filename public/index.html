@@ -17,6 +17,10 @@
       overflow-x: hidden;
       line-height: 1.6;
     }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     @keyframes fadeInBackground {
       0% { opacity: 0; }
       100% { opacity: 1; }
@@ -71,6 +75,8 @@
     }
     h1, p {
       margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
     }
     .cta-button {
       background: linear-gradient(45deg, #ff0000, #800000);
@@ -85,6 +91,8 @@
       letter-spacing: 1px;
       box-shadow: 0 5px 15px rgba(255,0,0,0.4);
       margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards 1.5s;
     }
     input[type=range], input[type=text], input[type=email] {
       width: 80%;
@@ -162,10 +170,6 @@
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
     function nextScene() {
-      const bg = document.getElementById('bg-image');
-      if (bg && currentScene === 1) {
-        bg.classList.add('fade-out');
-      }
       document.getElementById(`scene${currentScene}`).classList.add('hidden');
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
