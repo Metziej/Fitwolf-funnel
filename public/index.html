@@ -17,6 +17,47 @@
       overflow-x: hidden;
       line-height: 1.6;
     }
+    @keyframes fadeInBackground {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes fadeOutBackground {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes mistMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 0; }
+    }
+    #bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("/fenrir_ref_pose01 uitgeknipt.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #000;
+      z-index: -2;
+      opacity: 0;
+      animation: fadeInBackground 2s ease-in-out forwards;
+    }
+    #bg-image.fade-out {
+      animation: fadeOutBackground 2s ease-in-out forwards;
+    }
+    #mist {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%);
+      z-index: -1;
+      opacity: 0.7;
+      animation: mistMove 20s infinite linear;
+    }
     .scene {
       min-height: 100vh;
       padding: 20px;
@@ -61,6 +102,9 @@
   </style>
 </head>
 <body>
+  <div id="bg-image"></div>
+  <div id="mist"></div>
+
   <div class="scene" id="scene1">
     <h1>Word geen schaap. Word een wolf.</h1>
     <p>Start jouw transformatie en kies je pad.</p>
@@ -118,6 +162,10 @@
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
     function nextScene() {
+      const bg = document.getElementById('bg-image');
+      if (bg && currentScene === 1) {
+        bg.classList.add('fade-out');
+      }
       document.getElementById(`scene${currentScene}`).classList.add('hidden');
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
