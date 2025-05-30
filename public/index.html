@@ -11,17 +11,19 @@
     @keyframes fadeInBackground { 0% { opacity: 0; } 100% { opacity: 1; } }
     @keyframes fadeOutBackground { 0% { opacity: 1; } 100% { opacity: 0; } }
     @keyframes slideInFromRight { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOutToRight { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
     @keyframes slideInFromLeft { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOutToLeft { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(-100%); opacity: 0; } }
     @keyframes mistMove { 0% { background-position: 0 0; } 100% { background-position: 1000px 0; } }
     @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     @keyframes fadeInButton { from { opacity: 0; } to { opacity: 1; } }
 
-    #bg-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 0; animation: fadeInBackground 2s ease-in-out forwards; }
+    #bg-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center top; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 0; animation: fadeInBackground 2s ease-in-out forwards; }
     #bg-image.fade-out { animation: fadeOutBackground 2s ease-in-out forwards; }
     #mist { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%); z-index: -1; opacity: 0.7; animation: mistMove 20s infinite linear; }
     .scene { min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
     h1, p { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards; }
-    .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 20px 40px; font-size: 1.6rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); margin-top: 10px; opacity: 0; animation: fadeIn 1s forwards 1.5s; }
+    .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 20px 40px; font-size: 1.6rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); opacity: 0; animation: fadeIn 1s forwards 1.5s; margin-top: 10px; }
     .fade-out { animation: fadeOut 0.3s forwards; }
     .fade-in { animation: fadeInButton 0.3s forwards; }
     input[type=range], input[type=text], input[type=email] { width: 80%; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: none; }
@@ -29,9 +31,9 @@
     .hidden { display: none; }
     .swiper-container { margin-top: 10px; width: 100vw; max-width: 600px; overflow: hidden; position: relative; touch-action: pan-y; }
     .swiper-wrapper { display: flex; transition: transform 0.5s ease; }
-    .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; transition: opacity 0.3s; padding-top: 1vh; }
+    .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; transition: opacity 0.3s; padding-top: 4vh; }
     .swiper-slide.active { opacity: 1; }
-    .swiper-slide img { cursor: pointer; transform: translateY(-4vh); max-height: 55vh; object-fit: contain; width: 85vw; max-width: 340px; animation-duration: 0.6s; }
+    .swiper-slide img { cursor: pointer; max-height: 70vh; object-fit: contain; width: 90vw; max-width: 400px; transform: translateY(-8vh); animation: slideInFromRight 0.8s ease-out; }
   </style>
 </head>
 <body>
