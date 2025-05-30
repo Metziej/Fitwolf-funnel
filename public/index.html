@@ -23,6 +23,7 @@
     #mist { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%); z-index: -1; opacity: 0.7; animation: mistMove 20s infinite linear; }
     .scene { min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
     h1, p { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards; }
+    h2 { font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; color: #ff0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); opacity: 0; animation: fadeIn 2s forwards 0.5s; }
     .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 15px 40px; font-size: 1.6rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); opacity: 0; animation: fadeIn 1s forwards 1.5s; margin-top: 0px; }
     .fade-out { animation: fadeOut 0.3s forwards; }
     .fade-in { animation: fadeInButton 0.3s forwards; }
@@ -40,7 +41,7 @@
   <div id="bg-image"></div>
   <div id="mist"></div>
   <div class="scene" id="scene1">
-    <h1>Word geen schaap. Word een wolf.</h1>
+    <h2>Wees geen schaap. Word een wolf.</h1>
     <p>Start jouw transformatie en kies je pad.</p>
     <button class="cta-button" onclick="nextScene()">Start de Journey</button>
   </div>
