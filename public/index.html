@@ -36,7 +36,7 @@
     .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; transition: opacity 0.3s; padding-top: 4vh; position: relative; }
     .swiper-slide.active { opacity: 1; }
     .swiper-slide img { margin-top: 0px; cursor: pointer; max-height: 100vh; object-fit: contain; width: 80vw; max-width: 400px; animation: slideInFromRight 0.8s ease-out; }
-    .arrow-indicator { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2rem; color: red; animation: pulseArrow 1.5s infinite; z-index: 10; }
+    .arrow-indicator { position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: red; animation: pulseArrow 1.5s infinite; z-index: 10; }
     .arrow-right { right: 10px; }
     .arrow-left { left: 10px; }
   </style>
@@ -54,11 +54,11 @@
     <div class="swiper-container">
       <div class="swiper-wrapper" id="swiperWrapper">
         <div class="swiper-slide active">
-          <span class="arrow-indicator arrow-right">➡️</span>
+          <span class="arrow-indicator arrow-right">→</span>
           <img src="/Fenrir-aankomen2.png" alt="Beast Mode" onclick="choosePathFinal()">
         </div>
         <div class="swiper-slide">
-          <span class="arrow-indicator arrow-left">⬅️</span>
+          <span class="arrow-indicator arrow-left">←</span>
           <img src="/Fenrir-afvallen2.png" alt="Predator Mode" onclick="choosePathFinal()">
         </div>
       </div>
@@ -101,7 +101,7 @@
     <input type="email" id="email" placeholder="E-mail" />
     <button class="cta-button" onclick="submitData()">Stuur mij mijn battleplan!</button>
   </div>
-   <script>
+  <script>
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
     const chooseButton = document.getElementById('chooseButton');
