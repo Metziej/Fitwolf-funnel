@@ -21,7 +21,7 @@
     input[type=range], input[type=text], input[type=email] { width: 80%; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: none; }
     .option { margin: 10px 0; }
     .hidden { display: none; }
-    .swiper-container { margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative; }
+    .swiper-container { margin-top: 30px; width: 100vw; max-width: 600px; overflow: hidden; position: relative; touch-action: pan-y; }
     .swiper-wrapper { display: flex; transition: transform 0.5s ease; }
     .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5; transition: opacity 0.3s; }
     .swiper-slide.active { opacity: 1; }
@@ -36,11 +36,10 @@
     <p>Start jouw transformatie en kies je pad.</p>
     <button class="cta-button" onclick="nextScene()">Start de Journey</button>
   </div>
-
   <div class="scene hidden" id="scene2">
     <h1>Welk pad wil jij bewandelen?</h1>
     <div class="swiper-container">
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper" id="swiperWrapper">
         <div class="swiper-slide active">
           <img src="/Fenrir-aankomen2.png" alt="Beast Mode" style="width: 90vw; max-width: 400px;">
           <p>BEAST MODE - Spiermassa en kracht</p>
@@ -50,12 +49,9 @@
           <p>PREDATOR MODE - Vetverlies en definitie</p>
         </div>
       </div>
-      <button class="cta-button" onclick="swipeLeft()">◀</button>
-      <button class="cta-button" onclick="swipeRight()">▶</button>
     </div>
     <button class="cta-button" onclick="choosePathFinal()">Kies dit pad</button>
   </div>
-
   <div class="scene hidden" id="scene3">
     <h1>Vertel ons over jezelf</h1>
     <label>Leeftijd: <span id="ageVal">25</span></label>
@@ -66,14 +62,12 @@
     <input type="range" min="40" max="160" value="75" oninput="updateValue('weightVal', this.value)">
     <button class="cta-button" onclick="nextScene()">Volgende</button>
   </div>
-
   <div class="scene hidden" id="scene4">
     <h1>Wat voor werk doe je?</h1>
     <div class="option"><button class="cta-button" onclick="setLifestyle('Zittend')">💼 Zittend</button></div>
     <div class="option"><button class="cta-button" onclick="setLifestyle('Actief')">💪 Actief</button></div>
     <div class="option"><button class="cta-button" onclick="setLifestyle('Wisselend')">🧰 Wisselend</button></div>
   </div>
-
   <div class="scene hidden" id="scene5">
     <h1>Hoe vaak sport je per week?</h1>
     <div class="option"><button class="cta-button" onclick="setSport('Nooit')">❌ Nooit</button></div>
@@ -81,14 +75,12 @@
     <div class="option"><button class="cta-button" onclick="setSport('3–5x')">⚽ 3–5x</button></div>
     <div class="option"><button class="cta-button" onclick="setSport('Elke dag')">✨ Elke dag</button></div>
   </div>
-
   <div class="scene hidden" id="scene6">
     <h1>Hoe goed let je op je voeding?</h1>
     <div class="option"><button class="cta-button" onclick="setNutrition('Ik eet wat ik wil')">🍿 Ik eet wat ik wil</button></div>
     <div class="option"><button class="cta-button" onclick="setNutrition('Ik let een beetje op')">🤔 Ik let een beetje op</button></div>
     <div class="option"><button class="cta-button" onclick="setNutrition('Ik track alles')">✅ Ik track alles</button></div>
   </div>
-
   <div class="scene hidden" id="scene7">
     <h1>Fenrir's Analyse is binnen.</h1>
     <p id="result"></p>
@@ -96,7 +88,6 @@
     <input type="email" id="email" placeholder="E-mail" />
     <button class="cta-button" onclick="submitData()">Stuur mij mijn battleplan!</button>
   </div>
-
   <script>
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
@@ -107,15 +98,14 @@
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
     }
-    function choosePath(selectedPath) { path = selectedPath; nextScene(); }
     function choosePathFinal() {
       path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
       nextScene();
     }
+    function updateValue(id, val) { document.getElementById(id).textContent = val; }
     function setLifestyle(val) { lifestyle = val; nextScene(); }
     function setSport(val) { sport = val; nextScene(); }
     function setNutrition(val) { nutrition = val; nextScene(); }
-    function updateValue(id, val) { document.getElementById(id).textContent = val; }
     function submitData() {
       const age = document.getElementById('ageVal').textContent;
       const height = document.getElementById('heightVal').textContent;
@@ -124,16 +114,25 @@
       const email = document.getElementById('email').value;
       document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
     }
-
-    let currentIndex = 0;
-    const wrapper = document.querySelector('.swiper-wrapper');
-    const slides = document.querySelectorAll('.swiper-slide');
     function updateSlideStyles() {
       slides.forEach((slide, idx) => slide.classList.toggle('active', idx === currentIndex));
       wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
-    function swipeLeft() { if (currentIndex > 0) currentIndex--; updateSlideStyles(); }
-    function swipeRight() { if (currentIndex < slides.length - 1) currentIndex++; updateSlideStyles(); }
+    let currentIndex = 0;
+    const wrapper = document.getElementById('swiperWrapper');
+    const slides = wrapper.querySelectorAll('.swiper-slide');
+    wrapper.addEventListener('touchstart', handleTouchStart, false);
+    wrapper.addEventListener('touchend', handleTouchEnd, false);
+    let xDown = null;
+    function handleTouchStart(evt) { xDown = evt.touches[0].clientX; }
+    function handleTouchEnd(evt) {
+      if (!xDown) return;
+      const xUp = evt.changedTouches[0].clientX;
+      const xDiff = xDown - xUp;
+      if (Math.abs(xDiff) > 30) currentIndex = currentIndex === 0 ? 1 : 0;
+      updateSlideStyles();
+      xDown = null;
+    }
   </script>
 </body>
 </html>
