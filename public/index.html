@@ -11,13 +11,15 @@
     @keyframes fadeInBackground { 0% { opacity: 0; } 100% { opacity: 1; } }
     @keyframes fadeOutBackground { 0% { opacity: 1; } 100% { opacity: 0; } }
     @keyframes slideInFromRight { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOutToRight { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+    @keyframes slideInFromLeft { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
     @keyframes mistMove { 0% { background-position: 0 0; } 100% { background-position: 1000px 0; } }
     #bg-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 0; animation: fadeInBackground 2s ease-in-out forwards; }
     #bg-image.fade-out { animation: fadeOutBackground 2s ease-in-out forwards; }
     #mist { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%); z-index: -1; opacity: 0.7; animation: mistMove 20s infinite linear; }
     .scene { min-height: 100vh; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; }
     h1, p { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards; }
-    .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 15px 30px; font-size: 1.2rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); margin-top: 20px; opacity: 0; animation: fadeIn 1s forwards 1.5s; }
+    .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 15px 30px; font-size: 1.4rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); margin-top: 20px; opacity: 0; animation: fadeIn 1s forwards 1.5s; }
     input[type=range], input[type=text], input[type=email] { width: 80%; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: none; }
     .option { margin: 10px 0; }
     .hidden { display: none; }
@@ -37,7 +39,7 @@
     <button class="cta-button" onclick="nextScene()">Start de Journey</button>
   </div>
   <div class="scene hidden" id="scene2">
-    <h1>Welk pad wil jij bewandelen?</h1>
+    <h1>Welk pad kies jij?</h1>
     <div class="swiper-container">
       <div class="swiper-wrapper" id="swiperWrapper">
         <div class="swiper-slide active">
@@ -115,24 +117,28 @@
       document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
     }
     function updateSlideStyles() {
-      slides.forEach((slide, idx) => slide.classList.toggle('active', idx === currentIndex));
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('active');
+        slide.style.animation = idx === currentIndex
+          ? (xDiff > 0 ? 'slideInFromLeft 0.5s ease-out' : 'slideInFromRight 0.5s ease-out')
+          : (xDiff > 0 ? 'slideOutToRight 0.5s ease-out' : 'slideOutToRight 0.5s ease-out');
+      });
+      slides[currentIndex].classList.add('active');
       wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
     let currentIndex = 0;
+    let xDown = null, xDiff = 0;
     const wrapper = document.getElementById('swiperWrapper');
     const slides = wrapper.querySelectorAll('.swiper-slide');
-    wrapper.addEventListener('touchstart', handleTouchStart, false);
-    wrapper.addEventListener('touchend', handleTouchEnd, false);
-    let xDown = null;
-    function handleTouchStart(evt) { xDown = evt.touches[0].clientX; }
-    function handleTouchEnd(evt) {
+    wrapper.addEventListener('touchstart', evt => xDown = evt.touches[0].clientX, false);
+    wrapper.addEventListener('touchend', evt => {
       if (!xDown) return;
       const xUp = evt.changedTouches[0].clientX;
-      const xDiff = xDown - xUp;
+      xDiff = xDown - xUp;
       if (Math.abs(xDiff) > 30) currentIndex = currentIndex === 0 ? 1 : 0;
       updateSlideStyles();
       xDown = null;
-    }
+    });
   </script>
 </body>
 </html>
