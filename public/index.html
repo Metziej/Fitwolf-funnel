@@ -33,7 +33,7 @@
     .swiper-wrapper { display: flex; transition: transform 0.5s ease; }
     .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5; transition: opacity 0.3s; }
     .swiper-slide.active { opacity: 1; }
-    .swiper-slide.active img { animation: slideInFromRight 1s ease-out; }
+    .swiper-slide.active img { animation: slideInFromRight 1s ease-out; margin-top: -30px; }
   </style>
 </head>
 <body>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <button class="cta-button" id="pathButton" onclick="choosePathFinal()">BEAST MODE - Spiermassa en kracht</button>
+    <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">BEAST MODE - Spiermassa en kracht</button>
   </div>
   <div class="scene hidden" id="scene3">
     <h1>Vertel ons over jezelf</h1>
@@ -97,6 +97,8 @@
   <script>
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
+    const chooseButton = document.getElementById('chooseButton');
+
     function nextScene() {
       const bg = document.getElementById('bg-image');
       if (bg) bg.classList.add('fade-out');
@@ -104,14 +106,20 @@
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
     }
+
     function choosePathFinal() {
       path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
       nextScene();
     }
-    function updateValue(id, val) { document.getElementById(id).textContent = val; }
+
+    function updateValue(id, val) {
+      document.getElementById(id).textContent = val;
+    }
+
     function setLifestyle(val) { lifestyle = val; nextScene(); }
     function setSport(val) { sport = val; nextScene(); }
     function setNutrition(val) { nutrition = val; nextScene(); }
+
     function submitData() {
       const age = document.getElementById('ageVal').textContent;
       const height = document.getElementById('heightVal').textContent;
@@ -120,24 +128,19 @@
       const email = document.getElementById('email').value;
       document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
     }
+
     function updateSlideStyles() {
       slides.forEach((slide, idx) => {
         slide.classList.remove('active');
-        slide.style.animation = idx === currentIndex
-          ? (xDiff > 0 ? 'slideInFromLeft 0.5s ease-out' : 'slideInFromRight 0.5s ease-out')
-          : (xDiff > 0 ? 'slideOutToRight 0.5s ease-out' : 'slideOutToRight 0.5s ease-out');
       });
       slides[currentIndex].classList.add('active');
       wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-      const pathButton = document.getElementById('pathButton');
-      pathButton.classList.add('fade-out');
-      setTimeout(() => {
-        pathButton.textContent = currentIndex === 0 ? 'BEAST MODE - Spiermassa en kracht' : 'PREDATOR MODE - Vetverlies en definitie';
-        pathButton.classList.remove('fade-out');
-        pathButton.classList.add('fade-in');
-        setTimeout(() => pathButton.classList.remove('fade-in'), 300);
-      }, 300);
+      chooseButton.textContent = currentIndex === 0 ? 'BEAST MODE - Spiermassa en kracht' : 'PREDATOR MODE - Vetverlies en definitie';
+      chooseButton.classList.remove('fade-in');
+      void chooseButton.offsetWidth; // trigger reflow
+      chooseButton.classList.add('fade-in');
     }
+
     let currentIndex = 0;
     let xDown = null, xDiff = 0;
     const wrapper = document.getElementById('swiperWrapper');
@@ -147,7 +150,7 @@
       if (!xDown) return;
       const xUp = evt.changedTouches[0].clientX;
       xDiff = xDown - xUp;
-      if (Math.abs(xDiff) > 30) currentIndex = currentIndex === 0 ? 1 : 0;
+      if (Math.abs(xDiff) > 60) currentIndex = currentIndex === 0 ? 1 : 0;
       updateSlideStyles();
       xDown = null;
     });
