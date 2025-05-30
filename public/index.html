@@ -34,14 +34,14 @@
     .swiper-wrapper { display: flex; transition: transform 0.5s ease; }
     .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; transition: opacity 0.3s; padding-top: 4vh; }
     .swiper-slide.active { opacity: 1; }
-    .swiper-slide img { margin-top: 0px; cursor: pointer; max-height: 100vh; object-fit: contain; width: 80vw; max-width: 400px; transform: translateY(-8vh); animation: slideInFromRight 0.8s ease-out; }
+    .swiper-slide img { margin-top: 0px; cursor: pointer; max-height: 100vh; object-fit: contain; width: 80vw; max-width: 400px; animation: slideInFromRight 0.8s ease-out; }
   </style>
 </head>
 <body>
   <div id="bg-image"></div>
   <div id="mist"></div>
   <div class="scene" id="scene1">
-    <h2>Wees geen schaap. Word een wolf.</h1>
+    <h2>Wees geen schaap. Word een wolf.</h2>
     <p>Start jouw transformatie en kies je pad.</p>
     <button class="cta-button" onclick="nextScene()">Start de Journey</button>
   </div>
@@ -95,12 +95,13 @@
     <input type="email" id="email" placeholder="E-mail" />
     <button class="cta-button" onclick="submitData()">Stuur mij mijn battleplan!</button>
   </div>
-  <script>
+ <script>
     let currentScene = 1;
     let path = '', lifestyle = '', sport = '', nutrition = '';
     const chooseButton = document.getElementById('chooseButton');
 
     function nextScene() {
+      if (currentScene === 1) document.getElementById('bg-image').classList.add('fade-out');
       document.getElementById(`scene${currentScene}`).classList.add('hidden');
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
