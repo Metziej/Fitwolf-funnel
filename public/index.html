@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">BEAST MODE - Spiermassa en kracht</button>
+    <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">MONSTER - Spiermassa en kracht</button>
   </div>
   <div class="scene hidden" id="scene3">
 	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
@@ -147,7 +147,7 @@
       });
       slides[currentIndex].classList.add('active');
       wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-      chooseButton.textContent = currentIndex === 0 ? 'BEAST MODE - Spiermassa en kracht' : 'PREDATOR MODE - Vetverlies en definitie';
+      chooseButton.textContent = currentIndex === 0 ? 'BEAST MODE - Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
       chooseButton.classList.remove('fade-in');
       void chooseButton.offsetWidth;
       chooseButton.classList.add('fade-in');
