@@ -114,14 +114,6 @@
     currentScene++;
     document.getElementById(`scene${currentScene}`).classList.remove('hidden');
 
-if (currentScene == 2 { 
-	function hoverSwipe(targetIndex) {
-  if (window.innerWidth > 768 && currentIndex !== targetIndex) {
-    currentIndex = targetIndex;
-    updateSlideStyles();
-  }
-}
-
 if (currentScene === 3) {
   const video = document.getElementById('fenrirVideo');
   video.pause(); // Zorg dat hij niet speelt
@@ -206,4 +198,11 @@ if (currentScene === 3) {
     currentIndex = 0;
     updateSlideStyles();
   }
+	function hoverSwipe(targetIndex) {
+  if (window.innerWidth > 768 && currentIndex !== targetIndex) {
+    currentIndex = targetIndex;
+    updateSlideStyles();
+  }
+}
+</script>
 </script>
