@@ -112,89 +112,101 @@
     <input type="email" id="email" placeholder="E-mail" />
     <button class="cta-button" onclick="submitData()">Stuur mij mijn battleplan!</button>
   </div>
-  <script>
-    let currentScene = 1;
-    let path = '', lifestyle = '', sport = '', nutrition = '';
-    const chooseButton = document.getElementById('chooseButton');
+<script>
+  let currentScene = 1;
+  let path = '', lifestyle = '', sport = '', nutrition = '';
+  const chooseButton = document.getElementById('chooseButton');
 
-    function nextScene() {
-      if (currentScene === 1) document.getElementById('bg-image').classList.add('fade-out');
-      document.getElementById(`scene${currentScene}`).classList.add('hidden');
-      currentScene++;
-      document.getElementById(`scene${currentScene}`).classList.remove('hidden');
+  function nextScene() {
+    if (currentScene === 1) document.getElementById('bg-image').classList.add('fade-out');
+    document.getElementById(`scene${currentScene}`).classList.add('hidden');
+    currentScene++;
+    document.getElementById(`scene${currentScene}`).classList.remove('hidden');
 
-      if (currentScene === 3) {
-        const video = document.getElementById('fenrirVideo');
-        video.play();
-      }
+    if (currentScene === 3) {
+      const video = document.getElementById('fenrirVideo');
+      video.play();
+
+      // Zet sliders op startwaardes
+      document.querySelector('input[oninput*="ageVal"]').value = 37;
+      document.querySelector('input[oninput*="heightVal"]').value = 175;
+      document.querySelector('input[oninput*="weightVal"]').value = 100;
+
+      updateValue('ageVal', 37);
+      updateValue('heightVal', 175);
+      updateValue('weightVal', 100);
     }
+  }
 
-    function choosePathFinal() {
-      path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
-      nextScene();
+  function choosePathFinal() {
+    path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+    nextScene();
+  }
+
+  function updateValue(id, val) {
+    document.getElementById(id).textContent = val;
+
+    if (id === 'weightVal' || id === 'heightVal') {
+      const weight = parseInt(document.getElementById('weightVal').textContent);
+      const height = parseInt(document.getElementById('heightVal').textContent);
+
+      const bmi = weight / Math.pow(height / 100, 2);
+      const video = document.getElementById('fenrirVideo');
+      const minBMI = 14;
+      const maxBMI = 40;
+      const clampedBMI = Math.min(Math.max(bmi, minBMI), maxBMI);
+      const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
+      const videoDuration = video.duration || 1;
+      video.currentTime = videoDuration * percentage;
     }
+  }
 
-    function updateValue(id, val) {
-      document.getElementById(id).textContent = val;
+  function setLifestyle(val) { lifestyle = val; nextScene(); }
+  function setSport(val) { sport = val; nextScene(); }
+  function setNutrition(val) { nutrition = val; nextScene(); }
 
-      if (id === 'weightVal') {
-        const video = document.getElementById('fenrirVideo');
-        const minWeight = 40;
-        const maxWeight = 160;
-        const videoDuration = video.duration || 1;
-        const percentage = (val - minWeight) / (maxWeight - minWeight);
-        video.currentTime = videoDuration * percentage;
-      }
-    }
+  function submitData() {
+    const age = document.getElementById('ageVal').textContent;
+    const height = document.getElementById('heightVal').textContent;
+    const weight = document.getElementById('weightVal').textContent;
+    const name = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
+  }
 
-    function setLifestyle(val) { lifestyle = val; nextScene(); }
-    function setSport(val) { sport = val; nextScene(); }
-    function setNutrition(val) { nutrition = val; nextScene(); }
-
-    function submitData() {
-      const age = document.getElementById('ageVal').textContent;
-      const height = document.getElementById('heightVal').textContent;
-      const weight = document.getElementById('weightVal').textContent;
-      const name = document.getElementById('username').value;
-      const email = document.getElementById('email').value;
-      document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
-    }
-
-    function updateSlideStyles() {
-      slides.forEach((slide, idx) => {
-        slide.classList.remove('active');
-      });
-      slides[currentIndex].classList.add('active');
-      wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-      chooseButton.textContent = currentIndex === 0 ? 'MONSTER- Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
-      chooseButton.classList.remove('fade-in');
-      void chooseButton.offsetWidth;
-      chooseButton.classList.add('fade-in');
-    }
-
-    let currentIndex = 0;
-    let xDown = null, xDiff = 0;
-    const wrapper = document.getElementById('swiperWrapper');
-    const slides = wrapper.querySelectorAll('.swiper-slide');
-    wrapper.addEventListener('touchstart', evt => xDown = evt.touches[0].clientX, false);
-    wrapper.addEventListener('touchend', evt => {
-      if (!xDown) return;
-      const xUp = evt.changedTouches[0].clientX;
-      xDiff = xDown - xUp;
-      if (Math.abs(xDiff) > 60) currentIndex = currentIndex === 0 ? 1 : 0;
-      updateSlideStyles();
-      xDown = null;
+  function updateSlideStyles() {
+    slides.forEach((slide, idx) => {
+      slide.classList.remove('active');
     });
+    slides[currentIndex].classList.add('active');
+    wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    chooseButton.textContent = currentIndex === 0 ? 'MONSTER- Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
+    chooseButton.classList.remove('fade-in');
+    void chooseButton.offsetWidth;
+    chooseButton.classList.add('fade-in');
+  }
 
-    function resetToStart() {
-      currentScene = 1;
-      document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
-      document.getElementById('scene1').classList.remove('hidden');
-      document.getElementById('bg-image').classList.remove('fade-out');
-      wrapper.style.transform = `translateX(0%)`;
-      currentIndex = 0;
-      updateSlideStyles();
-    }
-  </script>
-</body>
-</html>
+  let currentIndex = 0;
+  let xDown = null, xDiff = 0;
+  const wrapper = document.getElementById('swiperWrapper');
+  const slides = wrapper.querySelectorAll('.swiper-slide');
+  wrapper.addEventListener('touchstart', evt => xDown = evt.touches[0].clientX, false);
+  wrapper.addEventListener('touchend', evt => {
+    if (!xDown) return;
+    const xUp = evt.changedTouches[0].clientX;
+    xDiff = xDown - xUp;
+    if (Math.abs(xDiff) > 60) currentIndex = currentIndex === 0 ? 1 : 0;
+    updateSlideStyles();
+    xDown = null;
+  });
+
+  function resetToStart() {
+    currentScene = 1;
+    document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
+    document.getElementById('scene1').classList.remove('hidden');
+    document.getElementById('bg-image').classList.remove('fade-out');
+    wrapper.style.transform = `translateX(0%)`;
+    currentIndex = 0;
+    updateSlideStyles();
+  }
+</script>
