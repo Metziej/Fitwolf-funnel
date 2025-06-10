@@ -69,10 +69,10 @@
   </div>
   <div class="scene hidden" id="scene3">
     <button onclick="resetToStart()">🔄 Opnieuw starten</button>
-    <video id="fenrirVideo" width="300" muted autoplay loop>
-      <source src="/Dun-naar-dik.mp4" type="video/mp4">
-      Je browser ondersteunt deze video niet.
-    </video>
+    <video id="fenrirVideo" width="300" muted playsinline preload="auto">
+  <source src="/Dun-naar-dik.mp4" type="video/mp4">
+  Je browser ondersteunt deze video niet.
+</video>
     <h1>Vertel ons over jezelf</h1>
     <label>Leeftijd: <span id="ageVal">25</span></label>
     <input type="range" min="14" max="60" value="25" oninput="updateValue('ageVal', this.value)">
@@ -123,19 +123,19 @@
     currentScene++;
     document.getElementById(`scene${currentScene}`).classList.remove('hidden');
 
-    if (currentScene === 3) {
-      const video = document.getElementById('fenrirVideo');
-      video.play();
+if (currentScene === 3) {
+  const video = document.getElementById('fenrirVideo');
+  video.pause(); // Zorg dat hij niet speelt
+  video.currentTime = 0;
+  // Zet sliders op startwaardes
+  document.querySelector('input[oninput*="ageVal"]').value = 37;
+  document.querySelector('input[oninput*="heightVal"]').value = 175;
+  document.querySelector('input[oninput*="weightVal"]').value = 100;
 
-      // Zet sliders op startwaardes
-      document.querySelector('input[oninput*="ageVal"]').value = 37;
-      document.querySelector('input[oninput*="heightVal"]').value = 175;
-      document.querySelector('input[oninput*="weightVal"]').value = 100;
-
-      updateValue('ageVal', 37);
-      updateValue('heightVal', 175);
-      updateValue('weightVal', 100);
-    }
+  updateValue('ageVal', 37);
+  updateValue('heightVal', 175);
+  updateValue('weightVal', 100);
+}
   }
 
   function choosePathFinal() {
