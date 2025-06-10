@@ -68,14 +68,11 @@
     <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">MONSTER - Spiermassa en kracht</button>
   </div>
   <div class="scene hidden" id="scene3">
-    <button onclick="resetToStart()">🔄 Opnieuw starten</button>
     <video id="fenrirVideo" width="300" muted playsinline preload="auto">
   <source src="/Dun-naar-dik.mp4" type="video/mp4">
   Je browser ondersteunt deze video niet.
 </video>
     <h1>Vertel ons over jezelf</h1>
-    <label>Leeftijd: <span id="ageVal">25</span></label>
-    <input type="range" min="14" max="60" value="25" oninput="updateValue('ageVal', this.value)">
     <label>Lengte (cm): <span id="heightVal">175</span></label>
     <input type="range" min="140" max="210" value="175" oninput="updateValue('heightVal', this.value)">
     <label>Gewicht (kg): <span id="weightVal">75</span></label>
@@ -128,13 +125,11 @@ if (currentScene === 3) {
   video.pause(); // Zorg dat hij niet speelt
   video.currentTime = 0;
   // Zet sliders op startwaardes
-  document.querySelector('input[oninput*="ageVal"]').value = 37;
-  document.querySelector('input[oninput*="heightVal"]').value = 175;
-  document.querySelector('input[oninput*="weightVal"]').value = 100;
+  document.querySelector('input[oninput*="heightVal"]').value = 140;
+  document.querySelector('input[oninput*="weightVal"]').value = 40;
 
-  updateValue('ageVal', 37);
-  updateValue('heightVal', 175);
-  updateValue('weightVal', 100);
+  updateValue('heightVal', 140);
+  updateValue('weightVal', 40);
 }
   }
 
