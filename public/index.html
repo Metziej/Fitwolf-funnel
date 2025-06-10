@@ -68,7 +68,11 @@
     <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">MONSTER - Spiermassa en kracht</button>
   </div>
   <div class="scene hidden" id="scene3">
-	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
+    <button onclick="resetToStart()">🔄 Opnieuw starten</button>
+    <video id="fenrirVideo" width="300" muted autoplay loop>
+      <source src="/Dun-naar-dik.mp4" type="video/mp4">
+      Je browser ondersteunt deze video niet.
+    </video>
     <h1>Vertel ons over jezelf</h1>
     <label>Leeftijd: <span id="ageVal">25</span></label>
     <input type="range" min="14" max="60" value="25" oninput="updateValue('ageVal', this.value)">
@@ -118,6 +122,11 @@
       document.getElementById(`scene${currentScene}`).classList.add('hidden');
       currentScene++;
       document.getElementById(`scene${currentScene}`).classList.remove('hidden');
+
+      if (currentScene === 3) {
+        const video = document.getElementById('fenrirVideo');
+        video.play();
+      }
     }
 
     function choosePathFinal() {
@@ -127,6 +136,15 @@
 
     function updateValue(id, val) {
       document.getElementById(id).textContent = val;
+
+      if (id === 'weightVal') {
+        const video = document.getElementById('fenrirVideo');
+        const minWeight = 40;
+        const maxWeight = 160;
+        const videoDuration = video.duration || 1;
+        const percentage = (val - minWeight) / (maxWeight - minWeight);
+        video.currentTime = videoDuration * percentage;
+      }
     }
 
     function setLifestyle(val) { lifestyle = val; nextScene(); }
@@ -167,16 +185,16 @@
       updateSlideStyles();
       xDown = null;
     });
-	  function resetToStart() {
-  currentScene = 1;
-  document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
-  document.getElementById('scene1').classList.remove('hidden');
-  document.getElementById('bg-image').classList.remove('fade-out');
-  wrapper.style.transform = `translateX(0%)`;
-  currentIndex = 0;
-  updateSlideStyles();
-}
 
+    function resetToStart() {
+      currentScene = 1;
+      document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
+      document.getElementById('scene1').classList.remove('hidden');
+      document.getElementById('bg-image').classList.remove('fade-out');
+      wrapper.style.transform = `translateX(0%)`;
+      currentIndex = 0;
+      updateSlideStyles();
+    }
   </script>
 </body>
 </html>
