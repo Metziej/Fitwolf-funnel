@@ -155,12 +155,11 @@ if (currentScene === 3) {
   function setNutrition(val) { nutrition = val; nextScene(); }
 
   function submitData() {
-    const age = document.getElementById('ageVal').textContent;
     const height = document.getElementById('heightVal').textContent;
     const weight = document.getElementById('weightVal').textContent;
     const name = document.getElementById('username').value;
     const email = document.getElementById('email').value;
-    document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
+    document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
   }
 
   function updateSlideStyles() {
@@ -205,4 +204,6 @@ if (currentScene === 3) {
   }
 }
 </script>
-</script>
+
+</body>
+</html>
