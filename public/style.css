@@ -9,7 +9,7 @@
 body {
   background-color: #000;
   color: #fff;
-  overflow-x: hidden;
+  overflow: hidden; /* Voorkomt scrollen door de achtergrond */
   line-height: 1.6;
 }
 
@@ -34,14 +34,20 @@ body {
   to { opacity: 0; }
 }
 
-/* Video-achtergrond styling */
-#bg-video {
+/* Nieuwe container voor de video-achtergrond */
+.background-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -2;
+    z-index: -1; /* Zorgt dat het achter de content staat */
+    background-color: #000;
+}
+
+#bg-video {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     transition: opacity 1s ease-out;
 }
@@ -50,22 +56,19 @@ body {
     opacity: 0;
 }
 
-/* Fade-effect voor de zijkanten op desktop */
+/* De 'masking' techniek voor de fade aan de zijkant, ALLEEN op desktop */
 @media (min-width: 769px) {
-    body::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, 
-            rgba(0,0,0,1) 0%, 
-            rgba(0,0,0,0) 25%, 
-            rgba(0,0,0,0) 75%, 
-            rgba(0,0,0,1) 100%);
-        z-index: -1;
-        pointer-events: none;
+    #bg-video {
+        mask-image: linear-gradient(to right, 
+            rgba(0,0,0,0) 0%, 
+            rgba(0,0,0,1) 25%, 
+            rgba(0,0,0,1) 75%, 
+            rgba(0,0,0,0) 100%);
+        -webkit-mask-image: linear-gradient(to right, 
+            rgba(0,0,0,0) 0%, 
+            rgba(0,0,0,1) 25%, 
+            rgba(0,0,0,1) 75%, 
+            rgba(0,0,0,0) 100%);
     }
 }
 
@@ -79,20 +82,11 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  position: relative;
+  position: relative; /* Nodig om boven de achtergrond te staan */
   overflow: visible;
 }
 
-#scene1 {
-    /* Overlay niet nodig op scene 1 */
-    background-color: transparent;
-}
-
-#scene2, #scene3, #scene4, #scene5, #scene6, #scene7 {
-    /* Donkere overlay voor leesbaarheid op de andere scenes */
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
+/* Donkere overlay is niet meer nodig door de zwarte achtergrond van de container */
 
 #scene2 {
   justify-content: flex-start;
