@@ -42,8 +42,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    object-fit: cover; /* Vult het scherm, behoudt aspect ratio, maar kan croppen */
-    object-position: top center; /* BELANGRIJK: Zorgt dat de BOVENKANT van de video zichtbaar blijft */
+    object-fit: contain; /* Zorgt dat de HELE video zichtbaar is, zonder te croppen */
     transition: opacity 1s ease-out;
 }
 
