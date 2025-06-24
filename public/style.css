@@ -94,7 +94,15 @@ body {
   overflow: visible;
 }
 
-/* Donkere overlay is niet meer nodig door de zwarte achtergrond van de container */
+/* Zorgt dat alleen scene 1 de video-achtergrond toont */
+#scene1 {
+    background-color: transparent;
+}
+
+#scene2, #scene3, #scene4, #scene5, #scene6, #scene7 {
+    background-color: #000;
+}
+
 
 #scene2 {
   justify-content: flex-start;
@@ -133,7 +141,6 @@ h2 {
     color: #fff; /* Zorgt dat de tekst wit is, en de schaduw zwart */
 }
 
-
 /* Grote CTA knoppen */
 .cta-button {
   background: linear-gradient(45deg, #ff0000, #800000);
@@ -151,6 +158,11 @@ h2 {
   animation: fadeIn 1s forwards 1.5s;
   margin-top: 30px;
   transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Schaduw voor de tekst in de startknop */
+#scene1 .cta-button {
+    text-shadow: 2px 2px 8px #000;
 }
 
 .cta-button:hover {
