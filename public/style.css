@@ -34,6 +34,12 @@ body {
   to { opacity: 0; }
 }
 
+/* NIEUWE animatie voor de video fade-in */
+@keyframes fadeInVideo {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* Nieuwe container voor de video-achtergrond */
 .background-container {
     position: fixed;
@@ -50,6 +56,8 @@ body {
     height: 100%;
     object-fit: contain;
     transition: opacity 1s ease-out;
+    /* Toepassing van de nieuwe fade-in animatie */
+    animation: fadeInVideo 2s ease-in-out forwards;
 }
 
 #bg-video.fade-out {
