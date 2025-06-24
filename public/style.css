@@ -34,17 +34,15 @@ body {
   to { opacity: 0; }
 }
 
-/* --- NIEUWE STIJL VOOR VIDEO-ACHTERGROND --- */
+/* --- AANGEPASTE STIJL VOOR VIDEO-ACHTERGROND --- */
 #bg-video {
     position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    object-fit: cover; /* Zorgt dat de video het hele scherm vult zonder vervorming */
+    object-fit: cover; /* Vult het scherm, behoudt aspect ratio (kan croppen) */
     transition: opacity 1s ease-out;
 }
 
