@@ -50,7 +50,7 @@ body {
     opacity: 0;
 }
 
-/* Nieuw blur-effect AAN DE ZIJKANTEN, ALLEEN VOOR DESKTOP */
+/* Verbeterd fade-effect voor de zijkanten, alleen voor desktop */
 @media (min-width: 769px) {
     body::after {
         content: '';
@@ -59,8 +59,11 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
-        /* Creëert een schaduw/vervaging aan de binnenkant van de linker- en rechterrand */
-        box-shadow: inset 15vw 0 10vw -8vw #000, inset -15vw 0 10vw -8vw #000;
+        background: linear-gradient(to right, 
+            rgba(0,0,0,1) 0%, 
+            rgba(0,0,0,0) 25%, 
+            rgba(0,0,0,0) 75%, 
+            rgba(0,0,0,1) 100%);
         z-index: -1;
         pointer-events: none; /* Zorgt dat de laag niet klikbaar is */
     }
