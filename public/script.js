@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     lifestyle: '',
     sport: '',
     nutrition: '',
-    height: 175,
-    weight: 75
+    height: 140, // Startwaarde aangepast
+    weight: 40   // Startwaarde aangepast
   };
 
   const scenes = document.querySelectorAll('.scene');
@@ -46,6 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
       updateFenrirVisual(); // Update visueel naar de startwaarden
     }
   }
+
+  /**
+   * Stelt het gekozen pad in op basis van de actieve slide en gaat verder.
+   */
+  function selectPathAndContinue() {
+    // Bepaal het pad op basis van de HUIDIGE actieve slide.
+    userData.path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+    nextScene();
+  }
   
   /**
    * Update de video van Fenrir op basis van de sliderwaarden (BMI).
@@ -67,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Bereken BMI en pas de video aan
     const bmi = weight / Math.pow(height / 100, 2);
-    const minBMI = 16; // Realistischere ondergrens
-    const maxBMI = 40; // Realistischere bovengrens
+    const minBMI = 14; 
+    const maxBMI = 40; 
     const clampedBMI = Math.min(Math.max(bmi, minBMI), maxBMI);
     const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
     
@@ -165,9 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('start-button').addEventListener('click', nextScene);
   
   // Keuzeknop na swiper
-  chooseButton.addEventListener('click', () => {
-      userData.path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
-      nextScene();
+  chooseButton.addEventListener('click', selectPathAndContinue);
+
+  // Maak de afbeeldingen in de swiper ook klikbaar
+  document.querySelectorAll('.path-image').forEach(img => {
+    img.addEventListener('click', selectPathAndContinue);
   });
   
   // Sliders voor lengte en gewicht
@@ -202,4 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- INITIALISATIE ---
   updateSlideStyles(); // Zet de swiper in de beginpositie
+
+  // Stel de sliders en labels in op de beginwaarden
+  heightSlider.value = userData.height;
+  weightSlider.value = userData.weight;
+  heightVal.textContent = userData.height;
+  weightVal.textContent = userData.weight;
+
 });
