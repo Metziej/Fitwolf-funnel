@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const scenes = document.querySelectorAll('.scene');
-  const bgImage = document.getElementById('bg-image');
+  const bgVideo = document.getElementById('bg-video'); // Verwijzing naar het video-element
   const chooseButton = document.getElementById('chooseButton');
   const video = document.getElementById('fenrirVideo');
   const heightSlider = document.getElementById('heightSlider');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Speciale actie bij de overgang van scene 1 naar 2
     if (currentScene === 1) {
-      bgImage.classList.add('fade-out');
+      bgVideo.classList.add('fade-out'); // Laat de achtergrondvideo vervagen
     }
 
     scenes[currentScene - 1].classList.add('hidden');
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX - touchEndX > 50) { // Swipe naar links
       currentIndex = 1;
-    } else if (touchEndX - startX > 50) { // Swipe naar rechts
+    } else if (touchEndX - touchStartX > 50) { // Swipe naar rechts
       currentIndex = 0;
     }
     updateSlideStyles();
