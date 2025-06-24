@@ -34,7 +34,7 @@ body {
   to { opacity: 0; }
 }
 
-/* --- AANGEPASTE STIJL VOOR VIDEO-ACHTERGROND --- */
+/* --- FINALE OPLOSSING VOOR VIDEO-ACHTERGROND --- */
 #bg-video {
     position: fixed;
     top: 0;
@@ -42,7 +42,8 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    object-fit: cover; /* Vult het scherm, behoudt aspect ratio (kan croppen) */
+    object-fit: cover; /* Vult het scherm, behoudt aspect ratio, maar kan croppen */
+    object-position: top center; /* BELANGRIJK: Zorgt dat de BOVENKANT van de video zichtbaar blijft */
     transition: opacity 1s ease-out;
 }
 
