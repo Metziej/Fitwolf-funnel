@@ -50,7 +50,7 @@ body {
     opacity: 0;
 }
 
-/* Combinatie van fade- en mist-effect, alleen voor desktop */
+/* Fade-effect voor de zijkanten op desktop */
 @media (min-width: 769px) {
     body::after {
         content: '';
@@ -59,19 +59,13 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
-        /* Meerdere gradients: één voor de zijkanten, één voor de 'mist' onderaan */
-        background: 
-            linear-gradient(to right, 
-                rgba(0,0,0,1) 0%, 
-                rgba(0,0,0,0) 25%, 
-                rgba(0,0,0,0) 75%, 
-                rgba(0,0,0,1) 100%),
-            linear-gradient(to top,
-                rgba(0,0,0,1) 0%,
-                rgba(0,0,0,0.8) 15%,
-                rgba(0,0,0,0) 40%);
+        background: linear-gradient(to right, 
+            rgba(0,0,0,1) 0%, 
+            rgba(0,0,0,0) 25%, 
+            rgba(0,0,0,0) 75%, 
+            rgba(0,0,0,1) 100%);
         z-index: -1;
-        pointer-events: none; /* Zorgt dat de laag niet klikbaar is */
+        pointer-events: none;
     }
 }
 
@@ -87,13 +81,16 @@ body {
   text-align: center;
   position: relative;
   overflow: visible;
-  /* Een subtiele donkere overlay om de tekst leesbaarder te maken boven de video */
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 #scene1 {
-    /* Scene 1 heeft geen overlay nodig, de video is daar de hoofdattractie */
+    /* Overlay niet nodig op scene 1 */
     background-color: transparent;
+}
+
+#scene2, #scene3, #scene4, #scene5, #scene6, #scene7 {
+    /* Donkere overlay voor leesbaarheid op de andere scenes */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 
@@ -106,7 +103,6 @@ h1, p {
   margin-bottom: 20px;
   opacity: 0;
   animation: fadeIn 1s forwards;
-  /* Schaduw voor betere leesbaarheid op video */
   text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
 }
 
