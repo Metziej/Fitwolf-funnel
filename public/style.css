@@ -1,0 +1,247 @@
+/* Algemene reset en basisstijlen */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Keyframe-animaties */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInBackground {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeInButton {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromRight {
+  0% { transform: translateX(100%) translateY(-2vh); opacity: 0; }
+  100% { transform: translateX(0) translateY(-2vh); opacity: 1; }
+}
+
+@keyframes mistMove {
+  0% { background-position: 0 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Achtergrondafbeelding van de wolf */
+#bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/fenrir_ref_pose01 uitgeknipt.png");
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-color: #000;
+  z-index: -2;
+  opacity: 1;
+  animation: fadeInBackground 2s ease-in-out forwards;
+}
+
+#bg-image.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+/* Mist-laag */
+#mist {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(20,20,30,0.4), rgba(0,0,0,0.7), rgba(20,20,30,0.4));
+  background-size: 200% 100%;
+  z-index: -1;
+  opacity: 0.7;
+  animation: mistMove 25s infinite linear;
+}
+
+/* Scene styling */
+.scene {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: visible;
+}
+
+#scene2 {
+  justify-content: flex-start;
+}
+
+/* Typografie */
+h1, p {
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ff0000;
+  text-shadow: 0 0 10px rgba(255,0,0,0.5);
+  opacity: 0;
+  animation: fadeIn 2s forwards 0.5s;
+}
+
+/* Grote CTA knoppen */
+.cta-button {
+  background: linear-gradient(45deg, #ff0000, #800000);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+  opacity: 0;
+  animation: fadeIn 1s forwards 1.5s;
+  margin-top: 30px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255,0,0,0.5);
+}
+
+#chooseButton.cta-button {
+  margin-top: 20px;
+}
+
+.fade-in {
+  animation: fadeInButton 0.3s forwards;
+}
+
+/* Formulieren en Sliders */
+input[type=range] {
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+input[type=text], input[type=email] {
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+input.input-error {
+    border-color: #ff0000;
+}
+.error-message {
+    color: #ff0000;
+    height: 20px;
+    font-size: 0.9rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* --- NIEUWE STIJLEN VOOR AFBEELDING-KNOPPEN --- */
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.choice-image {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    filter: brightness(0.8);
+}
+
+.choice-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255,0,0,0.6);
+    filter: brightness(1);
+}
+
+
+/* Swiper styling */
+.swiper-container {
+  margin-top: 0px;
+  width: 80vw;
+  max-width: 600px;
+  max-height: 100vh;
+  overflow: visible;
+  position: relative;
+  touch-action: pan-y;
+}
+
+.swiper-wrapper {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.swiper-slide {
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  padding-top: 0;
+}
+
+.swiper-slide.active {
+  opacity: 1;
+}
+
+.swiper-slide img {
+  margin-top: 0;
+  cursor: pointer;
+  max-height: 100vh;
+  object-fit: contain;
+  width: 80vw;
+  max-width: 400px;
+  transform: translateY(-2vh);
+  animation: slideInFromRight 0.8s ease-out;
+}
