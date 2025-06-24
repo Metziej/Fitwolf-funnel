@@ -1,241 +1,222 @@
-/* Algemene reset en basisstijlen */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
+// Wacht tot de volledige HTML-structuur is geladen voordat we JavaScript uitvoeren.
+document.addEventListener('DOMContentLoaded', () => {
 
-body {
-  background-color: #000;
-  color: #fff;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
+  // --- VARIABELEN EN ELEMENTEN ---
+  let currentScene = 1;
+  const userData = {
+    path: '',
+    lifestyle: '',
+    sport: '',
+    nutrition: '',
+    height: 140, // Startwaarde aangepast
+    weight: 40   // Startwaarde aangepast
+  };
 
-/* Nieuwe overlay voor het faden van de zijkanten van de video */
-body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(to right, #000 5%, transparent 25%, transparent 75%, #000 95%);
-}
+  const scenes = document.querySelectorAll('.scene');
+  const bgVideo = document.getElementById('bg-video'); // Verwijzing naar het video-element
+  const chooseButton = document.getElementById('chooseButton');
+  const video = document.getElementById('fenrirVideo');
+  const heightSlider = document.getElementById('heightSlider');
+  const weightSlider = document.getElementById('weightSlider');
+  const heightVal = document.getElementById('heightVal');
+  const weightVal = document.getElementById('weightVal');
+  let videoReady = false;
 
-/* Keyframe-animaties */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  // --- FUNCTIES ---
 
-@keyframes fadeInButton {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+  /**
+   * Gaat naar de volgende scene door de huidige te verbergen en de volgende te tonen.
+   */
+  function nextScene() {
+    if (currentScene >= scenes.length) return; // Voorkom fouten
 
-@keyframes slideInFromRight {
-  0% { transform: translateX(100%) translateY(-2vh); opacity: 0; }
-  100% { transform: translateX(0) translateY(-2vh); opacity: 1; }
-}
+    // Speciale actie bij de overgang van scene 1 naar 2
+    if (currentScene === 1) {
+      bgVideo.classList.add('fade-out'); // Laat de achtergrondvideo vervagen
+    }
 
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
+    scenes[currentScene - 1].classList.add('hidden');
+    currentScene++;
+    scenes[currentScene - 1].classList.remove('hidden');
 
-/* --- FINALE OPLOSSING VOOR VIDEO-ACHTERGROND --- */
-#bg-video {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2; /* Aangepast naar -2 zodat de fade-overlay erboven kan */
-    object-fit: contain; /* Zorgt dat de HELE video zichtbaar is, zonder te croppen */
-    transition: opacity 1s ease-out;
-}
+    // Reset de video wanneer scene 3 wordt betreden
+    if (currentScene === 3) {
+      video.pause();
+      video.currentTime = 0;
+      updateFenrirVisual(); // Update visueel naar de startwaarden
+    }
+  }
 
-#bg-video.fade-out {
-    opacity: 0;
-}
+  /**
+   * Stelt het gekozen pad in op basis van de actieve slide en gaat verder.
+   */
+  function selectPathAndContinue() {
+    userData.path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+    nextScene();
+  }
+  
+  /**
+   * Update de video van Fenrir op basis van de sliderwaarden (BMI).
+   * Deze functie wordt alleen uitgevoerd als de video klaar is.
+   */
+  function updateFenrirVisual() {
+    if (!videoReady) return; // Wacht tot de video is geladen
 
+    const height = parseInt(heightSlider.value);
+    const weight = parseInt(weightSlider.value);
+    
+    // Sla waarden op in het data-object
+    userData.height = height;
+    userData.weight = weight;
+    
+    // Update de tekstlabels
+    heightVal.textContent = height;
+    weightVal.textContent = weight;
 
-/* Scene styling */
-.scene {
-  min-height: 100vh;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  overflow: visible;
-  /* Een subtiele donkere overlay om de tekst leesbaarder te maken boven de video */
-  background-color: rgba(0, 0, 0, 0.3);
-}
+    // Bereken BMI en pas de video aan
+    const bmi = weight / Math.pow(height / 100, 2);
+    const minBMI = 14; 
+    const maxBMI = 40; 
+    const clampedBMI = Math.min(Math.max(bmi, minBMI), maxBMI);
+    const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
+    
+    video.currentTime = video.duration * percentage;
+  }
 
-#scene1 {
-    /* Scene 1 heeft geen overlay nodig, de video is daar de hoofdattractie */
-    background-color: transparent;
-}
+  /**
+   * Verzend de verzamelde gegevens.
+   * Voert eerst een validatie uit.
+   */
+  function submitData() {
+    const nameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const errorMsg = document.getElementById('form-error');
 
+    // Validatie
+    if (nameInput.value.trim() === '' || emailInput.value.trim() === '') {
+      errorMsg.textContent = 'Vul alsjeblieft je naam en e-mailadres in.';
+      nameInput.classList.toggle('input-error', nameInput.value.trim() === '');
+      emailInput.classList.toggle('input-error', emailInput.value.trim() === '');
+      return;
+    }
+     if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+        errorMsg.textContent = 'Vul alsjeblieft een geldig e-mailadres in.';
+        emailInput.classList.add('input-error');
+        return;
+    }
 
-#scene2 {
-  justify-content: flex-start;
-}
+    // Foutmeldingen wissen als alles goed is
+    errorMsg.textContent = '';
+    nameInput.classList.remove('input-error');
+    emailInput.classList.remove('input-error');
 
-/* Typografie */
-h1, p {
-  margin-bottom: 20px;
-  opacity: 0;
-  animation: fadeIn 1s forwards;
-  /* Schaduw voor betere leesbaarheid op video */
-  text-shadow: 0px 2px 4px rgba(0,0,0,0.7);
-}
-
-h1 {
-    font-size: 2.2rem;
-}
-
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #ff0000;
-  text-shadow: 0 0 10px rgba(255,0,0,0.5), 0px 2px 4px rgba(0,0,0,0.7);
-  opacity: 0;
-  animation: fadeIn 2s forwards 0.5s;
-}
-
-/* Grote CTA knoppen */
-.cta-button {
-  background: linear-gradient(45deg, #ff0000, #800000);
-  color: white;
-  border: none;
-  padding: 15px 40px;
-  font-size: 1.6rem;
-  border-radius: 5px;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
-  box-shadow: 0 5px 15px rgba(255,0,0,0.4);
-  opacity: 0;
-  animation: fadeIn 1s forwards 1.5s;
-  margin-top: 30px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255,0,0,0.5);
-}
-
-#chooseButton.cta-button {
-  margin-top: 20px;
-}
-
-.fade-in {
-  animation: fadeInButton 0.3s forwards;
-}
-
-/* Formulieren en Sliders */
-input[type=range] {
-  width: 80%;
-  max-width: 400px;
-  margin-bottom: 20px;
-}
-input[type=text], input[type=email] {
-  width: 80%;
-  max-width: 400px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid transparent;
-}
-input.input-error {
-    border-color: #ff0000;
-}
-.error-message {
-    color: #ff0000;
-    height: 20px;
-    font-size: 0.9rem;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Afbeelding-knoppen */
-.option-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    width: 100%;
-    max-width: 900px;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.choice-image {
-    width: 100%;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    filter: brightness(0.8);
-}
-
-.choice-image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(255,0,0,0.6);
-    filter: brightness(1);
-}
+    // Toon het resultaat (placeholder voor daadwerkelijke verzending)
+    const resultP = document.getElementById('result');
+    resultP.innerHTML = `Jij bent een ${userData.path} Wolf in wording.<br>
+      Lengte: ${userData.height}cm, Gewicht: ${userData.weight}kg.<br>
+      Doel: ${userData.path}, Lifestyle: ${userData.lifestyle}, Sport: ${userData.sport}, Voeding: ${userData.nutrition}`;
+    
+    alert('Gegevens succesvol "verzonden"! Check de console voor de data.');
+    console.log("Te verzenden data:", {
+        naam: nameInput.value,
+        email: emailInput.value,
+        ...userData
+    });
+  }
 
 
-/* Swiper styling */
-.swiper-container {
-  margin-top: 0px;
-  width: 80vw;
-  max-width: 600px;
-  max-height: 100vh;
-  overflow: visible;
-  position: relative;
-  touch-action: pan-y;
-}
+  // --- SWIPER LOGICA ---
+  const swiperWrapper = document.getElementById('swiperWrapper');
+  const slides = swiperWrapper.querySelectorAll('.swiper-slide');
+  let currentIndex = 0;
+  let touchStartX = 0;
 
-.swiper-wrapper {
-  display: flex;
-  transition: transform 0.5s ease;
-}
+  function updateSlideStyles() {
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+    swiperWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    
+    const pathText = currentIndex === 0 ? 'MONSTER - Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
+    chooseButton.textContent = pathText;
+    chooseButton.classList.remove('fade-in');
+    void chooseButton.offsetWidth; // Forceer reflow voor animatie-reset
+    chooseButton.classList.add('fade-in');
+  }
 
-.swiper-slide {
-  min-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  opacity: 0.5;
-  transition: opacity 0.3s;
-  padding-top: 0;
-}
+  // Touch-events voor swipen
+  swiperWrapper.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+  swiperWrapper.addEventListener('touchend', e => {
+    const touchEndX = e.changedTouches[0].clientX;
+    if (touchStartX - touchEndX > 50) { // Swipe naar links
+      currentIndex = 1;
+    } else if (touchEndX - touchStartX > 50) { // Swipe naar rechts
+      currentIndex = 0;
+    }
+    updateSlideStyles();
+  });
+  
+  // Hover-event voor swipen op desktop
+  slides.forEach((slide, index) => {
+      slide.addEventListener('mouseenter', () => {
+          if (window.innerWidth > 768) { // Alleen op desktop
+              currentIndex = index;
+              updateSlideStyles();
+          }
+      });
+  });
 
-.swiper-slide.active {
-  opacity: 1;
-}
 
-.swiper-slide img {
-  margin-top: 0;
-  cursor: pointer;
-  max-height: 100vh;
-  object-fit: contain;
-  width: 80vw;
-  max-width: 400px;
-  transform: translateY(-2vh);
-  animation: slideInFromRight 0.8s ease-out;
-}
+  // --- EVENT LISTENERS ---
+
+  // Startknop
+  document.getElementById('start-button').addEventListener('click', nextScene);
+  
+  // Keuzeknop na swiper
+  chooseButton.addEventListener('click', selectPathAndContinue);
+
+  // Maak de afbeeldingen in de swiper ook klikbaar
+  document.querySelectorAll('.path-image').forEach(img => {
+    img.addEventListener('click', selectPathAndContinue);
+  });
+  
+  // Sliders voor lengte en gewicht
+  heightSlider.addEventListener('input', updateFenrirVisual);
+  weightSlider.addEventListener('input', updateFenrirVisual);
+
+  // Volgende knop na sliders
+  document.getElementById('scene3-next').addEventListener('click', nextScene);
+
+  // Knoppen voor keuzes (nu afbeeldingen)
+  document.querySelectorAll('.lifestyle-btn').forEach(btn => btn.addEventListener('click', (e) => {
+      userData.lifestyle = e.target.dataset.value;
+      nextScene();
+  }));
+  document.querySelectorAll('.sport-btn').forEach(btn => btn.addEventListener('click', (e) => {
+      userData.sport = e.target.dataset.value;
+      nextScene();
+  }));
+  document.querySelectorAll('.nutrition-btn').forEach(btn => btn.addEventListener('click', (e) => {
+      userData.nutrition = e.target.dataset.value;
+      nextScene();
+  }));
+  
+  // Verzendknop
+  document.getElementById('submit-button').addEventListener('click', submitData);
+
+  // FIX VOOR IPHONE VIDEO: Wacht tot video-metadata geladen is.
+  video.addEventListener('loadedmetadata', () => {
+    videoReady = true;
+    updateFenrirVisual(); // Update de video direct na het laden
+  });
+
+  // --- INITIALISATIE ---
+  updateSlideStyles(); // Zet de swiper in de beginpositie
+
+  // Stel de sliders en labels in op de beginwaarden
+  heightSlider.value = userData.height;
+  weightSlider.value = userData.weight;
+  heightVal.textContent = userData.height;
+  weightVal.textContent = userData.weight;
+
+});
