@@ -26,9 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showScene(index) {
         transitionSound();
-        scenes.forEach((scene, i) => {
-            scene.classList.toggle('hidden', i !== index);
-        });
+        const currentScene = scenes[currentSceneIndex];
+        const nextScene = scenes[index];
+        
+        currentScene.classList.add('hidden');
+        nextScene.classList.remove('hidden');
+
         currentSceneIndex = index;
         background.style.opacity = index > 0 ? '0' : '1';
     }
@@ -171,5 +174,8 @@ E-mail: ${emailInput.value}
     });
 
     // Initialisatie
+    scenes.forEach((scene, i) => {
+        scene.classList.toggle('hidden', i !== 0);
+    });
     updateSlideStyles();
 });
