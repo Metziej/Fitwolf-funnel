@@ -26,93 +26,86 @@
         <svg id="icon-sound-off" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l-5-5m0 5l5-5" /></svg>
     </button>
 
-    <div class="relative z-10 flex items-center justify-center h-screen p-4">
-        <div class="w-full max-w-4xl text-center">
+    <!-- Scene 1: Welkomstscherm -->
+    <section class="scene" id="scene1">
+        <h2 class="text-5xl md:text-7xl text-red-500" style="text-shadow: 0 0 15px var(--brand-red);">Blijf geen schaap. Word een wolf!</h2>
+        <p class="text-xl md:text-2xl mt-4 font-bold">Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</p>
+        <button class="cta-button text-3xl mt-8 bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-lg shadow-lg" id="start-button">Ik Neem Actie</button>
+    </section>
 
-            <!-- Scene 1: Welkomstscherm -->
-            <section class="scene" id="scene1">
-                <h2 class="text-5xl md:text-7xl text-red-500" style="text-shadow: 0 0 15px var(--brand-red);">Blijf geen schaap. Word een wolf!</h2>
-                <p class="text-xl md:text-2xl mt-4 font-bold">Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</p>
-                <button class="cta-button text-3xl mt-8 bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-lg shadow-lg" id="start-button">Ik Neem Actie</button>
-            </section>
-
- <!-- Scene 2: Keuze van het pad -->
-  <section class="scene hidden" id="scene2">
-    <h1>Wie wil je zijn?</h1>
-    <div class="swiper-container">
-      <div class="swiper-wrapper" id="swiperWrapper">
-        <div class="swiper-slide active">
-          <img src="/Fenrir-aankomen2.png" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="path-image">
-        </div>
-        <div class="swiper-slide">
-          <img src="/Fenrir-afvallen2.png" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="path-image">
-        </div>
-      </div>
-    </div>
-    <button id="chooseButton" class="cta-button fade-in">MONSTER - Spiermassa en kracht</button>
-  </section>
-
-            
-            <!-- Scene 3: Fysieke gegevens -->
-            <section class="scene hidden" id="scene3">
-                <h1 class="text-4xl md:text-6xl mb-4">Wat is je startpunt?</h1>
-                <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-                    <video id="fenrirVideo" width="250" muted playsinline preload="auto" class="rounded-lg"><source src="Dun-naar-dik.webm" type="video/webm"><source src="Dun-naar-dik.mp4" type="video/mp4"></video>
-                    <div class="w-full max-w-sm text-left">
-                        <label for="heightSlider" class="text-xl">Lengte: <span id="heightVal" class="font-bold text-red-500">175</span> cm</label>
-                        <input type="range" id="heightSlider" min="140" max="210" value="175" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
-                        <label for="weightSlider" class="text-xl mt-4 block">Gewicht: <span id="weightVal" class="font-bold text-red-500">75</span> kg</label>
-                        <input type="range" id="weightSlider" min="40" max="160" value="75" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
-                    </div>
+    <!-- Scene 2: Keuze van het pad (met Swiper) -->
+    <section class="scene hidden" id="scene2">
+        <h1 class="text-4xl md:text-6xl">Wie wil je zijn?</h1>
+        <div class="swiper-container">
+            <div class="swiper-wrapper" id="swiperWrapper">
+                <div class="swiper-slide active">
+                    <img src="Fenrir-aankomen2.jpg" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="path-image">
                 </div>
-                <button class="cta-button text-2xl mt-8 bg-gray-700 hover:bg-gray-600 text-white py-2 px-8 rounded-lg" id="scene3-next">Volgende</button>
-            </section>
-
-            <!-- Scene 4: Levensstijl -->
-            <section class="scene hidden" id="scene-lifestyle">
-                 <h1 id="lifestyle-title" class="text-4xl md:text-6xl mb-8">Hoe ziet je dagelijkse jacht eruit?</h1>
-                 <div class="option-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Zittend%0A(Krijger+in+rust)" alt="Zittend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Zittend">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Actief%0A(Constant+op+jacht)" alt="Actief werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Actief">
-                    <img src="fenrir_ref_pose01 uitgeknipt.jpg" alt="Wisselend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Wisselend">
-                 </div>
-            </section>
-            
-            <!-- Scene 5: Sport -->
-            <section class="scene hidden" id="scene-sport">
-                 <h1 id="sport-title" class="text-4xl md:text-6xl mb-8">Hoe vaak slijp je je klauwen?</h1>
-                 <div class="option-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Nooit" alt="Nooit sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Nooit">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=1-2x%0Aper+week" alt="1-2x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="1-2x">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=3-5x%0Aper+week" alt="3-5x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="3-5x">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Elke%0ADag" alt="Elke dag sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Elke dag">
-                 </div>
-            </section>
-
-            <!-- Scene 6: Voeding -->
-            <section class="scene hidden" id="scene-nutrition">
-                 <h1 id="nutrition-title" class="text-4xl md:text-6xl mb-8">Hoe voed je het beest?</h1>
-                 <div class="option-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+eet%0Awat+ik+wil" alt="Ik eet wat ik wil" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik eet wat ik wil">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+let%0Aeen+beetje+op" alt="Ik let een beetje op" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik let een beetje op">
-                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+track%0Aalles" alt="Ik track alles" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik track alles">
-                 </div>
-            </section>
-
-            <!-- Scene 7: Resultaat & Gegevensverzameling -->
-            <section class="scene hidden" id="scene7">
-                <h1 class="text-4xl md:text-6xl mb-4">Fenrir's Analyse is Binnen.</h1>
-                <p id="result" class="text-lg max-w-2xl mx-auto"></p>
-                <div class="max-w-md mx-auto mt-8 space-y-4">
-                    <input type="text" id="username" placeholder="Naam" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
-                    <input type="email" id="email" placeholder="E-mail" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
-                    <p id="form-error" class="text-red-500 h-6"></p>
-                    <button class="cta-button text-3xl bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg w-full" id="submit-button">Stuur Mij Mijn Battleplan!</button>
+                <div class="swiper-slide">
+                    <img src="Fenrir-afvallen2.jpg" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="path-image">
                 </div>
-            </section>
-
+            </div>
         </div>
-    </div>
+        <button id="chooseButton" class="cta-button text-2xl mt-4 bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg"></button>
+    </section>
+    
+    <!-- Scene 3: Fysieke gegevens -->
+    <section class="scene hidden" id="scene3">
+        <h1 class="text-4xl md:text-6xl">Wat is je startpunt?</h1>
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+            <video id="fenrirVideo" width="250" muted playsinline preload="auto" class="rounded-lg"><source src="Dun-naar-dik.webm" type="video/webm"><source src="Dun-naar-dik.mp4" type="video/mp4"></video>
+            <div class="w-full max-w-sm text-left">
+                <label for="heightSlider" class="text-xl">Lengte: <span id="heightVal" class="font-bold text-red-500">175</span> cm</label>
+                <input type="range" id="heightSlider" min="140" max="210" value="175" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+                <label for="weightSlider" class="text-xl mt-4 block">Gewicht: <span id="weightVal" class="font-bold text-red-500">75</span> kg</label>
+                <input type="range" id="weightSlider" min="40" max="160" value="75" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+            </div>
+        </div>
+        <button class="cta-button text-2xl mt-8 bg-gray-700 hover:bg-gray-600 text-white py-2 px-8 rounded-lg" id="scene3-next">Volgende</button>
+    </section>
+
+    <!-- Scene 4: Levensstijl -->
+    <section class="scene hidden" id="scene4">
+         <h1 class="text-4xl md:text-6xl">Hoe ziet je dagelijkse jacht eruit?</h1>
+         <div class="option-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Zittend%0A(Krijger+in+rust)" alt="Zittend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Zittend">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Actief%0A(Constant+op+jacht)" alt="Actief werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Actief">
+            <img src="fenrir_ref_pose01 uitgeknipt.jpg" alt="Wisselend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Wisselend">
+         </div>
+    </section>
+    
+    <!-- Scene 5: Sport -->
+    <section class="scene hidden" id="scene5">
+         <h1 class="text-4xl md:text-6xl">Hoe vaak slijp je je klauwen?</h1>
+         <div class="option-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Nooit" alt="Nooit sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Nooit">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=1-2x%0Aper+week" alt="1-2x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="1-2x">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=3-5x%0Aper+week" alt="3-5x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="3-5x">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Elke%0ADag" alt="Elke dag sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Elke dag">
+         </div>
+    </section>
+
+    <!-- Scene 6: Voeding -->
+    <section class="scene hidden" id="scene6">
+         <h1 class="text-4xl md:text-6xl">Hoe voed je het beest?</h1>
+         <div class="option-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+eet%0Awat+ik+wil" alt="Ik eet wat ik wil" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik eet wat ik wil">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+let%0Aeen+beetje+op" alt="Ik let een beetje op" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik let een beetje op">
+            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+track%0Aalles" alt="Ik track alles" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik track alles">
+         </div>
+    </section>
+
+    <!-- Scene 7: Resultaat & Gegevensverzameling -->
+    <section class="scene hidden" id="scene7">
+        <h1 class="text-4xl md:text-6xl">Fenrir's Analyse is Binnen.</h1>
+        <p id="result" class="text-lg max-w-2xl mx-auto"></p>
+        <div class="max-w-md mx-auto mt-8 space-y-4">
+            <input type="text" id="username" placeholder="Naam" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+            <input type="email" id="email" placeholder="E-mail" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+            <p id="form-error" class="text-red-500 h-6"></p>
+            <button class="cta-button text-3xl bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg w-full" id="submit-button">Stuur Mij Mijn Battleplan!</button>
+        </div>
+    </section>
 
     <!-- Link naar jouw JavaScript-bestand -->
     <script src="script.js"></script>
