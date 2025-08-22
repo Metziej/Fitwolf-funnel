@@ -17,16 +17,29 @@ h1, h2 {
     letter-spacing: 1px;
 }
 .scene {
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-.scene.hidden {
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute; /* Belangrijk voor de overgang */
     width: 100%;
     left: 0;
-    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
 }
+.scene:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    position: relative; /* Zorgt dat de actieve scene de ruimte inneemt */
+}
+.scene.hidden {
+    display: none;
+}
+
 .choice-image {
     transition: all 0.2s ease-in-out;
     filter: grayscale(50%) brightness(0.8);
