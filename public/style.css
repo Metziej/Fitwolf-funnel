@@ -6,6 +6,7 @@ body {
     font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #000;
 }
 h1, h2 {
     font-family: 'Teko', sans-serif;
@@ -24,9 +25,10 @@ h1, h2 {
     justify-content: center;
     align-items: center;
     text-align: center;
-    position: absolute; /* Belangrijk voor de overgang */
+    position: absolute;
     width: 100%;
     left: 0;
+    top: 0;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease-in-out;
@@ -34,20 +36,23 @@ h1, h2 {
 .scene:not(.hidden) {
     opacity: 1;
     pointer-events: auto;
-    position: relative; /* Zorgt dat de actieve scene de ruimte inneemt */
+    position: relative;
 }
 .scene.hidden {
-    display: none;
+    display: none !important; /* Forceer verbergen */
 }
-
 .choice-image {
-    transition: all 0.2s ease-in-out;
-    filter: grayscale(50%) brightness(0.8);
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    filter: brightness(0.8);
 }
 .choice-image:hover {
-    filter: grayscale(0%) brightness(1);
     transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
+    box-shadow: 0 10px 25px rgba(255,0,0,0.6);
+    filter: brightness(1);
 }
 
 /* Achtergrond styling */
@@ -75,12 +80,10 @@ h1, h2 {
   position: relative;
   touch-action: pan-y;
 }
-
 .swiper-wrapper {
   display: flex;
   transition: transform 0.5s ease;
 }
-
 .swiper-slide {
   min-width: 100%;
   display: flex;
@@ -91,12 +94,10 @@ h1, h2 {
   transform: scale(0.9);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
-
 .swiper-slide.active {
   opacity: 1;
   transform: scale(1);
 }
-
 .swiper-slide .path-image {
   max-width: 100%;
   height: auto;
