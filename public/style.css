@@ -23,7 +23,7 @@ h1, h2 {
     opacity: 0;
     pointer-events: none;
     position: absolute;
-    width: 100%; /* Zorgt ervoor dat de layout niet verschuift */
+    width: 100%;
     left: 0;
     transform: translateY(20px);
 }
@@ -37,37 +37,43 @@ h1, h2 {
     box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
 }
 
-/* Nieuwe achtergrond styling */
+/* Achtergrond styling */
 #background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
     background-image: url('fenrir_ref_pose01 uitgeknipt.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     transition: opacity 1s ease-out;
-    /* Overlay voor betere tekstleesbaarheid */
     box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.5); 
 }
 
-/* Swiper styling (teruggebracht) */
+/* Swiper styling (uit jouw originele bestand) */
 .swiper-container {
-  width: 100%;
-  max-width: 350px; /* Limiet voor desktop */
+  width: 80vw;
+  max-width: 400px;
   margin: 0 auto;
-  overflow: hidden; /* Verbergt de niet-actieve slide */
+  overflow: hidden;
   position: relative;
-  touch-action: pan-y; /* Sta verticaal scrollen toe op mobiel */
+  touch-action: pan-y;
 }
 
 .swiper-wrapper {
   display: flex;
-  transition: transform 0.4s ease-out;
+  transition: transform 0.5s ease;
 }
 
 .swiper-slide {
   min-width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   opacity: 0.5;
   transform: scale(0.9);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -81,7 +87,7 @@ h1, h2 {
 .swiper-slide .path-image {
   max-width: 100%;
   height: auto;
-  max-height: 60vh; /* Zorgt dat de afbeelding niet te groot wordt op lange schermen */
+  max-height: 60vh;
   cursor: pointer;
   border-radius: 1rem;
 }
