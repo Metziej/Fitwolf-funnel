@@ -23,6 +23,8 @@ h1, h2 {
     opacity: 0;
     pointer-events: none;
     position: absolute;
+    width: 100%; /* Zorgt ervoor dat de layout niet verschuift */
+    left: 0;
     transform: translateY(20px);
 }
 .choice-image {
@@ -34,14 +36,52 @@ h1, h2 {
     transform: scale(1.05);
     box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
 }
-.choice-image.selected {
-    filter: grayscale(0%) brightness(1.1);
-    transform: scale(1.05);
-    box-shadow: 0 0 30px var(--brand-red), 0 0 15px var(--brand-red) inset;
-    border-color: var(--brand-red);
-}
-#bg-video {
+
+/* Nieuwe achtergrond styling */
+#background-container {
+    background-image: url('fenrir_ref_pose01 uitgeknipt.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     transition: opacity 1s ease-out;
-    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 80%);
+    /* Overlay voor betere tekstleesbaarheid */
+    box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.5); 
+}
+
+/* Swiper styling (teruggebracht) */
+.swiper-container {
+  width: 100%;
+  max-width: 350px; /* Limiet voor desktop */
+  margin: 0 auto;
+  overflow: hidden; /* Verbergt de niet-actieve slide */
+  position: relative;
+  touch-action: pan-y; /* Sta verticaal scrollen toe op mobiel */
+}
+
+.swiper-wrapper {
+  display: flex;
+  transition: transform 0.4s ease-out;
+}
+
+.swiper-slide {
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  transform: scale(0.9);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.swiper-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.swiper-slide .path-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 60vh; /* Zorgt dat de afbeelding niet te groot wordt op lange schermen */
+  cursor: pointer;
+  border-radius: 1rem;
 }
