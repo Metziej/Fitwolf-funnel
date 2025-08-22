@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     muteButton.addEventListener('click', () => {
         soundsReady = !soundsReady;
-        Tone.start(); // Start audio context on first user interaction
+        Tone.start();
         iconOn.classList.toggle('hidden');
         iconOff.classList.toggle('hidden');
     });
 
     // --- SCENE MANAGEMENT ---
     const scenes = document.querySelectorAll('.scene');
-    let currentSceneIndex = 0;
+    const background = document.getElementById('background-container');
     const userData = { path: '', height: 175, weight: 75, lifestyle: '', sport: '', nutrition: '' };
 
     function showScene(index) {
@@ -28,25 +28,64 @@ document.addEventListener('DOMContentLoaded', () => {
         scenes.forEach((scene, i) => {
             scene.classList.toggle('hidden', i !== index);
         });
-        currentSceneIndex = index;
-        // Fade out background video after scene 1
-        document.getElementById('bg-video').style.opacity = index > 0 ? '0' : '1';
+        // Fade out background after scene 1
+        background.style.opacity = index > 0 ? '0' : '1';
     }
+
+    // --- SWIPER LOGIC (SCENE 2) ---
+    const swiperWrapper = document.getElementById('swiperWrapper');
+    const slides = swiperWrapper.querySelectorAll('.swiper-slide');
+    const chooseButton = document.getElementById('chooseButton');
+    let currentIndex = 0;
+    let touchStartX = 0;
+
+    function updateSlideStyles() {
+        slides.forEach((slide, idx) => {
+            slide.classList.toggle('active', idx === currentIndex);
+        });
+        swiperWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        const pathText = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+        const pathDescription = currentIndex === 0 ? 'Spiermassa & Kracht' : 'Vetverlies & Definitie';
+        chooseButton.innerHTML = `<span class="block text-2xl">${pathText}</span><span class="block text-sm font-normal">${pathDescription}</span>`;
+    }
+
+    swiperWrapper.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX, { passive: true });
+    swiperWrapper.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].clientX;
+        if (touchStartX - touchEndX > 50 && currentIndex < slides.length - 1) { 
+            currentIndex++;
+        } else if (touchEndX - touchStartX > 50 && currentIndex > 0) { 
+            currentIndex--;
+        }
+        updateSlideStyles();
+    });
+    
+    slides.forEach((slide, index) => {
+        slide.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 768) { 
+                currentIndex = index;
+                updateSlideStyles();
+            }
+        });
+        slide.addEventListener('click', () => {
+             if (window.innerWidth <= 768) { 
+                currentIndex = index;
+                updateSlideStyles();
+            }
+        });
+    });
+
+    chooseButton.addEventListener('click', () => {
+        clickSound();
+        userData.path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+        showScene(2);
+    });
 
     // --- EVENT LISTENERS & LOGIC ---
     document.getElementById('start-button').addEventListener('click', () => {
         clickSound();
         showScene(1);
-    });
-
-    document.querySelectorAll('.path-choice').forEach(choice => {
-        choice.addEventListener('click', () => {
-            clickSound();
-            userData.path = choice.dataset.path;
-            document.querySelectorAll('.path-choice img').forEach(img => img.classList.remove('selected'));
-            choice.querySelector('img').classList.add('selected');
-            setTimeout(() => showScene(2), 300);
-        });
     });
     
     // Scene 3: Sliders
@@ -60,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('heightVal').textContent = userData.height;
         document.getElementById('weightVal').textContent = userData.weight;
 
-        if (fenrirVideo.readyState >= 2) { // Check if video metadata is loaded
+        if (fenrirVideo.readyState >= 2) {
             const bmi = userData.weight / Math.pow(userData.height / 100, 2);
             const minBMI = 14, maxBMI = 40;
             const clampedBMI = Math.max(minBMI, Math.min(bmi, maxBMI));
@@ -91,14 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clickSound();
         userData.nutrition = e.target.dataset.value;
         
-        // Final scene logic
         const resultP = document.getElementById('result');
         let analyseText = `Jouw pad is de ${userData.path}. `;
-        if(userData.path === 'Beast Mode'){
-            analyseText += "We gaan ons focussen op het bouwen van pure spiermassa en kracht. Jouw strijdplan wordt hierop afgestemd."
-        } else {
-            analyseText += "We gaan ons focussen op het verbranden van vet en het onthullen van messcherpe definitie. Jouw strijdplan wordt hierop afgestemd."
-        }
+        analyseText += userData.path === 'Beast Mode' ? "We gaan ons focussen op het bouwen van pure spiermassa en kracht." : "We gaan ons focussen op het verbranden van vet en het onthullen van messcherpe definitie.";
         resultP.textContent = analyseText;
         showScene(6);
     }));
@@ -140,4 +174,7 @@ E-mail: ${emailInput.value}
         alert('Perfect! Je persoonlijke analyse wordt nu voorbereid in je e-mailprogramma. Klik op \'Verzenden\' om je aanvraag te voltooien.');
         window.location.href = mailtoLink;
     });
+
+    // Initialisatie
+    updateSlideStyles();
 });
