@@ -22,12 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const scenes = document.querySelectorAll('.scene');
     const background = document.getElementById('background-container');
     const userData = { path: '', height: 175, weight: 75, lifestyle: '', sport: '', nutrition: '' };
+    let currentSceneIndex = 0;
 
     function showScene(index) {
         transitionSound();
         scenes.forEach((scene, i) => {
             scene.classList.toggle('hidden', i !== index);
         });
+        currentSceneIndex = index;
         background.style.opacity = index > 0 ? '0' : '1';
     }
 
