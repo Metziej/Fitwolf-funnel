@@ -1,104 +1,123 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitWolf | Ontketen het Beest in Jou</title>
-  <!-- Link naar het externe CSS-bestand -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitWolf | Ontketen het Beest in Jou</title>
+    
+    <!-- Externe Scripts en Lettertypes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Link naar jouw CSS-bestand -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-black text-white overflow-hidden">
 
-  <!-- Speciale container voor de video-achtergrond -->
-  <div class="background-container">
-    <video autoplay loop muted playsinline id="bg-video">
-      <source src="/fenrir-mist.webm" type="video/webm">
-      <source src="/fenrir-mist.mp4" type="video/mp4">
-      Je browser ondersteunt geen video-achtergronden.
-    </video>
-  </div>
+    <!-- Background Video Container -->
+    <div class="absolute inset-0 z-0">
+        <video autoplay loop muted playsinline id="bg-video" class="w-full h-full object-cover">
+            <source src="fenrir-mist.webm" type="video/webm">
+            <source src="fenrir-mist.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <!-- Mute Button -->
+    <button id="mute-button" class="absolute top-4 right-4 z-20 bg-black/50 p-2 rounded-full hover:bg-red-600/70 transition-colors">
+        <svg id="icon-sound-on" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+        <svg id="icon-sound-off" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l-5-5m0 5l5-5" /></svg>
+    </button>
 
-  <!-- Scene 1: Welkomstscherm -->
-  <section class="scene" id="scene1">
-    <h2>Blijf geen schaap. Word een wolf!</h2>
-    <p><b>Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</b></p>
-    <button class="cta-button" id="start-button">IK NEEM ACTIE</button>
-  </section>
+    <div class="relative z-10 flex items-center justify-center h-screen p-4">
+        <div class="w-full max-w-4xl text-center">
 
-  <!-- Scene 2: Keuze van het pad -->
-  <section class="scene hidden" id="scene2">
-    <h1>Wie wil je zijn?</h1>
-    <div class="swiper-container">
-      <div class="swiper-wrapper" id="swiperWrapper">
-        <div class="swiper-slide active">
-          <img src="/Fenrir-aankomen2.png" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="path-image">
+            <!-- Scene 1: Welkomstscherm -->
+            <section class="scene" id="scene1">
+                <h2 class="text-5xl md:text-7xl text-red-500" style="text-shadow: 0 0 15px var(--brand-red);">Blijf geen schaap. Word een wolf!</h2>
+                <p class="text-xl md:text-2xl mt-4 font-bold">Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</p>
+                <button class="cta-button text-3xl mt-8 bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-lg shadow-lg" id="start-button">Ik Neem Actie</button>
+            </section>
+
+            <!-- Scene 2: Keuze van het pad -->
+            <section class="scene hidden" id="scene2">
+                <h1 class="text-4xl md:text-6xl mb-8">Wie wil je zijn?</h1>
+                <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+                    <div class="path-choice cursor-pointer" data-path="Beast Mode">
+                        <img src="Fenrir-aankomen2.jpg" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="choice-image rounded-xl border-4 border-transparent w-64 h-auto">
+                        <h3 class="text-3xl mt-4 uppercase">Beast Mode</h3>
+                        <p>Spiermassa & Kracht</p>
+                    </div>
+                    <div class="path-choice cursor-pointer" data-path="Predator Mode">
+                        <img src="Fenrir-afvallen2.jpg" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="choice-image rounded-xl border-4 border-transparent w-64 h-auto">
+                        <h3 class="text-3xl mt-4 uppercase">Predator Mode</h3>
+                        <p>Vetverlies & Definitie</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Scene 3: Fysieke gegevens -->
+            <section class="scene hidden" id="scene3">
+                <h1 class="text-4xl md:text-6xl mb-4">Wat is je startpunt?</h1>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                    <video id="fenrirVideo" width="250" muted playsinline preload="auto" class="rounded-lg"><source src="Dun-naar-dik.webm" type="video/webm"><source src="Dun-naar-dik.mp4" type="video/mp4"></video>
+                    <div class="w-full max-w-sm text-left">
+                        <label for="heightSlider" class="text-xl">Lengte: <span id="heightVal" class="font-bold text-red-500">175</span> cm</label>
+                        <input type="range" id="heightSlider" min="140" max="210" value="175" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+                        <label for="weightSlider" class="text-xl mt-4 block">Gewicht: <span id="weightVal" class="font-bold text-red-500">75</span> kg</label>
+                        <input type="range" id="weightSlider" min="40" max="160" value="75" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+                    </div>
+                </div>
+                <button class="cta-button text-2xl mt-8 bg-gray-700 hover:bg-gray-600 text-white py-2 px-8 rounded-lg" id="scene3-next">Volgende</button>
+            </section>
+
+            <!-- Scene 4, 5, 6: Levensstijl, Sport, Voeding (Dynamisch) -->
+            <section class="scene hidden" id="scene-lifestyle">
+                 <h1 id="lifestyle-title" class="text-4xl md:text-6xl mb-8">Hoe ziet je dagelijkse jacht eruit?</h1>
+                 <div class="option-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Zittend%0A(Krijger+in+rust)" alt="Zittend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Zittend">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Actief%0A(Constant+op+jacht)" alt="Actief werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Actief">
+                    <img src="fenrir_ref_pose01 uitgeknipt.jpg" alt="Wisselend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Wisselend">
+                 </div>
+            </section>
+            
+            <section class="scene hidden" id="scene-sport">
+                 <h1 id="sport-title" class="text-4xl md:text-6xl mb-8">Hoe vaak slijp je je klauwen?</h1>
+                 <div class="option-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Nooit" alt="Nooit sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Nooit">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=1-2x%0Aper+week" alt="1-2x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="1-2x">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=3-5x%0Aper+week" alt="3-5x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="3-5x">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Elke%0ADag" alt="Elke dag sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Elke dag">
+                 </div>
+            </section>
+
+            <section class="scene hidden" id="scene-nutrition">
+                 <h1 id="nutrition-title" class="text-4xl md:text-6xl mb-8">Hoe voed je het beest?</h1>
+                 <div class="option-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+eet%0Awat+ik+wil" alt="Ik eet wat ik wil" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik eet wat ik wil">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+let%0Aeen+beetje+op" alt="Ik let een beetje op" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik let een beetje op">
+                    <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+track%0Aalles" alt="Ik track alles" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik track alles">
+                 </div>
+            </section>
+
+            <!-- Scene 7: Resultaat & Gegevensverzameling -->
+            <section class="scene hidden" id="scene7">
+                <h1 class="text-4xl md:text-6xl mb-4">Fenrir's Analyse is Binnen.</h1>
+                <p id="result" class="text-lg max-w-2xl mx-auto"></p>
+                <div class="max-w-md mx-auto mt-8 space-y-4">
+                    <input type="text" id="username" placeholder="Naam" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+                    <input type="email" id="email" placeholder="E-mail" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+                    <p id="form-error" class="text-red-500 h-6"></p>
+                    <button class="cta-button text-3xl bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg w-full" id="submit-button">Stuur Mij Mijn Battleplan!</button>
+                </div>
+            </section>
+
         </div>
-        <div class="swiper-slide">
-          <img src="/Fenrir-afvallen2.png" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="path-image">
-        </div>
-      </div>
     </div>
-    <button id="chooseButton" class="cta-button fade-in">MONSTER - Spiermassa en kracht</button>
-  </section>
 
-  <!-- Scene 3: Fysieke gegevens -->
-  <section class="scene hidden" id="scene3">
-    <video id="fenrirVideo" width="200" muted playsinline preload="auto">
-      <!-- Correcte bronnen voor maximale compatibiliteit -->
-      <source src="/Dun-naar-dik.webm" type="video/webm">
-      <source src="/Dun-naar-dik.mp4" type="video/mp4">
-      Je browser ondersteunt deze video niet.
-    </video>
-    <h1>Wie ben je nu?</h1>
-    <label for="heightSlider">Lengte (cm): <span id="heightVal">175</span></label>
-    <input type="range" id="heightSlider" min="140" max="210" value="175">
-    <label for="weightSlider">Gewicht (kg): <span id="weightVal">75</span></label>
-    <input type="range" id="weightSlider" min="40" max="160" value="75">
-    <button class="cta-button" id="scene3-next">Volgende</button>
-  </section>
-
-  <!-- Scene 4: Levensstijl -->
-  <section class="scene hidden" id="scene4">
-    <h1>Wat voor werk doe je?</h1>
-    <div class="option-grid">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/4211f375-14a5-4f05-8968-3d191d8350d7" alt="Zittend werk" class="choice-image lifestyle-btn" data-value="Zittend">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/c2f82991-8664-4e20-94d0-621ca76b0520" alt="Actief werk" class="choice-image lifestyle-btn" data-value="Actief">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/a444a477-9a4f-4654-be8d-f5e67edde5f4" alt="Wisselend werk" class="choice-image lifestyle-btn" data-value="Wisselend">
-    </div>
-  </section>
-
-  <!-- Scene 5: Sportfrequentie -->
-  <section class="scene hidden" id="scene5">
-    <h1>Hoe vaak sport je per week?</h1>
-    <div class="option-grid">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/9c336585-05e8-4a57-b08e-5b18f0c2a715" alt="Nooit sporten" class="choice-image sport-btn" data-value="Nooit">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/84de79de-226e-419b-a36c-941d3c05423f" alt="1-2x per week sporten" class="choice-image sport-btn" data-value="1–2x">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/f90f1469-808a-40ad-afbc-08e1a1005b63" alt="3-5x per week sporten" class="choice-image sport-btn" data-value="3–5x">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/7ef64a93-792f-488b-a70d-f3c7e6c0c169" alt="Elke dag sporten" class="choice-image sport-btn" data-value="Elke dag">
-    </div>
-  </section>
-
-  <!-- Scene 6: Voeding -->
-  <section class="scene hidden" id="scene6">
-    <h1>Hoe goed let je op je voeding?</h1>
-    <div class="option-grid">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/13812b73-c6c7-43f6-932d-327c5ff9f302" alt="Ik eet wat ik wil" class="choice-image nutrition-btn" data-value="Ik eet wat ik wil">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/373b88b4-e404-4050-a94f-561b36bb3369" alt="Ik let een beetje op mijn voeding" class="choice-image nutrition-btn" data-value="Ik let een beetje op">
-      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/714cd70b-3631-4828-8d4b-741a4a169b13" alt="Ik track al mijn voeding" class="choice-image nutrition-btn" data-value="Ik track alles">
-    </div>
-  </section>
-
-  <!-- Scene 7: Resultaat & Gegevensverzameling -->
-  <section class="scene hidden" id="scene7">
-    <h1>Fenrir's Analyse is binnen.</h1>
-    <p id="result"></p>
-    <input type="text" id="username" placeholder="Naam">
-    <input type="email" id="email" placeholder="E-mail">
-    <p id="form-error" class="error-message"></p>
-    <button class="cta-button" id="submit-button">Stuur mij mijn battleplan!</button>
-  </section>
-
-  <!-- Link naar het externe JavaScript-bestand -->
-  <script src="script.js"></script>
+    <!-- Link naar jouw JavaScript-bestand -->
+    <script src="script.js"></script>
 </body>
 </html>
