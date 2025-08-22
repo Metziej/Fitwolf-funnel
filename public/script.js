@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         scenes.forEach((scene, i) => {
             scene.classList.toggle('hidden', i !== index);
         });
-        // Fade out background after scene 1
         background.style.opacity = index > 0 ? '0' : '1';
     }
 
@@ -64,12 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     slides.forEach((slide, index) => {
         slide.addEventListener('mouseenter', () => {
             if (window.innerWidth > 768) { 
-                currentIndex = index;
-                updateSlideStyles();
-            }
-        });
-        slide.addEventListener('click', () => {
-             if (window.innerWidth <= 768) { 
                 currentIndex = index;
                 updateSlideStyles();
             }
