@@ -6,108 +6,391 @@
     <title>FitWolf | Ontketen het Beest in Jou</title>
     
     <!-- Externe Scripts en Lettertypes -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Link naar jouw CSS-bestand -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- ALGEMENE STYLING --- */
+        :root {
+            --brand-red: #dc2626;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        h1, h2 {
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 8px #000;
+        }
+        p {
+             text-shadow: 2px 2px 8px #000;
+        }
+        .cta-button {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5);
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* --- SCENE MANAGEMENT --- */
+        .scene {
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- ACHTERGROND --- */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('fenrir_ref_pose01 uitgeknipt.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            transition: opacity 1s ease-out;
+            box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.6); 
+        }
+        #background-container.fade-out {
+            opacity: 0;
+        }
+
+        /* --- SWIPER (JOUW ORIGINELE CODE) --- */
+        .swiper-container {
+            width: 90vw;
+            max-width: 400px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+            touch-action: pan-y;
+        }
+        .swiper-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .swiper-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            opacity: 0.5;
+            transform: scale(0.9);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .swiper-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .swiper-slide .path-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 60vh;
+            cursor: pointer;
+            border-radius: 1rem;
+        }
+        #chooseButton.fade-in {
+             animation: fadeInButton 0.3s forwards;
+        }
+        @keyframes fadeInButton { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- OVERIGE ELEMENTEN --- */
+        .choice-image {
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            filter: brightness(0.8);
+        }
+        .choice-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255,0,0,0.6);
+            filter: brightness(1);
+        }
+        .input-error {
+            border: 2px solid var(--brand-red) !important;
+        }
+        input[type=range] {
+             accent-color: var(--brand-red);
+        }
+    </style>
 </head>
 <body class="bg-black text-white overflow-hidden">
 
-    <!-- Background Image Container -->
     <div id="background-container"></div>
     
-    <!-- Mute Button -->
-    <button id="mute-button" class="absolute top-4 right-4 z-20 bg-black/50 p-2 rounded-full hover:bg-red-600/70 transition-colors">
+    <button id="mute-button" class="fixed top-4 right-4 z-20 bg-black/50 p-2 rounded-full hover:bg-red-600/70 transition-colors">
         <svg id="icon-sound-on" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
         <svg id="icon-sound-off" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l-5-5m0 5l5-5" /></svg>
     </button>
 
-    <!-- Scene 1: Welkomstscherm -->
-    <section class="scene" id="scene1">
-        <h2 class="text-5xl md:text-7xl text-red-500" style="text-shadow: 0 0 15px var(--brand-red);">Blijf geen schaap. Word een wolf!</h2>
-        <p class="text-xl md:text-2xl mt-4 font-bold">Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</p>
-        <button class="cta-button text-3xl mt-8 bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-lg shadow-lg" id="start-button">Ik Neem Actie</button>
-    </section>
+    <main>
+        <!-- Scene 1: Welkomstscherm -->
+        <section class="scene" id="scene1">
+            <h2 class="text-5xl md:text-7xl text-red-500" style="text-shadow: 0 0 15px var(--brand-red);">Blijf geen schaap. Word een wolf!</h2>
+            <p class="text-xl md:text-2xl mt-4 font-bold">Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</p>
+            <button class="cta-button text-3xl mt-8 bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-lg shadow-lg" id="start-button">Ik Neem Actie</button>
+        </section>
 
-    <!-- Scene 2: Keuze van het pad (met Swiper) -->
-    <section class="scene hidden" id="scene2">
-        <h1 class="text-4xl md:text-6xl">Wie wil je zijn?</h1>
-        <div class="swiper-container">
-            <div class="swiper-wrapper" id="swiperWrapper">
-                <div class="swiper-slide active">
-                    <img src="Fenrir-aankomen2.jpg" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="path-image">
-                </div>
-                <div class="swiper-slide">
-                    <img src="Fenrir-afvallen2.jpg" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="path-image">
+        <!-- Scene 2: Keuze van het pad -->
+        <section class="scene hidden" id="scene2">
+            <h1 class="text-4xl md:text-6xl">Wie wil je zijn?</h1>
+            <div class="swiper-container">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    <div class="swiper-slide active">
+                        <img src="Fenrir-aankomen2.jpg" alt="Beast Mode" class="path-image">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="Fenrir-afvallen2.jpg" alt="Predator Mode" class="path-image">
+                    </div>
                 </div>
             </div>
-        </div>
-        <button id="chooseButton" class="cta-button text-2xl mt-4 bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg"></button>
-    </section>
-    
-    <!-- Scene 3: Fysieke gegevens -->
-    <section class="scene hidden" id="scene3">
-        <h1 class="text-4xl md:text-6xl">Wat is je startpunt?</h1>
-        <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-            <video id="fenrirVideo" width="250" muted playsinline preload="auto" class="rounded-lg"><source src="Dun-naar-dik.webm" type="video/webm"><source src="Dun-naar-dik.mp4" type="video/mp4"></video>
-            <div class="w-full max-w-sm text-left">
-                <label for="heightSlider" class="text-xl">Lengte: <span id="heightVal" class="font-bold text-red-500">175</span> cm</label>
-                <input type="range" id="heightSlider" min="140" max="210" value="175" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
-                <label for="weightSlider" class="text-xl mt-4 block">Gewicht: <span id="weightVal" class="font-bold text-red-500">75</span> kg</label>
-                <input type="range" id="weightSlider" min="40" max="160" value="75" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+            <button id="chooseButton" class="cta-button text-2xl mt-8 bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg"></button>
+        </section>
+        
+        <!-- Scene 3: Fysieke gegevens -->
+        <section class="scene hidden" id="scene3">
+            <h1 class="text-4xl md:text-6xl">Wat is je startpunt?</h1>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-4xl">
+                <video id="fenrirVideo" width="250" muted playsinline preload="auto" class="rounded-lg"><source src="Dun-naar-dik.webm" type="video/webm"><source src="Dun-naar-dik.mp4" type="video/mp4"></video>
+                <div class="w-full max-w-sm text-left">
+                    <label for="heightSlider" class="text-xl">Lengte: <span id="heightVal" class="font-bold text-red-500">175</span> cm</label>
+                    <input type="range" id="heightSlider" min="140" max="210" value="175" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                    <label for="weightSlider" class="text-xl mt-4 block">Gewicht: <span id="weightVal" class="font-bold text-red-500">75</span> kg</label>
+                    <input type="range" id="weightSlider" min="40" max="160" value="75" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                </div>
             </div>
-        </div>
-        <button class="cta-button text-2xl mt-8 bg-gray-700 hover:bg-gray-600 text-white py-2 px-8 rounded-lg" id="scene3-next">Volgende</button>
-    </section>
+            <button class="cta-button text-2xl mt-8 bg-gray-700 hover:bg-gray-600 text-white py-2 px-8 rounded-lg" id="scene3-next">Volgende</button>
+        </section>
 
-    <!-- Scene 4: Levensstijl -->
-    <section class="scene hidden" id="scene4">
-         <h1 class="text-4xl md:text-6xl">Hoe ziet je dagelijkse jacht eruit?</h1>
-         <div class="option-grid grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Zittend%0A(Krijger+in+rust)" alt="Zittend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Zittend">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Actief%0A(Constant+op+jacht)" alt="Actief werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Actief">
-            <img src="fenrir_ref_pose01 uitgeknipt.jpg" alt="Wisselend werk" class="choice-image lifestyle-btn rounded-xl border-4 border-transparent" data-value="Wisselend">
-         </div>
-    </section>
-    
-    <!-- Scene 5: Sport -->
-    <section class="scene hidden" id="scene5">
-         <h1 class="text-4xl md:text-6xl">Hoe vaak slijp je je klauwen?</h1>
-         <div class="option-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Nooit" alt="Nooit sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Nooit">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=1-2x%0Aper+week" alt="1-2x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="1-2x">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=3-5x%0Aper+week" alt="3-5x per week sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="3-5x">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Elke%0ADag" alt="Elke dag sporten" class="choice-image sport-btn rounded-xl border-4 border-transparent" data-value="Elke dag">
-         </div>
-    </section>
+        <!-- Scene 4, 5, 6, 7... (rest van de HTML is hetzelfde) -->
+        <section class="scene hidden" id="scene4">
+            <h1 class="text-4xl md:text-6xl mb-8">Hoe ziet je dagelijkse jacht eruit?</h1>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Zittend%0A(Krijger+in+rust)" alt="Zittend werk" class="choice-image lifestyle-btn" data-value="Zittend">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Actief%0A(Constant+op+jacht)" alt="Actief werk" class="choice-image lifestyle-btn" data-value="Actief">
+                <img src="fenrir_ref_pose01 uitgeknipt.jpg" alt="Wisselend werk" class="choice-image lifestyle-btn" data-value="Wisselend">
+            </div>
+        </section>
+        <section class="scene hidden" id="scene5">
+            <h1 class="text-4xl md:text-6xl mb-8">Hoe vaak slijp je je klauwen?</h1>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-4xl">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Nooit" alt="Nooit sporten" class="choice-image sport-btn" data-value="Nooit">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=1-2x%0Aper+week" alt="1-2x per week sporten" class="choice-image sport-btn" data-value="1-2x">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=3-5x%0Aper+week" alt="3-5x per week sporten" class="choice-image sport-btn" data-value="3-5x">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Elke%0ADag" alt="Elke dag sporten" class="choice-image sport-btn" data-value="Elke dag">
+            </div>
+        </section>
+        <section class="scene hidden" id="scene6">
+            <h1 class="text-4xl md:text-6xl mb-8">Hoe voed je het beest?</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+eet%0Awat+ik+wil" alt="Ik eet wat ik wil" class="choice-image nutrition-btn" data-value="Ik eet wat ik wil">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+let%0Aeen+beetje+op" alt="Ik let een beetje op" class="choice-image nutrition-btn" data-value="Ik let een beetje op">
+                <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+track%0Aalles" alt="Ik track alles" class="choice-image nutrition-btn" data-value="Ik track alles">
+            </div>
+        </section>
+        <section class="scene hidden" id="scene7">
+            <h1 class="text-4xl md:text-6xl mb-4">Fenrir's Analyse is Binnen.</h1>
+            <p id="result" class="text-lg max-w-2xl mx-auto"></p>
+            <div class="max-w-md mx-auto mt-8 space-y-4">
+                <input type="text" id="username" placeholder="Naam" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+                <input type="email" id="email" placeholder="E-mail" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
+                <p id="form-error" class="text-red-500 h-6"></p>
+                <button class="cta-button text-3xl bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg w-full" id="submit-button">Stuur Mij Mijn Battleplan!</button>
+            </div>
+        </section>
+    </main>
 
-    <!-- Scene 6: Voeding -->
-    <section class="scene hidden" id="scene6">
-         <h1 class="text-4xl md:text-6xl">Hoe voed je het beest?</h1>
-         <div class="option-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+eet%0Awat+ik+wil" alt="Ik eet wat ik wil" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik eet wat ik wil">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+let%0Aeen+beetje+op" alt="Ik let een beetje op" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik let een beetje op">
-            <img src="https://placehold.co/400x600/111827/ef4444?text=Ik+track%0Aalles" alt="Ik track alles" class="choice-image nutrition-btn rounded-xl border-4 border-transparent" data-value="Ik track alles">
-         </div>
-    </section>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- SOUND ENGINE ---
+        let soundsReady = false;
+        const synth = new Tone.Synth({ oscillator: { type: 'sine' }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 } }).toDestination();
+        const clickSound = () => soundsReady && synth.triggerAttackRelease("C2", "8n");
+        const transitionSound = () => soundsReady && new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.1, sustain: 0 } }).toDestination().triggerAttackRelease("16n");
+        const successSound = () => soundsReady && synth.triggerAttackRelease("C4", "8n", Tone.now());
 
-    <!-- Scene 7: Resultaat & Gegevensverzameling -->
-    <section class="scene hidden" id="scene7">
-        <h1 class="text-4xl md:text-6xl">Fenrir's Analyse is Binnen.</h1>
-        <p id="result" class="text-lg max-w-2xl mx-auto"></p>
-        <div class="max-w-md mx-auto mt-8 space-y-4">
-            <input type="text" id="username" placeholder="Naam" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
-            <input type="email" id="email" placeholder="E-mail" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-center focus:border-red-500 focus:ring-0 transition-colors">
-            <p id="form-error" class="text-red-500 h-6"></p>
-            <button class="cta-button text-3xl bg-red-600 hover:bg-red-700 text-white py-3 px-10 rounded-lg shadow-lg w-full" id="submit-button">Stuur Mij Mijn Battleplan!</button>
-        </div>
-    </section>
+        const muteButton = document.getElementById('mute-button');
+        muteButton.addEventListener('click', () => {
+            soundsReady = !soundsReady;
+            if (soundsReady && Tone.context.state !== 'running') { Tone.start(); }
+            document.getElementById('icon-sound-on').classList.toggle('hidden');
+            document.getElementById('icon-sound-off').classList.toggle('hidden');
+        });
 
-    <!-- Link naar jouw JavaScript-bestand -->
-    <script src="script.js"></script>
+        // --- SCENE MANAGEMENT ---
+        const scenes = document.querySelectorAll('.scene');
+        const background = document.getElementById('background-container');
+        let currentScene = 1;
+
+        function nextScene() {
+            transitionSound();
+            if (currentScene >= scenes.length) return;
+            if (currentScene === 1) { background.classList.add('fade-out'); }
+            scenes[currentScene - 1].classList.add('hidden');
+            currentScene++;
+            scenes[currentScene - 1].classList.remove('hidden');
+        }
+        
+        // --- JOUW ORIGINELE, WERKEND SCRIPT ---
+        const userData = { path: '', height: 175, weight: 75, lifestyle: '', sport: '', nutrition: '' };
+        
+        // Swiper Logic
+        const swiperWrapper = document.getElementById('swiperWrapper');
+        const slides = swiperWrapper.querySelectorAll('.swiper-slide');
+        const chooseButton = document.getElementById('chooseButton');
+        let currentIndex = 0;
+        let touchStartX = 0;
+
+        function updateSlideStyles() {
+            slides.forEach((slide, idx) => slide.classList.toggle('active', idx === currentIndex));
+            swiperWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            const pathText = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+            const pathDescription = currentIndex === 0 ? 'Spiermassa & Kracht' : 'Vetverlies & Definitie';
+            chooseButton.innerHTML = `<span class="block text-2xl">${pathText}</span><span class="block text-sm font-normal">${pathDescription}</span>`;
+            chooseButton.classList.remove('fade-in');
+            void chooseButton.offsetWidth;
+            chooseButton.classList.add('fade-in');
+        }
+
+        swiperWrapper.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX, { passive: true });
+        swiperWrapper.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].clientX;
+            if (touchStartX - touchEndX > 50) { currentIndex = 1; } 
+            else if (touchEndX - touchStartX > 50) { currentIndex = 0; }
+            updateSlideStyles();
+        });
+        
+        slides.forEach((slide, index) => {
+            slide.addEventListener('mouseenter', () => {
+                if (window.innerWidth > 768) { currentIndex = index; updateSlideStyles(); }
+            });
+        });
+        
+        function selectPathAndContinue() {
+            clickSound();
+            userData.path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
+            nextScene();
+        }
+
+        // Scene 3 Logic
+        const fenrirVideo = document.getElementById('fenrirVideo');
+        const heightSlider = document.getElementById('heightSlider');
+        const weightSlider = document.getElementById('weightSlider');
+        let fenrirVideoReady = false;
+
+        function updateFenrirVisual() {
+            userData.height = parseInt(heightSlider.value);
+            userData.weight = parseInt(weightSlider.value);
+            document.getElementById('heightVal').textContent = userData.height;
+            document.getElementById('weightVal').textContent = userData.weight;
+
+            if (!fenrirVideoReady) return;
+            const bmi = userData.weight / Math.pow(userData.height / 100, 2);
+            const minBMI = 14, maxBMI = 40;
+            const clampedBMI = Math.max(minBMI, Math.min(bmi, maxBMI));
+            const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
+            fenrirVideo.currentTime = fenrirVideo.duration * percentage;
+        }
+
+        // --- EVENT LISTENERS ---
+        document.getElementById('start-button').addEventListener('click', () => { clickSound(); nextScene(); });
+        chooseButton.addEventListener('click', selectPathAndContinue);
+        
+        heightSlider.addEventListener('input', updateFenrirVisual);
+        weightSlider.addEventListener('input', updateFenrirVisual);
+        fenrirVideo.addEventListener('loadedmetadata', () => { fenrirVideoReady = true; updateFenrirVisual(); });
+        document.getElementById('scene3-next').addEventListener('click', () => { clickSound(); nextScene(); });
+
+        document.querySelectorAll('.lifestyle-btn').forEach(btn => btn.addEventListener('click', e => {
+            clickSound();
+            userData.lifestyle = e.target.dataset.value;
+            nextScene();
+        }));
+        document.querySelectorAll('.sport-btn').forEach(btn => btn.addEventListener('click', e => {
+            clickSound();
+            userData.sport = e.target.dataset.value;
+            nextScene();
+        }));
+        document.querySelectorAll('.nutrition-btn').forEach(btn => btn.addEventListener('click', e => {
+            clickSound();
+            userData.nutrition = e.target.dataset.value;
+            let analyseText = `Jouw pad is de ${userData.path}. `;
+            analyseText += userData.path === 'Beast Mode' ? "We gaan ons focussen op het bouwen van pure spiermassa en kracht." : "We gaan ons focussen op het verbranden van vet en het onthullen van messcherpe definitie.";
+            document.getElementById('result').textContent = analyseText;
+            nextScene();
+        }));
+
+        document.getElementById('submit-button').addEventListener('click', () => {
+            const nameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const errorMsg = document.getElementById('form-error');
+
+            nameInput.classList.remove('input-error');
+            emailInput.classList.remove('input-error');
+            errorMsg.textContent = '';
+            
+            if (nameInput.value.trim() === '' || !/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+                errorMsg.textContent = 'Vul een geldige naam en e-mailadres in.';
+                if (nameInput.value.trim() === '') nameInput.classList.add('input-error');
+                if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) emailInput.classList.add('input-error');
+                return;
+            }
+            
+            successSound();
+            const emailBody = `
+Nieuwe FitWolf Intake van: ${nameInput.value}
+======================================
+Pad Keuze: ${userData.path}
+---------------------------------
+Huidige Fysiek:
+Lengte: ${userData.height} cm
+Gewicht: ${userData.weight} kg
+---------------------------------
+Levensstijl & Gewoontes:
+Werk: ${userData.lifestyle}
+Sportfrequentie: ${userData.sport} per week
+Voeding: ${userData.nutrition}
+---------------------------------
+Contactgegevens:
+Naam: ${nameInput.value}
+E-mail: ${emailInput.value}
+            `.trim();
+
+            const mailtoLink = `mailto:info@fitwolf.nl?subject=${encodeURIComponent(`Nieuwe FitWolf Intake van ${nameInput.value}`)}&body=${encodeURIComponent(emailBody)}`;
+            alert('Perfect! Je persoonlijke analyse wordt nu voorbereid in je e-mailprogramma. Klik op \'Verzenden\' om je aanvraag te voltooien.');
+            window.location.href = mailtoLink;
+        });
+
+        // --- INITIALISATIE ---
+        scenes.forEach((s, i) => s.classList.toggle('hidden', i !== 0)); // Zorg dat alleen de eerste scene zichtbaar is
+        updateSlideStyles();
+        heightSlider.value = userData.height;
+        weightSlider.value = userData.weight;
+        document.getElementById('heightVal').textContent = userData.height;
+        document.getElementById('weightVal').textContent = userData.weight;
+    });
+    </script>
 </body>
 </html>
+
