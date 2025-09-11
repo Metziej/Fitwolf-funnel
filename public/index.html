@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitWolf | Ontketen het Beest in Jou</title>
+  <!-- Link naar het externe CSS-bestand -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Speciale container voor de video-achtergrond -->
+  <div class="background-container">
+    <video autoplay loop muted playsinline id="bg-video">
+      <source src="/fenrir-mist.webm" type="video/webm">
+      <source src="/fenrir-mist.mp4" type="video/mp4">
+      Je browser ondersteunt geen video-achtergronden.
+    </video>
+  </div>
+
+  <!-- Scene 1: Welkomstscherm -->
+  <section class="scene" id="scene1">
+    <h2>Blijf geen schaap. Word een wolf!</h2>
+    <p><b>Ontvang NU GRATIS Jouw Persoonlijke Strijdplan!</b></p>
+    <button class="cta-button" id="start-button">IK NEEM ACTIE</button>
+  </section>
+
+  <!-- Scene 2: Keuze van het pad -->
+  <section class="scene hidden" id="scene2">
+    <h1>Wie wil je zijn?</h1>
+    <div class="swiper-container">
+      <div class="swiper-wrapper" id="swiperWrapper">
+        <div class="swiper-slide active">
+          <img src="/Fenrir-aankomen2.png" alt="Illustratie van een gespierde wolf, symbool voor spiermassa en kracht." class="path-image">
+        </div>
+        <div class="swiper-slide">
+          <img src="/Fenrir-afvallen2.png" alt="Illustratie van een fitte, afgetrainde wolf, symbool voor vetverlies en definitie." class="path-image">
+        </div>
+      </div>
+    </div>
+    <button id="chooseButton" class="cta-button fade-in">MONSTER - Spiermassa en kracht</button>
+  </section>
+
+  <!-- Scene 3: Fysieke gegevens -->
+  <section class="scene hidden" id="scene3">
+    <video id="fenrirVideo" width="200" muted playsinline preload="auto">
+      <!-- Correcte bronnen voor maximale compatibiliteit -->
+      <source src="/Dun-naar-dik.webm" type="video/webm">
+      <source src="/Dun-naar-dik.mp4" type="video/mp4">
+      Je browser ondersteunt deze video niet.
+    </video>
+    <h1>Wie ben je nu?</h1>
+    <label for="heightSlider">Lengte (cm): <span id="heightVal">175</span></label>
+    <input type="range" id="heightSlider" min="140" max="210" value="175">
+    <label for="weightSlider">Gewicht (kg): <span id="weightVal">75</span></label>
+    <input type="range" id="weightSlider" min="40" max="160" value="75">
+    <button class="cta-button" id="scene3-next">Volgende</button>
+  </section>
+
+  <!-- Scene 4: Levensstijl -->
+  <section class="scene hidden" id="scene4">
+    <h1>Wat voor werk doe je?</h1>
+    <div class="option-grid">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/4211f375-14a5-4f05-8968-3d191d8350d7" alt="Zittend werk" class="choice-image lifestyle-btn" data-value="Zittend">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/c2f82991-8664-4e20-94d0-621ca76b0520" alt="Actief werk" class="choice-image lifestyle-btn" data-value="Actief">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/a444a477-9a4f-4654-be8d-f5e67edde5f4" alt="Wisselend werk" class="choice-image lifestyle-btn" data-value="Wisselend">
+    </div>
+  </section>
+
+  <!-- Scene 5: Sportfrequentie -->
+  <section class="scene hidden" id="scene5">
+    <h1>Hoe vaak sport je per week?</h1>
+    <div class="option-grid">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/9c336585-05e8-4a57-b08e-5b18f0c2a715" alt="Nooit sporten" class="choice-image sport-btn" data-value="Nooit">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/84de79de-226e-419b-a36c-941d3c05423f" alt="1-2x per week sporten" class="choice-image sport-btn" data-value="1–2x">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/f90f1469-808a-40ad-afbc-08e1a1005b63" alt="3-5x per week sporten" class="choice-image sport-btn" data-value="3–5x">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/7ef64a93-792f-488b-a70d-f3c7e6c0c169" alt="Elke dag sporten" class="choice-image sport-btn" data-value="Elke dag">
+    </div>
+  </section>
+
+  <!-- Scene 6: Voeding -->
+  <section class="scene hidden" id="scene6">
+    <h1>Hoe goed let je op je voeding?</h1>
+    <div class="option-grid">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/13812b73-c6c7-43f6-932d-327c5ff9f302" alt="Ik eet wat ik wil" class="choice-image nutrition-btn" data-value="Ik eet wat ik wil">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/373b88b4-e404-4050-a94f-561b36bb3369" alt="Ik let een beetje op mijn voeding" class="choice-image nutrition-btn" data-value="Ik let een beetje op">
+      <img src="https://storage.googleapis.com/gemini-generative-ai-api-freeform-prod/images/714cd70b-3631-4828-8d4b-741a4a169b13" alt="Ik track al mijn voeding" class="choice-image nutrition-btn" data-value="Ik track alles">
+    </div>
+  </section>
+
+  <!-- Scene 7: Resultaat & Gegevensverzameling -->
+  <section class="scene hidden" id="scene7">
+    <h1>Fenrir's Analyse is binnen.</h1>
+    <p id="result"></p>
+    <input type="text" id="username" placeholder="Naam">
+    <input type="email" id="email" placeholder="E-mail">
+    <p id="form-error" class="error-message"></p>
+    <button class="cta-button" id="submit-button">Stuur mij mijn battleplan!</button>
+  </section>
+
+  <!-- Link naar het externe JavaScript-bestand -->
+  <script src="script.js"></script>
+</body>
+</html>
