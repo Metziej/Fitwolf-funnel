@@ -252,17 +252,14 @@
     }
     
     /* Scene 3 Video Slider */
-    .body-visualizer {
+    .video-container {
         position: relative;
         width: 80%;
-        max-width: 400px;
-        height: 300px;
+        max-width: 500px;
         margin: 20px auto;
-        border: 2px solid var(--color-secondary);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background-color 0.5s ease;
+    }
+    #bmiVideo {
+        width: 100%;
     }
     .slider {
         -webkit-appearance: none;
@@ -348,7 +345,7 @@
     <div id="glitch-word2" class="glitch-word">Twijfel...</div>
     <div id="glitch-word3" class="glitch-word">Uitstel...</div>
     <div id="glitch-word4" class="glitch-word">Nog een dag...</div>
-    <img src="https://placehold.co/150x150/080808/FF3B30?text=FW" id="awakening-logo" alt="FitWolf Logo">
+    <img src="fenrir_ref_pose01 uitgeknipt.png" id="awakening-logo" alt="FitWolf Logo">
   </div>
 
   <div class="saga-progress-container">
@@ -370,13 +367,12 @@
       <div class="swiper-nav" id="prevSlide">&lt;</div>
       <div class="swiper-outer">
           <div class="swiper-wrapper" id="swiperWrapper">
-            <!-- NOTE: Replaced local images with placeholders for visibility -->
             <div class="swiper-slide active" data-path="Juggernaut">
-              <img src="https://placehold.co/400x400/FF3B30/080808?text=Juggernaut\n(Aankomen)" alt="Juggernaut Pad">
+              <img src="Fenrir-aankomen2.png" alt="Juggernaut Pad">
               <p class="path-title">PATH OF THE JUGGERNAUT</p>
             </div>
             <div class="swiper-slide" data-path="Predator">
-              <img src="https://placehold.co/400x400/080808/F7F7F7?text=Predator\n(Afvallen)" alt="Predator Pad">
+              <img src="Fenrir-afvallen2.png" alt="Predator Pad">
               <p class="path-title">PATH OF THE PREDATOR</p>
             </div>
           </div>
@@ -388,9 +384,10 @@
 
   <div id="scene3" class="scene hidden">
       <h2>CONFRONTEER DE REALITEIT. ANALYSE VAN JE BASE STATS.</h2>
-      <!-- NOTE: Local video was replaced with an interactive div as local files cannot be loaded. -->
-      <div class="body-visualizer" id="bodyVisualizer">
-        <p>Huidige Vorm</p>
+      <div class="video-container">
+        <video id="bmiVideo" preload="auto" muted playsinline>
+            <source src="Dun-naar-dik.mp4" type="video/mp4">
+        </video>
       </div>
       <input type="range" min="0" max="100" value="50" class="slider" id="bmiSlider">
       <p class="stats-screen" id="stats-output">Base Stat: Gemiddeld</p>
@@ -639,33 +636,33 @@
 
     // SCENE 3: Body Visualizer Logic
     const bmiSlider = document.getElementById('bmiSlider');
-    const bodyVisualizer = document.getElementById('bodyVisualizer');
+    const bmiVideo = document.getElementById('bmiVideo');
     const statsOutput = document.getElementById('stats-output');
 
-    bmiSlider.addEventListener('input', () => {
-        const percentage = bmiSlider.value / 100;
-        
-        let statText = "Base Stat: Gemiddeld";
-        let color = `hsl(25, 80%, ${50 - (percentage * 40)}%)`; // From orange to dark red
-        
-        if (percentage < 0.2) {
-            statText = "Base Stat: Extreem Mager";
-            color = `hsl(180, 50%, ${70 - (percentage * 50)}%)`; // Light cyan
-        } else if (percentage < 0.4) {
-            statText = "Base Stat: Afgetraind";
-             color = `hsl(120, 50%, ${60 - (percentage * 50)}%)`; // Green
-        } else if (percentage < 0.6) {
-            statText = "Base Stat: Gemiddeld";
-            color = `hsl(60, 60%, ${50 - (percentage * 40)}%)`; // Yellow
-        } else if (percentage < 0.8) {
-            statText = "Base Stat: Fors";
-            color = `hsl(30, 70%, ${50 - (percentage * 40)}%)`; // Orange
-        } else {
-            statText = "Base Stat: Zwaar Overgewicht";
-        }
-        statsOutput.textContent = statText;
-        bodyVisualizer.style.backgroundColor = color;
-    });
+    if (bmiVideo) {
+        bmiVideo.addEventListener('loadedmetadata', () => {
+             bmiSlider.addEventListener('input', () => {
+                const percentage = bmiSlider.value / 100;
+                if(bmiVideo.duration) {
+                    bmiVideo.currentTime = bmiVideo.duration * percentage;
+                }
+                
+                let statText = "Base Stat: Gemiddeld";
+                if (percentage < 0.2) {
+                    statText = "Base Stat: Extreem Mager";
+                } else if (percentage < 0.4) {
+                    statText = "Base Stat: Afgetraind";
+                } else if (percentage < 0.6) {
+                    statText = "Base Stat: Gemiddeld";
+                } else if (percentage < 0.8) {
+                    statText = "Base Stat: Fors";
+                } else {
+                    statText = "Base Stat: Zwaar Overgewicht";
+                }
+                statsOutput.textContent = statText;
+            });
+        });
+    }
     
     // SCENE 4-6: Choice Logic
     document.querySelectorAll('.choice-grid').forEach(grid => {
@@ -712,15 +709,10 @@
     }
 
     // Initialize
-    // updateProgressBar(); // Progress bar will now be updated on first action
+    updateProgressBar();
     updateSlideStyles();
 
   </script>
 </body>
 </html>
-
-
-
-
-
 
