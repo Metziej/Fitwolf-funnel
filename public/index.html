@@ -3,206 +3,724 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitWolf | Ontketen het Beest in Jou</title>
+  <title>FitWolf Saga | Start Jouw Transformatie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
-    body { background-color: #000; color: #fff; overflow-x: hidden; line-height: 1.6; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInBackground { 0% { opacity: 0; } 100% { opacity: 1; } }
-    @keyframes fadeOutBackground { 0% { opacity: 1; } 100% { opacity: 0; } }
-    @keyframes slideInFromRight { 0% { transform: translateX(100%) translateY(-2vh); opacity: 0; } 100% { transform: translateX(0) translateY(-2vh); opacity: 1; } }
-    @keyframes slideOutToRight { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
-    @keyframes slideInFromLeft { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOutToLeft { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(-100%); opacity: 0; } }
-    @keyframes mistMove { 0% { background-position: 0 0; } 100% { background-position: 1000px 0; } }
-    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-    @keyframes fadeInButton { from { opacity: 0; } to { opacity: 1; } }
+    :root {
+      --color-primary: #080808;
+      --color-secondary: #F7F7F7;
+      --color-accent: #FF3B30;
+      --font-saga: 'Rajdhani', sans-serif;
+      --font-data: 'Roboto Mono', monospace;
+    }
 
-    #bg-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center top; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 1; animation: fadeInBackground 2s ease-in-out forwards; }
-    #bg-image.fade-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center top; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 0; animation: fadeInBackground 2s ease-in-out backwards; }
-    #mist { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%); z-index: -1; opacity: 0.7; animation: mistMove 20s infinite linear; }
-    .scene { min-height: 100vh; padding: 0px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: visible; }
-    #scene2 { justify-content: flex-start; }
-    h1, p { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards; }
-    h2 { font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; color: #ff0000; text-shadow: 0 0 10px rgba(255,0,0,0.5); opacity: 0; animation: fadeIn 2s forwards 0.5s; }
-    .cta-button { background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; padding: 15px 40px; font-size: 1.6rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(255,0,0,0.4); opacity: 0; animation: fadeIn 1s forwards 1.5s; margin-top: 30px; }
-    #chooseButton.cta-button { margin-top: 0px; }
-    .fade-out { animation: fadeOut 0.3s forwards; }
-    .fade-in { animation: fadeInButton 0.3s forwards; }
-    input[type=range], input[type=text], input[type=email] { width: 80%; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: none; }
-    .option { margin: 10px 0; }
-    .hidden { display: none; }
-    .swiper-container { margin-top: 0px; width: 80vw; max-width: 600px; max-height: 100vh; overflow: visible; position: relative; touch-action: pan-y; }
-    .swiper-wrapper { display: flex; transition: transform 0.5s ease; }
-    .swiper-slide { min-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 0.5; transition: opacity 0.3s; padding-top: 0; }
-    .swiper-slide.active { opacity: 1; }
-    .swiper-slide img { margin-top: 0; cursor: pointer; max-height: 100vh; object-fit: contain; width: 80vw; max-width: 400px; transform: translateY(-2vh); animation: slideInFromRight 0.8s ease-out; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--color-primary);
+      color: var(--color-secondary);
+      font-family: var(--font-saga);
+      overflow-x: hidden;
+      background-image: url('https://www.transparenttextures.com/patterns/dark-concrete.png'); /* Brutalist Texture */
+    }
+    
+    /* --- AWAKENING INTRO START --- */
+    #awakening-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #000;
+        z-index: 9999;
+        transition: opacity 1s ease-out;
+        overflow: hidden; /* Hide shards that fly off-screen */
+    }
+    .glitch-word {
+        font-family: var(--font-data);
+        font-size: 2rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        opacity: 0;
+        margin: 10px 0;
+        animation: text-flicker 3s infinite alternate;
+        position: absolute; /* Changed for dynamic positioning */
+        transition: opacity 0.5s ease;
+        display: none; /* Zorgt dat ze compleet onzichtbaar zijn bij het laden */
+    }
+    #awakening-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 150px;
+        height: auto;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+    }
+    @keyframes text-flicker {
+        0% { opacity: 0.1; text-shadow: 0 0 5px var(--color-accent); }
+        5% { opacity: 1; text-shadow: 0 0 10px var(--color-accent); }
+        10% { opacity: 0.2; }
+        20% { opacity: 1; text-shadow: 0 0 15px var(--color-accent); }
+        100% { opacity: 1; }
+    }
+    #awakening-overlay.shatter {
+        animation: white-flash 0.3s ease-out;
+    }
+
+    @keyframes white-flash {
+        0% { background-color: #000; }
+        50% { background-color: #fff; }
+        100% { background-color: #000; }
+    }
+    /* --- AWAKENING INTRO END --- */
+
+    /* --- SHATTER EFFECT START --- */
+    .shard {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: #111;
+        transform-origin: center;
+        transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease-out;
+    }
+    /* --- SHATTER EFFECT END --- */
+    
+    .saga-progress-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        backdrop-filter: blur(5px);
+    }
+
+    .saga-progress-bar {
+        width: 100%;
+        height: 5px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin-top: 5px;
+    }
+
+    #saga-progress-fill {
+        width: 0%;
+        height: 100%;
+        background-color: var(--color-accent);
+        transition: width 0.5s ease-in-out;
+    }
+
+    .scene {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .scene.hidden {
+      display: none;
+    }
+    
+    h1, h2 {
+        font-family: var(--font-saga);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+    }
+    
+    /* Glitch Animation */
+    .glitch {
+        font-size: 3rem;
+        position: relative;
+    }
+
+    .glitch::before,
+    .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--color-primary);
+    }
+    .glitch::before {
+        left: 2px;
+        text-shadow: -2px 0 var(--color-accent);
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        animation: glitch-anim-2 2.5s infinite;
+    }
+    .glitch::after {
+        left: -2px;
+        text-shadow: -2px 0 #00ffff, 2px 2px var(--color-accent);
+        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        animation: glitch-anim-1 2.5s infinite;
+    }
+
+    @keyframes glitch-anim-1 { 0%, 100% { clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); } 5%, 8% { clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%); } 10%, 13% { clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%); } 30%, 33% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); } 50%, 53% { clip-path: polygon(0 20%, 100% 20%, 100% 100%, 0 100%); } }
+    @keyframes glitch-anim-2 { 0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); } 3%, 6% { clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%); } 12%, 15% { clip-path: polygon(0 0, 100% 0, 100% 60%, 0 60%); } 40%, 43% { clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); } 60%, 63% { clip-path: polygon(0 0, 100% 0, 100% 80%, 0 80%); } }
+
+
+    .cta-button {
+      background: transparent;
+      border: 2px solid var(--color-accent);
+      color: var(--color-secondary);
+      padding: 15px 30px;
+      font-family: var(--font-saga);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 0px var(--color-accent);
+      animation: pulseGlow 2s infinite;
+      margin-top: 20px;
+    }
+    
+    .cta-button:hover {
+        background: var(--color-accent);
+        color: var(--color-primary);
+        box-shadow: 0 0 25px var(--color-accent);
+    }
+
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 5px var(--color-secondary); }
+        50% { box-shadow: 0 0 20px var(--color-secondary); }
+        100% { box-shadow: 0 0 5px var(--color-secondary); }
+    }
+
+    /* Scene 2 Swiper */
+    .swiper-container {
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .swiper-outer {
+        overflow: hidden;
+        width: 100%;
+    }
+    .swiper-wrapper {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    .swiper-slide {
+        flex: 0 0 100%;
+        padding: 20px;
+        opacity: 0.5;
+        transform: scale(0.8);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .swiper-slide.active {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .swiper-slide img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+    .path-title {
+        margin-top: 10px;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+    }
+    .swiper-nav {
+        font-size: 3rem;
+        cursor: pointer;
+        color: var(--color-secondary);
+        padding: 0 20px;
+        user-select: none;
+        transition: color 0.3s ease;
+    }
+    .swiper-nav:hover {
+        color: var(--color-accent);
+    }
+    
+    /* Scene 3 Video Slider */
+    .body-visualizer {
+        position: relative;
+        width: 80%;
+        max-width: 400px;
+        height: 300px;
+        margin: 20px auto;
+        border: 2px solid var(--color-secondary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.5s ease;
+    }
+    .slider {
+        -webkit-appearance: none;
+        width: 80%;
+        max-width: 400px;
+        height: 5px;
+        background: rgba(255,255,255,0.3);
+        outline: none;
+        margin-top: 20px;
+    }
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: var(--color-accent);
+        cursor: pointer;
+        border-radius: 50%;
+    }
+    
+    .stats-screen {
+        font-family: var(--font-data);
+        font-size: 1.2rem;
+        margin-top: 10px;
+        min-height: 2em; /* Prevent layout shift */
+    }
+
+    /* Scene 4-6 Buttons */
+    .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        width: 100%;
+        max-width: 600px;
+    }
+    .choice-btn {
+        background-color: transparent;
+        border: 2px solid var(--color-secondary);
+        color: var(--color-secondary);
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font-saga);
+        text-transform: uppercase;
+        font-size: 1rem;
+    }
+    .choice-btn:hover, .choice-btn.selected {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+    }
+    
+    /* Scene 7 Form */
+    .scroll-form input {
+        width: 100%;
+        max-width: 400px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--color-secondary);
+        color: var(--color-secondary);
+        font-family: var(--font-data);
+        font-size: 1rem;
+        text-align: center;
+    }
+    .scroll-form input:focus {
+        outline: none;
+        border-bottom-color: var(--color-accent);
+    }
+    #confirmation-message {
+        margin-top: 20px;
+        color: var(--color-accent);
+        font-family: var(--font-data);
+        font-size: 1.2rem;
+    }
+
   </style>
 </head>
 <body>
-  <div id="bg-image"></div>
-  <div id="mist"></div>
-  <div class="scene" id="scene1">
-    <h2>Blijf geen schaap. Word een wolf!</h2>
-    <p>Ontvang Jouw GRATIS Strijdplan!</p>
-    <button class="cta-button" onclick="nextScene()">IK NEEM ACTIE</button>
+
+  <div id="awakening-overlay">
+    <div id="glitch-word1" class="glitch-word">Middelmatigheid...</div>
+    <div id="glitch-word2" class="glitch-word">Twijfel...</div>
+    <div id="glitch-word3" class="glitch-word">Uitstel...</div>
+    <div id="glitch-word4" class="glitch-word">Nog een dag...</div>
+    <img src="https://placehold.co/150x150/080808/FF3B30?text=FW" id="awakening-logo" alt="FitWolf Logo">
   </div>
-  <div class="scene hidden" id="scene2">
-    <h1>Wie wil je zijn?</h1>
-    <div class="swiper-container">
-      <div class="swiper-wrapper" id="swiperWrapper">
-<div class="swiper-slide active">
-  <img src="/Fenrir-aankomen2.png" alt="Beast Mode" onclick="choosePathFinal()" onmouseenter="hoverSwipe(0)">
-</div>
-<div class="swiper-slide">
-  <img src="/Fenrir-afvallen2.png" alt="Predator Mode" onclick="choosePathFinal()" onmouseenter="hoverSwipe(1)">
-</div>
-      </div>
+
+  <div class="saga-progress-container">
+    <p id="progress-text">SAGA PROGRESS: 0% COMPLETE</p>
+    <div class="saga-progress-bar">
+      <div id="saga-progress-fill"></div>
     </div>
-    <button id="chooseButton" class="cta-button fade-in" onclick="choosePathFinal()">MONSTER - Spiermassa en kracht</button>
   </div>
-  <div class="scene hidden" id="scene3">
-    <video id="fenrirVideo" width="200" muted playsinline preload="auto">
-  <source src="/Dun-naar-dik.mp4" type="video/mp4">
-  Je browser ondersteunt deze video niet.
-</video>
-    <h1>Wie ben je nu?</h1>
-    <label>Lengte (cm): <span id="heightVal">175</span></label>
-    <input type="range" min="140" max="210" value="175" oninput="updateValue('heightVal', this.value)">
-    <label>Gewicht (kg): <span id="weightVal">75</span></label>
-    <input type="range" min="40" max="160" value="75" oninput="updateValue('weightVal', this.value)">
-    <button class="cta-button" onclick="nextScene()">Volgende</button>
+
+  <div id="scene1" class="scene hidden">
+    <h1 class="glitch" data-text="BLIJF GEEN FIGURANT">BLIJF GEEN FIGURANT</h1>
+    <h2>Ontwaak je innerlijke wolf!</h2>
+    <button class="cta-button" onclick="nextScene()">Start Mijn Verhaal</button>
   </div>
-  <div class="scene hidden" id="scene4">
-	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
-    <h1>Wat voor werk doe je?</h1>
-    <div class="option"><button class="cta-button" onclick="setLifestyle('Zittend')">💼 Zittend</button></div>
-    <div class="option"><button class="cta-button" onclick="setLifestyle('Actief')">💪 Actief</button></div>
-    <div class="option"><button class="cta-button" onclick="setLifestyle('Wisselend')">🧰 Wisselend</button></div>
+
+  <div id="scene2" class="scene hidden">
+    <h2>Kies je Pad. Welke Wolf Wil Jij Zijn?</h2>
+    <div class="swiper-container">
+      <div class="swiper-nav" id="prevSlide">&lt;</div>
+      <div class="swiper-outer">
+          <div class="swiper-wrapper" id="swiperWrapper">
+            <!-- NOTE: Replaced local images with placeholders for visibility -->
+            <div class="swiper-slide active" data-path="Juggernaut">
+              <img src="https://placehold.co/400x400/FF3B30/080808?text=Juggernaut\n(Aankomen)" alt="Juggernaut Pad">
+              <p class="path-title">PATH OF THE JUGGERNAUT</p>
+            </div>
+            <div class="swiper-slide" data-path="Predator">
+              <img src="https://placehold.co/400x400/080808/F7F7F7?text=Predator\n(Afvallen)" alt="Predator Pad">
+              <p class="path-title">PATH OF THE PREDATOR</p>
+            </div>
+          </div>
+      </div>
+      <div class="swiper-nav" id="nextSlide">&gt;</div>
+    </div>
+    <button id="chooseButton" class="cta-button" onclick="handleChoiceAndNextScene('path', getCurrentPath())">SLUIT DIT PAD AF</button>
   </div>
-  <div class="scene hidden" id="scene5">
-	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
-    <h1>Hoe vaak sport je per week?</h1>
-    <div class="option"><button class="cta-button" onclick="setSport('Nooit')">❌ Nooit</button></div>
-    <div class="option"><button class="cta-button" onclick="setSport('1–2x')">✌️ 1–2x</button></div>
-    <div class="option"><button class="cta-button" onclick="setSport('3–5x')">⚽ 3–5x</button></div>
-    <div class="option"><button class="cta-button" onclick="setSport('Elke dag')">✨ Elke dag</button></div>
+
+  <div id="scene3" class="scene hidden">
+      <h2>CONFRONTEER DE REALITEIT. ANALYSE VAN JE BASE STATS.</h2>
+      <!-- NOTE: Local video was replaced with an interactive div as local files cannot be loaded. -->
+      <div class="body-visualizer" id="bodyVisualizer">
+        <p>Huidige Vorm</p>
+      </div>
+      <input type="range" min="0" max="100" value="50" class="slider" id="bmiSlider">
+      <p class="stats-screen" id="stats-output">Base Stat: Gemiddeld</p>
+      <button class="cta-button" onclick="handleChoiceAndNextScene('physique', document.getElementById('stats-output').textContent)">DATA GEREGISTREERD</button>
   </div>
-  <div class="scene hidden" id="scene6">
-	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
-    <h1>Hoe goed let je op je voeding?</h1>
-    <div class="option"><button class="cta-button" onclick="setNutrition('Ik eet wat ik wil')">🍿 Ik eet wat ik wil</button></div>
-    <div class="option"><button class="cta-button" onclick="setNutrition('Ik let een beetje op')">🤔 Ik let een beetje op</button></div>
-    <div class="option"><button class="cta-button" onclick="setNutrition('Ik track alles')">✅ Ik track alles</button></div>
+  
+  <div id="scene4" class="scene hidden">
+    <h2>Analyseer je dagelijkse strijd.</h2>
+    <div class="choice-grid" id="work-choices">
+        <button class="choice-btn" data-value="zittend">💼 Zittend werk</button>
+        <button class="choice-btn" data-value="actief">💪 Actief werk</button>
+    </div>
   </div>
-  <div class="scene hidden" id="scene7">
-	  <button onclick="resetToStart()">🔄 Opnieuw starten</button>
-    <h1>Fenrir's Analyse is binnen.</h1>
-    <p id="result"></p>
-    <input type="text" id="username" placeholder="Naam" />
-    <input type="email" id="email" placeholder="E-mail" />
-    <button class="cta-button" onclick="submitData()">Stuur mij mijn battleplan!</button>
+
+  <div id="scene5" class="scene hidden">
+    <h2>Evalueer je huidige training.</h2>
+    <div class="choice-grid" id="sport-choices">
+        <button class="choice-btn" data-value="geen">❌ Geen sport</button>
+        <button class="choice-btn" data-value="soms">⚽ Af en toe</button>
+        <button class="choice-btn" data-value="regelmatig">🏆 Regelmatig</button>
+    </div>
   </div>
-<script>
-  let currentScene = 1;
-  let path = '', lifestyle = '', sport = '', nutrition = '';
-  const chooseButton = document.getElementById('chooseButton');
 
-  function nextScene() {
-    if (currentScene === 1) document.getElementById('bg-image').classList.add('fade-out');
-    document.getElementById(`scene${currentScene}`).classList.add('hidden');
-    currentScene++;
-    document.getElementById(`scene${currentScene}`).classList.remove('hidden');
+  <div id="scene6" class="scene hidden">
+    <h2>Beoordeel je brandstof.</h2>
+    <div class="choice-grid" id="food-choices">
+        <button class="choice-btn" data-value="alles">🍿 Ik eet alles</button>
+        <button class="choice-btn" data-value="beetje">🤔 Ik let een beetje op</button>
+        <button class="choice-btn" data-value="strikt">✅ Ik eet strikt</button>
+    </div>
+  </div>
 
-if (currentScene === 3) {
-  const video = document.getElementById('fenrirVideo');
-  video.pause(); // Zorg dat hij niet speelt
-  video.currentTime = 0;
-  // Zet sliders op startwaardes
-  document.querySelector('input[oninput*="heightVal"]').value = 140;
-  document.querySelector('input[oninput*="weightVal"]').value = 40;
+  <div id="scene7" class="scene hidden">
+      <h2>HET TRANSCENDENT SIGIL HEEFT GESPROKEN.</h2>
+      <p style="margin-bottom: 30px;">VUL DE SCROLL OM JE STRIJDPLAN TE ONTVANGEN.</p>
+      <div class="scroll-form">
+          <input type="text" id="userName" placeholder="> VOORNAAM" required>
+          <input type="email" id="userEmail" placeholder="> E-MAILADRES" required>
+      </div>
+      <button class="cta-button" onclick="submitSaga()">ZEGEL MIJN LOT</button>
+      <div id="confirmation-message"></div>
+  </div>
 
-  updateValue('heightVal', 140);
-  updateValue('weightVal', 40);
-}
-  }
 
-  function choosePathFinal() {
-    path = currentIndex === 0 ? 'Beast Mode' : 'Predator Mode';
-    nextScene();
-  }
+  <script>
+    // --- AWAKENING INTRO SCRIPT START ---
+    window.addEventListener('load', () => {
+        const overlay = document.getElementById('awakening-overlay');
+        const words = [
+            document.getElementById('glitch-word1'),
+            document.getElementById('glitch-word2'),
+            document.getElementById('glitch-word3'),
+            document.getElementById('glitch-word4')
+        ];
+        const logo = document.getElementById('awakening-logo');
+        const scene1 = document.getElementById('scene1');
 
-  function updateValue(id, val) {
-    document.getElementById(id).textContent = val;
+        // Function to set words at random positions
+        function setRandomPosition(element) {
+            // We'll use viewport units for responsiveness, ensuring words are well distributed.
+            let top, left;
 
-    if (id === 'weightVal' || id === 'heightVal') {
-      const weight = parseInt(document.getElementById('weightVal').textContent);
-      const height = parseInt(document.getElementById('heightVal').textContent);
+            // Avoid the vertical center (between 35% and 65% of the viewport height)
+            if (Math.random() > 0.5) {
+                top = Math.random() * 30 + 5; // Places word in the top part (5% to 35%)
+            } else {
+                top = Math.random() * 30 + 65; // Places word in the bottom part (65% to 95%)
+            }
 
-      const bmi = weight / Math.pow(height / 100, 2);
-      const video = document.getElementById('fenrirVideo');
-      const minBMI = 14;
-      const maxBMI = 40;
-      const clampedBMI = Math.min(Math.max(bmi, minBMI), maxBMI);
-      const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
-      const videoDuration = video.duration || 1;
-      video.currentTime = videoDuration * percentage;
-    }
-  }
+            // Use wider horizontal distribution, especially on larger screens.
+            if (window.innerWidth > 768) { // Desktop
+                left = Math.random() > 0.5 ? Math.random() * 30 + 5 : Math.random() * 30 + 65; // Places word on the far left or right
+            } else { // Mobile
+                left = Math.random() * 80 + 10; // More horizontal freedom on smaller screens (10% to 90%)
+            }
 
-  function setLifestyle(val) { lifestyle = val; nextScene(); }
-  function setSport(val) { sport = val; nextScene(); }
-  function setNutrition(val) { nutrition = val; nextScene(); }
+            element.style.top = `${top}vh`;
+            element.style.left = `${left}vw`;
+            element.style.transform = 'translate(-50%, -50%)'; // This centers the word on the random point
+        }
 
-  function submitData() {
-    const age = document.getElementById('ageVal').textContent;
-    const height = document.getElementById('heightVal').textContent;
-    const weight = document.getElementById('weightVal').textContent;
-    const name = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    document.getElementById('result').innerHTML = `Jij bent een ${path} Wolf in wording.<br>Leeftijd: ${age}, Lengte: ${height}cm, Gewicht: ${weight}kg.<br>Doel: ${path}, Lifestyle: ${lifestyle}/${sport}/${nutrition}`;
-  }
+        // The sequence
+        words.forEach((word, index) => {
+            setTimeout(() => {
+                setRandomPosition(word);
+                word.style.display = 'block'; // Maak het element eerst onderdeel van de layout
+                
+                // Een kleine vertraging is nodig om de browser de display-wijziging te laten verwerken
+                // zodat de opacity-transitie correct werkt.
+                setTimeout(() => {
+                    word.style.opacity = '1';
+                }, 20);
 
-  function updateSlideStyles() {
-    slides.forEach((slide, idx) => {
-      slide.classList.remove('active');
+            }, 1000 * (index + 0.5));
+        });
+
+        // The climax: Shatter effect
+        setTimeout(() => {
+            overlay.classList.add('shatter'); // White flash for impact
+            createShatterEffect(overlay); // Create glass shards
+
+            words.forEach(word => {
+                word.style.opacity = '0';
+            });
+            
+            logo.style.opacity = '1';
+            logo.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 5000);
+        
+        // Hide the overlay and show the main content
+        setTimeout(() => {
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none'; // Makes the overlay unclickable
+            
+            scene1.classList.remove('hidden');
+            scene1.style.opacity = '0';
+            scene1.style.transform = 'translateY(20px)';
+             setTimeout(() => {
+                scene1.style.opacity = '1';
+                scene1.style.transform = 'translateY(0)';
+            }, 50);
+
+        }, 5500);
     });
-    slides[currentIndex].classList.add('active');
-    wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-    chooseButton.textContent = currentIndex === 0 ? 'MONSTER- Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
-    chooseButton.classList.remove('fade-in');
-    void chooseButton.offsetWidth;
-    chooseButton.classList.add('fade-in');
-  }
 
-  let currentIndex = 0;
-  let xDown = null, xDiff = 0;
-  const wrapper = document.getElementById('swiperWrapper');
-  const slides = wrapper.querySelectorAll('.swiper-slide');
-  wrapper.addEventListener('touchstart', evt => xDown = evt.touches[0].clientX, false);
-  wrapper.addEventListener('touchend', evt => {
-    if (!xDown) return;
-    const xUp = evt.changedTouches[0].clientX;
-    xDiff = xDown - xUp;
-    if (Math.abs(xDiff) > 60) currentIndex = currentIndex === 0 ? 1 : 0;
-    updateSlideStyles();
-    xDown = null;
-  });
+    function createShatterEffect(container) {
+        const numShards = 40;
+        for (let i = 0; i < numShards; i++) {
+            const shard = document.createElement('div');
+            shard.classList.add('shard');
 
-  function resetToStart() {
-    currentScene = 1;
-    document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
-    document.getElementById('scene1').classList.remove('hidden');
-    document.getElementById('bg-image').classList.remove('fade-out');
-    wrapper.style.transform = `translateX(0%)`;
-    currentIndex = 0;
+            // Random size and shape for a more realistic shatter
+            const size = Math.random() * 60 + 20; // 20px to 80px
+            shard.style.width = `${size}px`;
+            shard.style.height = `${size}px`;
+            shard.style.background = `hsl(0, 0%, ${Math.random() * 15}%)`; // Shades of dark gray
+            shard.style.clipPath = `polygon(${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%)`;
+            shard.style.transform = 'translate(-50%, -50%)';
+
+            container.appendChild(shard);
+
+            // Animate it flying outwards
+            setTimeout(() => {
+                const angle = Math.random() * 360;
+                const distance = Math.random() * window.innerWidth * 0.7 + 100;
+                const rotation = Math.random() * 1080 - 540;
+
+                const x = Math.cos(angle * Math.PI / 180) * distance;
+                const y = Math.sin(angle * Math.PI / 180) * distance;
+
+                shard.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+                shard.style.opacity = '0';
+            }, 10); 
+        }
+    }
+    // --- AWAKENING INTRO SCRIPT END ---
+
+    let currentScene = 1;
+    const totalScenes = 7;
+    const userData = {
+        path: null,
+        physique: null,
+        work: null,
+        sport: null,
+        food: null,
+        name: null,
+        email: null,
+    };
+
+    function updateProgressBar() {
+        // We start the "real" saga at scene 1, so progress is 0 until scene 2
+        const progress = currentScene <= 1 ? 0 : ((currentScene -1) / (totalScenes-1)) * 100;
+        document.getElementById('saga-progress-fill').style.width = `${progress}%`;
+        document.getElementById('progress-text').textContent = `SAGA PROGRESS: ${Math.round(progress)}% COMPLETE`;
+    }
+
+    function nextScene() {
+      if (currentScene >= totalScenes) return;
+
+      const current = document.getElementById(`scene${currentScene}`);
+      current.style.opacity = '0';
+      current.style.transform = 'translateY(-20px)';
+      
+      setTimeout(() => {
+        current.classList.add('hidden');
+        currentScene++;
+        const next = document.getElementById(`scene${currentScene}`);
+        if (next) {
+            next.classList.remove('hidden');
+            next.style.opacity = '0';
+            next.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                next.style.opacity = '1';
+                next.style.transform = 'translateY(0)';
+            }, 50);
+        }
+        updateProgressBar();
+      }, 500);
+    }
+    
+    function handleChoiceAndNextScene(key, value) {
+        userData[key] = value;
+        nextScene();
+    }
+
+    // SCENE 2: Swiper Logic
+    let currentIndex = 0;
+    const wrapper = document.getElementById('swiperWrapper');
+    const slides = wrapper.querySelectorAll('.swiper-slide');
+    const chooseButton = document.getElementById('chooseButton');
+    const prevSlideBtn = document.getElementById('prevSlide');
+    const nextSlideBtn = document.getElementById('nextSlide');
+
+    function updateSlideStyles() {
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentIndex);
+        });
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        const path = getCurrentPath().toUpperCase();
+        chooseButton.textContent = `SLUIT HET ${path} PAD AF`;
+    }
+
+    function getCurrentPath() {
+        return slides[currentIndex].dataset.path;
+    }
+    
+    function changeSlide(direction) {
+        currentIndex = (currentIndex + direction + slides.length) % slides.length;
+        updateSlideStyles();
+    }
+    
+    prevSlideBtn.addEventListener('click', () => changeSlide(-1));
+    nextSlideBtn.addEventListener('click', () => changeSlide(1));
+    
+    let xDown = null;
+    wrapper.addEventListener('touchstart', evt => { xDown = evt.touches[0].clientX; }, {passive: true});
+    wrapper.addEventListener('touchend', evt => {
+        if (!xDown) return;
+        const xUp = evt.changedTouches[0].clientX;
+        const xDiff = xDown - xUp;
+        if (Math.abs(xDiff) > 50) { // Swipe threshold
+            changeSlide(xDiff > 0 ? 1 : -1);
+        }
+        xDown = null;
+    });
+
+    // SCENE 3: Body Visualizer Logic
+    const bmiSlider = document.getElementById('bmiSlider');
+    const bodyVisualizer = document.getElementById('bodyVisualizer');
+    const statsOutput = document.getElementById('stats-output');
+
+    bmiSlider.addEventListener('input', () => {
+        const percentage = bmiSlider.value / 100;
+        
+        let statText = "Base Stat: Gemiddeld";
+        let color = `hsl(25, 80%, ${50 - (percentage * 40)}%)`; // From orange to dark red
+        
+        if (percentage < 0.2) {
+            statText = "Base Stat: Extreem Mager";
+            color = `hsl(180, 50%, ${70 - (percentage * 50)}%)`; // Light cyan
+        } else if (percentage < 0.4) {
+            statText = "Base Stat: Afgetraind";
+             color = `hsl(120, 50%, ${60 - (percentage * 50)}%)`; // Green
+        } else if (percentage < 0.6) {
+            statText = "Base Stat: Gemiddeld";
+            color = `hsl(60, 60%, ${50 - (percentage * 40)}%)`; // Yellow
+        } else if (percentage < 0.8) {
+            statText = "Base Stat: Fors";
+            color = `hsl(30, 70%, ${50 - (percentage * 40)}%)`; // Orange
+        } else {
+            statText = "Base Stat: Zwaar Overgewicht";
+        }
+        statsOutput.textContent = statText;
+        bodyVisualizer.style.backgroundColor = color;
+    });
+    
+    // SCENE 4-6: Choice Logic
+    document.querySelectorAll('.choice-grid').forEach(grid => {
+        grid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('choice-btn')) {
+                // Remove 'selected' from siblings
+                [...e.target.parentElement.children].forEach(child => child.classList.remove('selected'));
+                // Add 'selected' to clicked button
+                e.target.classList.add('selected');
+                
+                const key = grid.id.split('-')[0];
+                const value = e.target.dataset.value;
+                
+                // Automatically go to next scene after choice
+                setTimeout(() => handleChoiceAndNextScene(key, value), 400);
+            }
+        });
+    });
+
+    // SCENE 7: Submission Logic
+    function submitSaga() {
+        const nameInput = document.getElementById('userName');
+        const emailInput = document.getElementById('userEmail');
+        const confirmationMsg = document.getElementById('confirmation-message');
+        
+        if (!nameInput.value || !emailInput.value) {
+            confirmationMsg.textContent = "> VUL ALLE VELDEN IN.";
+            return;
+        }
+
+        userData.name = nameInput.value;
+        userData.email = emailInput.value;
+
+        // Simulate submission
+        console.log("--- SAGA GEGEVENS VERZONDEN ---");
+        console.log(userData);
+
+        confirmationMsg.textContent = `> ${userData.name.toUpperCase()}, JE SAGA IS BEGONNEN. CHECK JE MAIL.`;
+        
+        // Disable form
+        nameInput.disabled = true;
+        emailInput.disabled = true;
+        document.querySelector('#scene7 .cta-button').disabled = true;
+    }
+
+    // Initialize
+    // updateProgressBar(); // Progress bar will now be updated on first action
     updateSlideStyles();
-  }
-	function hoverSwipe(targetIndex) {
-  if (window.innerWidth > 768 && currentIndex !== targetIndex) {
-    currentIndex = targetIndex;
-    updateSlideStyles();
-  }
-}
-</script>
-</script>
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
