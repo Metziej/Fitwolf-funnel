@@ -204,20 +204,25 @@
     /* Scene 2 Swiper */
     .swiper-container {
         width: 100%;
-        max-width: 400px;
+        max-width: 900px; /* Wider to show both slides */
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
-        overflow: hidden;
     }
     .swiper-wrapper {
         display: flex;
-        transition: transform 0.5s ease-in-out;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
     .swiper-slide {
-        flex: 0 0 100%;
-        padding: 20px;
+        flex: 1 1 50%;
+        padding: 10px;
         opacity: 0.5;
-        transform: scale(0.8);
-        transition: opacity 0.5s ease, transform 0.5s ease;
+        transform: scale(0.85);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        cursor: pointer;
     }
     .swiper-slide.active {
         opacity: 1;
@@ -227,12 +232,23 @@
         max-width: 100%;
         height: auto;
         border-radius: 8px;
-        cursor: pointer;
     }
     .path-title {
         margin-top: 10px;
         text-transform: uppercase;
         font-size: 1.2rem;
+    }
+    .swiper-nav {
+        font-size: 3rem;
+        color: var(--color-secondary);
+        cursor: pointer;
+        user-select: none;
+        padding: 0 20px;
+        z-index: 10;
+        transition: color 0.3s ease;
+    }
+    .swiper-nav:hover {
+        color: var(--color-accent);
     }
     
     /* Scene 3 Video Slider */
@@ -348,16 +364,18 @@
   <div id="scene2" class="scene hidden">
     <h2>Kies je Pad. Welke Wolf Wil Jij Zijn?</h2>
     <div class="swiper-container">
+      <div class="swiper-nav" id="prevBtn">&lt;</div>
       <div class="swiper-wrapper" id="swiperWrapper">
         <div class="swiper-slide active" data-path="Juggernaut">
-          <img src="Fenrir-aankomen2.png" alt="Juggernaut Pad" onmouseenter="hoverSwipe(0)">
+          <img src="Fenrir-aankomen2.png" alt="Juggernaut Pad">
           <p class="path-title">PATH OF THE JUGGERNAUT</p>
         </div>
         <div class="swiper-slide" data-path="Predator">
-          <img src="Fenrir-afvallen2.png" alt="Predator Pad" onmouseenter="hoverSwipe(1)">
+          <img src="Fenrir-afvallen2.png" alt="Predator Pad">
           <p class="path-title">PATH OF THE PREDATOR</p>
         </div>
       </div>
+      <div class="swiper-nav" id="nextBtn">&gt;</div>
     </div>
     <button id="chooseButton" class="cta-button" onclick="handleChoiceAndNextScene('path', getCurrentPath())">SLUIT DIT PAD AF</button>
   </div>
@@ -578,12 +596,13 @@
     const wrapper = document.getElementById('swiperWrapper');
     const slides = wrapper.querySelectorAll('.swiper-slide');
     const chooseButton = document.getElementById('chooseButton');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
 
     function updateSlideStyles() {
         slides.forEach((slide, index) => {
             slide.classList.toggle('active', index === currentIndex);
         });
-        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
         const path = getCurrentPath().toUpperCase();
         chooseButton.textContent = `SLUIT HET ${path} PAD AF`;
     }
@@ -592,12 +611,22 @@
         return slides[currentIndex].dataset.path;
     }
 
-    function hoverSwipe(targetIndex) {
-        if (window.innerWidth > 768 && currentIndex !== targetIndex) { // Only works on desktop
-            currentIndex = targetIndex;
-            updateSlideStyles();
-        }
+    function changeSlide(direction) {
+        currentIndex = (currentIndex + direction + slides.length) % slides.length;
+        updateSlideStyles();
     }
+    
+    prevBtn.addEventListener('click', () => changeSlide(-1));
+    nextBtn.addEventListener('click', () => changeSlide(1));
+
+    slides.forEach((slide, index) => {
+        slide.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 768 && currentIndex !== index) {
+                currentIndex = index;
+                updateSlideStyles();
+            }
+        });
+    });
     
     let xDown = null;
     wrapper.addEventListener('touchstart', evt => { xDown = evt.touches[0].clientX; }, {passive: true});
@@ -606,8 +635,7 @@
         const xUp = evt.changedTouches[0].clientX;
         const xDiff = xDown - xUp;
         if (Math.abs(xDiff) > 50) { // Swipe threshold
-             currentIndex = currentIndex === 0 ? 1 : 0;
-             updateSlideStyles();
+             changeSlide(xDiff > 0 ? 1 : -1);
         }
         xDown = null;
     });
