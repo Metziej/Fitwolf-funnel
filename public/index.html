@@ -25,7 +25,26 @@
       color: var(--color-secondary);
       font-family: var(--font-saga);
       overflow-x: hidden;
-      background-image: url('https://www.transparenttextures.com/patterns/dark-concrete.png'); /* Brutalist Texture */
+      background-image: url('https://www.transparenttextures.com/patterns/dark-concrete.png');
+    }
+
+    #main-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('fenrir_ref_pose01 uitgeknipt.png');
+        background-size: contain;
+        background-position: center top;
+        background-repeat: no-repeat;
+        z-index: -2;
+        opacity: 0;
+        transition: opacity 1.5s ease-in;
+    }
+
+    #main-background.visible {
+        opacity: 0.2; /* Subtle background presence */
     }
     
     /* --- AWAKENING INTRO START --- */
@@ -173,7 +192,6 @@
     @keyframes glitch-anim-1 { 0%, 100% { clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); } 5%, 8% { clip-path: polygon(0 70%, 100% 70%, 100% 100%, 0 100%); } 10%, 13% { clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%); } 30%, 33% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); } 50%, 53% { clip-path: polygon(0 20%, 100% 20%, 100% 100%, 0 100%); } }
     @keyframes glitch-anim-2 { 0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); } 3%, 6% { clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%); } 12%, 15% { clip-path: polygon(0 0, 100% 0, 100% 60%, 0 60%); } 40%, 43% { clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); } 60%, 63% { clip-path: polygon(0 0, 100% 0, 100% 80%, 0 80%); } }
 
-
     .cta-button {
       background: transparent;
       border: 2px solid var(--color-accent);
@@ -251,24 +269,27 @@
         color: var(--color-accent);
     }
     
-    /* Scene 3 Video Slider */
-    .video-container {
-        position: relative;
-        width: 80%;
-        max-width: 500px;
-        margin: 20px auto;
+    /* Scene 3 Sliders */
+    #scene3 video {
+        width: 90vw;
+        max-width: 250px;
+        height: auto;
+        margin-bottom: 10px;
+        border-radius: 8px;
     }
-    #bmiVideo {
-        width: 100%;
+    #scene3 label {
+        font-family: var(--font-data);
+        font-size: 1.2rem;
+        margin-top: 15px;
     }
     .slider {
         -webkit-appearance: none;
-        width: 80%;
+        width: 80vw;
         max-width: 400px;
         height: 5px;
         background: rgba(255,255,255,0.3);
         outline: none;
-        margin-top: 20px;
+        margin-top: 10px;
     }
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
@@ -280,13 +301,6 @@
         border-radius: 50%;
     }
     
-    .stats-screen {
-        font-family: var(--font-data);
-        font-size: 1.2rem;
-        margin-top: 10px;
-        min-height: 2em; /* Prevent layout shift */
-    }
-
     /* Scene 4-6 Buttons */
     .choice-grid {
         display: grid;
@@ -340,6 +354,8 @@
 </head>
 <body>
 
+  <div id="main-background"></div>
+
   <div id="awakening-overlay">
     <div id="glitch-word1" class="glitch-word">Middelmatigheid...</div>
     <div id="glitch-word2" class="glitch-word">Twijfel...</div>
@@ -366,11 +382,11 @@
     <div class="swiper-container">
       <div class="swiper-nav" id="prevBtn">&lt;</div>
       <div class="swiper-wrapper" id="swiperWrapper">
-        <div class="swiper-slide active" data-path="Juggernaut">
+        <div class="swiper-slide active" data-path="Juggernaut" onclick="handleChoiceAndNextScene('path', 'Juggernaut')">
           <img src="Fenrir-aankomen2.png" alt="Juggernaut Pad">
           <p class="path-title">PATH OF THE JUGGERNAUT</p>
         </div>
-        <div class="swiper-slide" data-path="Predator">
+        <div class="swiper-slide" data-path="Predator" onclick="handleChoiceAndNextScene('path', 'Predator')">
           <img src="Fenrir-afvallen2.png" alt="Predator Pad">
           <p class="path-title">PATH OF THE PREDATOR</p>
         </div>
@@ -381,15 +397,15 @@
   </div>
 
   <div id="scene3" class="scene hidden">
-      <h2>CONFRONTEER DE REALITEIT. ANALYSE VAN JE BASE STATS.</h2>
-      <div class="video-container">
-        <video id="bmiVideo" preload="auto" muted playsinline>
-            <source src="Dun-naar-dik.mp4" type="video/mp4">
-        </video>
-      </div>
-      <input type="range" min="0" max="100" value="50" class="slider" id="bmiSlider">
-      <p class="stats-screen" id="stats-output">Base Stat: Gemiddeld</p>
-      <button class="cta-button" onclick="handleChoiceAndNextScene('physique', document.getElementById('stats-output').textContent)">DATA GEREGISTREERD</button>
+      <h2>CONFRONTEER DE REALITEIT</h2>
+      <video id="bmiVideo" muted playsinline preload="auto">
+          <source src="Dun-naar-dik.mp4" type="video/mp4">
+      </video>
+      <label>Lengte (cm): <span id="heightVal">175</span></label>
+      <input type="range" class="slider" min="140" max="220" value="175" id="heightSlider">
+      <label>Gewicht (kg): <span id="weightVal">75</span></label>
+      <input type="range" class="slider" min="40" max="150" value="75" id="weightSlider">
+      <button class="cta-button" onclick="registerStatsAndNextScene()">DATA GEREGISTREERD</button>
   </div>
   
   <div id="scene4" class="scene hidden">
@@ -442,63 +458,49 @@
         ];
         const logo = document.getElementById('awakening-logo');
         const scene1 = document.getElementById('scene1');
+        const mainBg = document.getElementById('main-background');
 
-        // Function to set words at random positions
         function setRandomPosition(element) {
-            // We'll use viewport units for responsiveness, ensuring words are well distributed.
             let top, left;
-
-            // Avoid the vertical center (between 35% and 65% of the viewport height)
             if (Math.random() > 0.5) {
-                top = Math.random() * 30 + 5; // Places word in the top part (5% to 35%)
+                top = Math.random() * 30 + 5;
             } else {
-                top = Math.random() * 30 + 65; // Places word in the bottom part (65% to 95%)
+                top = Math.random() * 30 + 65;
             }
-
-            // Use wider horizontal distribution, especially on larger screens.
-            if (window.innerWidth > 768) { // Desktop
-                left = Math.random() > 0.5 ? Math.random() * 30 + 5 : Math.random() * 30 + 65; // Places word on the far left or right
-            } else { // Mobile
-                left = Math.random() * 80 + 10; // More horizontal freedom on smaller screens (10% to 90%)
+            if (window.innerWidth > 768) {
+                left = Math.random() > 0.5 ? Math.random() * 30 + 5 : Math.random() * 30 + 65;
+            } else {
+                left = Math.random() * 80 + 10;
             }
-
             element.style.top = `${top}vh`;
             element.style.left = `${left}vw`;
-            element.style.transform = 'translate(-50%, -50%)'; // This centers the word on the random point
+            element.style.transform = 'translate(-50%, -50%)';
         }
 
-        // The sequence
         words.forEach((word, index) => {
             setTimeout(() => {
                 setRandomPosition(word);
-                word.style.display = 'block'; // Maak het element eerst onderdeel van de layout
-                
-                // Een kleine vertraging is nodig om de browser de display-wijziging te laten verwerken
-                // zodat de opacity-transitie correct werkt.
+                word.style.display = 'block';
                 setTimeout(() => {
                     word.style.opacity = '1';
                 }, 20);
-
             }, 1000 * (index + 0.5));
         });
 
-        // The climax: Shatter effect
         setTimeout(() => {
-            overlay.classList.add('shatter'); // White flash for impact
-            createShatterEffect(overlay); // Create glass shards
-
+            overlay.classList.add('shatter');
+            createShatterEffect(overlay);
             words.forEach(word => {
                 word.style.opacity = '0';
             });
-            
             logo.style.opacity = '1';
             logo.style.transform = 'translate(-50%, -50%) scale(1)';
         }, 5000);
         
-        // Hide the overlay and show the main content
         setTimeout(() => {
             overlay.style.opacity = '0';
-            overlay.style.pointerEvents = 'none'; // Makes the overlay unclickable
+            overlay.style.pointerEvents = 'none';
+            mainBg.classList.add('visible'); // Fade in main background
             
             scene1.classList.remove('hidden');
             scene1.style.opacity = '0';
@@ -516,26 +518,20 @@
         for (let i = 0; i < numShards; i++) {
             const shard = document.createElement('div');
             shard.classList.add('shard');
-
-            // Random size and shape for a more realistic shatter
-            const size = Math.random() * 60 + 20; // 20px to 80px
+            const size = Math.random() * 60 + 20;
             shard.style.width = `${size}px`;
             shard.style.height = `${size}px`;
-            shard.style.background = `hsl(0, 0%, ${Math.random() * 15}%)`; // Shades of dark gray
+            shard.style.background = `hsl(0, 0%, ${Math.random() * 15}%)`;
             shard.style.clipPath = `polygon(${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%)`;
             shard.style.transform = 'translate(-50%, -50%)';
-
             container.appendChild(shard);
 
-            // Animate it flying outwards
             setTimeout(() => {
                 const angle = Math.random() * 360;
                 const distance = Math.random() * window.innerWidth * 0.7 + 100;
                 const rotation = Math.random() * 1080 - 540;
-
                 const x = Math.cos(angle * Math.PI / 180) * distance;
                 const y = Math.sin(angle * Math.PI / 180) * distance;
-
                 shard.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotation}deg)`;
                 shard.style.opacity = '0';
             }, 10); 
@@ -556,7 +552,6 @@
     };
 
     function updateProgressBar() {
-        // We start the "real" saga at scene 1, so progress is 0 until scene 2
         const progress = currentScene <= 1 ? 0 : ((currentScene -1) / (totalScenes-1)) * 100;
         document.getElementById('saga-progress-fill').style.width = `${progress}%`;
         document.getElementById('progress-text').textContent = `SAGA PROGRESS: ${Math.round(progress)}% COMPLETE`;
@@ -564,7 +559,6 @@
 
     function nextScene() {
       if (currentScene >= totalScenes) return;
-
       const current = document.getElementById(`scene${currentScene}`);
       current.style.opacity = '0';
       current.style.transform = 'translateY(-20px)';
@@ -634,55 +628,55 @@
         if (!xDown) return;
         const xUp = evt.changedTouches[0].clientX;
         const xDiff = xDown - xUp;
-        if (Math.abs(xDiff) > 50) { // Swipe threshold
+        if (Math.abs(xDiff) > 50) {
              changeSlide(xDiff > 0 ? 1 : -1);
         }
         xDown = null;
     });
 
     // SCENE 3: Body Visualizer Logic
-    const bmiSlider = document.getElementById('bmiSlider');
+    const heightSlider = document.getElementById('heightSlider');
+    const weightSlider = document.getElementById('weightSlider');
+    const heightVal = document.getElementById('heightVal');
+    const weightVal = document.getElementById('weightVal');
     const bmiVideo = document.getElementById('bmiVideo');
-    const statsOutput = document.getElementById('stats-output');
 
-    if (bmiVideo) {
-        bmiVideo.addEventListener('loadedmetadata', () => {
-             bmiSlider.addEventListener('input', () => {
-                const percentage = bmiSlider.value / 100;
-                if(bmiVideo.duration) {
-                    bmiVideo.currentTime = bmiVideo.duration * percentage;
-                }
-                
-                let statText = "Base Stat: Gemiddeld";
-                if (percentage < 0.2) {
-                    statText = "Base Stat: Extreem Mager";
-                } else if (percentage < 0.4) {
-                    statText = "Base Stat: Afgetraind";
-                } else if (percentage < 0.6) {
-                    statText = "Base Stat: Gemiddeld";
-                } else if (percentage < 0.8) {
-                    statText = "Base Stat: Fors";
-                } else {
-                    statText = "Base Stat: Zwaar Overgewicht";
-                }
-                statsOutput.textContent = statText;
-            });
-        });
+    function updateBmiVisualizer() {
+        if (!heightSlider || !weightSlider) return;
+        const height = parseInt(heightSlider.value);
+        const weight = parseInt(weightSlider.value);
+        heightVal.textContent = height;
+        weightVal.textContent = weight;
+
+        if (bmiVideo && bmiVideo.readyState >= 2) { // Ensure video metadata is loaded
+            const bmi = weight / ((height / 100) ** 2);
+            const minBMI = 15; // Underweight
+            const maxBMI = 40; // Obese
+            const clampedBMI = Math.max(minBMI, Math.min(bmi, maxBMI));
+            const percentage = (clampedBMI - minBMI) / (maxBMI - minBMI);
+            bmiVideo.currentTime = bmiVideo.duration * percentage;
+        }
+    }
+
+    heightSlider.addEventListener('input', updateBmiVisualizer);
+    weightSlider.addEventListener('input', updateBmiVisualizer);
+    
+    function registerStatsAndNextScene() {
+        userData.physique = {
+            height: heightSlider.value,
+            weight: weightSlider.value
+        };
+        nextScene();
     }
     
     // SCENE 4-6: Choice Logic
     document.querySelectorAll('.choice-grid').forEach(grid => {
         grid.addEventListener('click', (e) => {
             if (e.target.classList.contains('choice-btn')) {
-                // Remove 'selected' from siblings
                 [...e.target.parentElement.children].forEach(child => child.classList.remove('selected'));
-                // Add 'selected' to clicked button
                 e.target.classList.add('selected');
-                
                 const key = grid.id.split('-')[0];
                 const value = e.target.dataset.value;
-                
-                // Automatically go to next scene after choice
                 setTimeout(() => handleChoiceAndNextScene(key, value), 400);
             }
         });
@@ -698,17 +692,12 @@
             confirmationMsg.textContent = "> VUL ALLE VELDEN IN.";
             return;
         }
-
         userData.name = nameInput.value;
         userData.email = emailInput.value;
-
-        // Simulate submission
         console.log("--- SAGA GEGEVENS VERZONDEN ---");
         console.log(userData);
-
         confirmationMsg.textContent = `> ${userData.name.toUpperCase()}, JE SAGA IS BEGONNEN. CHECK JE MAIL.`;
         
-        // Disable form
         nameInput.disabled = true;
         emailInput.disabled = true;
         document.querySelector('#scene7 .cta-button').disabled = true;
