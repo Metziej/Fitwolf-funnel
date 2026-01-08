@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | FitWolf</title>
+  <style>
+    /* JOUW STIJL, AANGEPAST VOOR LOGIN */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    body { background-color: #000; color: #fff; overflow-x: hidden; line-height: 1.6; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInBackground { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes mistMove { 0% { background-position: 0 0; } 100% { background-position: 1000px 0; } }
+
+    #bg-image { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("/fenrir_ref_pose01 uitgeknipt.png"); background-size: contain; background-position: center top; background-repeat: no-repeat; background-color: #000; z-index: -2; opacity: 0.3; animation: fadeInBackground 2s ease-in-out forwards; }
+    #mist { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(20,20,30,0.5) 100%); z-index: -1; opacity: 0.7; animation: mistMove 20s infinite linear; }
+    .scene { min-height: 100vh; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
+    h1 { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards; font-size: 2rem; color: #ff0000; }
+    p { margin-bottom: 20px; opacity: 0; animation: fadeIn 1s forwards 0.5s; }
+    
+    .cta-button { 
+      background: linear-gradient(45deg, #ff0000, #800000); 
+      color: white; border: none; 
+      padding: 15px 40px; 
+      font-size: 1.6rem; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      font-weight: bold; 
+      letter-spacing: 1px; 
+      box-shadow: 0 5px 15px rgba(255,0,0,0.4); 
+      opacity: 0; 
+      animation: fadeIn 1s forwards 1s; 
+      margin-top: 20px; 
+      width: 80%;
+      max-width: 400px;
+    }
+    
+    /* Input stijlen */
+    input[type=email], input[type=password] {
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background-color: #222;
+      color: #fff;
+      font-size: 1rem;
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.5s;
+    }
+    
+    /* Feedback & Loader Stijlen */
+    .error-message {
+      color: #ff4d4d;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #auth-feedback { min-height: 24px; }
+    .loader {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #ff0000;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      margin: 15px auto 0;
+      animation: rotation 1s linear infinite;
+    }
+    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    .login-link {
+        margin-top: 20px; 
+        font-size: 1rem; 
+        animation: fadeIn 1s forwards 1.5s; 
+        opacity: 0;
+    }
+    .login-link a {
+        color: #ff0000;
+        font-weight: bold;
+        text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="bg-image"></div>
+  <div id="mist"></div>
+  
+  <div class="scene" id="scene-login">
+    <h1>Welkom Terug, Held.</h1>
+    <p>Log in om je quest voort te zetten.</p>
+    
+    <input type="email" id="email" placeholder="E-mail" />
+    <input type="password" id="password" placeholder="Wachtwoord" />
+    
+    <div id="auth-feedback" class="error-message" style="display:none;"></div>
+    <div class="loader" id="auth-loader"></div>
+
+    <button id="login-button" class="cta-button">Log In</button>
+    
+    <p class="login-link">
+      Nog geen Held? <a href="index.html">Start hier je quest</a>
+    </p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+<script>
+  // --------------------------------------------------------------------
+  // STAP 1: CONFIGUREER JE "BREIN" (FIREBASE)
+  // --------------------------------------------------------------------
+  // Plak hier *DEZELFDE* Firebase Config als in je andere bestanden
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlimObPICtsa0mnTo1cK12SMp3nhcQuwg", // <-- PLAK HIER
+    authDomain: "fitwolf-engine.firebaseapp.com", // <-- PLAK HIER
+    projectId: "fitwolf-engine", // <-- PLAK HIER
+    storageBucket: "fitwolf-engine.firebasestorage.app", // <-- PLAK HIER
+    messagingSenderId: "974082407299", // <-- PLAK HIER
+    appId: "1:974082407299:web:2980779c10adccd0db54b6" // <-- PLAK HIER
+  };
+  
+  // STAP 2: Initialiseer Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  
+  // --------------------------------------------------------------------
+  // DE "LOGIN" MOTOR
+  // --------------------------------------------------------------------
+  
+  const loginButton = document.getElementById('login-button');
+  const emailEl = document.getElementById('email');
+  const passwordEl = document.getElementById('password');
+  const feedbackEl = document.getElementById('auth-feedback');
+  const loader = document.getElementById('auth-loader');
+  
+  loginButton.addEventListener('click', loginHero);
+  
+  async function loginHero() {
+      const email = emailEl.value.trim();
+      const password = passwordEl.value;
+      
+      // Validatie
+      if (email.length === 0 || password.length === 0) {
+          feedbackEl.textContent = 'Vul alsjeblieft beide velden in.';
+          feedbackEl.style.display = 'block';
+          return;
+      }
+      
+      // 1. Toon feedback (laden)
+      loginButton.disabled = true;
+      loader.style.display = 'block';
+      feedbackEl.style.display = 'none';
+      
+      try {
+          // 2. Probeer in te loggen bij Firebase
+          await auth.signInWithEmailAndPassword(email, password);
+          
+          // 3. SUCCES! Stuur door naar het dashboard.
+          window.location.href = 'dashboard.html';
+          
+      } catch (error) {
+          // 4. FOUT! Geef feedback
+          loader.style.display = 'none';
+          loginButton.disabled = false;
+          feedbackEl.style.display = 'block';
+          
+          console.error("Login Fout:", error.code);
+          switch(error.code) {
+              case 'auth/user-not-found':
+              case 'auth/wrong-password':
+              case 'auth/invalid-credential':
+                  feedbackEl.textContent = 'Held niet gevonden of wachtwoord incorrect.';
+                  break;
+              case 'auth/invalid-email':
+                  feedbackEl.textContent = 'Dit is geen geldig e-mailadres.';
+                  break;
+              default:
+                  feedbackEl.textContent = 'Oeps, er ging iets mis. Probeer het opnieuw.';
+          }
+      }
+  }
+
+</script>
+</body>
+</html>

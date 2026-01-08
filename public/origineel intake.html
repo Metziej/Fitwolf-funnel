@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitWolf | Ontketen het Beest in Jou</title>
+  <style>
+    /* JOUW ORIGINELE STYLING - VOLLEDIG BEHOUDEN */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    body { background-color: #000; color: #fff; overflow-x: hidden; line-height: 1.6; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInBackground { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes fadeOutBackground { 0% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes slideInFromRight { 0% { transform: translateX(100%) translateY(-2vh); opacity: 0; } 100% { transform: translateX(0) translateY(-2vh); opacity: 1; } }
+    @keyframes slideOutToRight { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
+    @keyframes slideInFromLeft { 0% { transform: translateX(-100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOutToLeft { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(-100%); opacity: 0; } }
+    @keyframes buttonFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes progressPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 165, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0); } }
+
+    .hidden { display: none !important; }
+    .scene {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 2;
+    }
+    #scene1 { background: none; }
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    #bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.3;
+      animation: fadeInBackground 2s ease;
+    }
+    #bg-image.fade-out {
+      animation: fadeOutBackground 1s ease forwards;
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      color: #FFA500;
+    }
+    p, label {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    .cta-button, .nav-button, button {
+      background-color: #FFA500;
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 30px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+    }
+    .cta-button:hover, .nav-button:hover, button:hover {
+      background-color: #fff;
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+    }
+    .nav-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #FFA500;
+      border: 1px solid #FFA500;
+    }
+    .nav-button:hover { background-color: #FFA500; color: #000; }
+    .button-container {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .swiper-container {
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      position: relative;
+      margin: 20px 0;
+    }
+    .swiper-wrapper {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .swiper-slide {
+      flex: 0 0 100%;
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 15px;
+      transform: scale(0.9);
+      opacity: 0.5;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+    .swiper-slide.active {
+      transform: scale(1);
+      opacity: 1;
+    }
+    #slide1 { background-image: url('https://via.placeholder.com/400x400.png?text=MONSTER'); } /* Placeholder - vervang door jouw afbeelding */
+    #slide2 { background-image: url('https://via.placeholder.com/400x400.png?text=ROOFDIER'); } /* Placeholder - vervang door jouw afbeelding */
+    
+    #choose-button {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 400px;
+      animation: buttonFadeIn 0.5s ease forwards;
+    }
+    .fade-in {
+      animation: buttonFadeIn 0.5s ease forwards;
+    }
+    
+    /* Input Stijlen */
+    .input-group {
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      text-align: left;
+      font-weight: bold;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background-color: #222;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .radio-group {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+    .radio-option {
+      cursor: pointer;
+      padding: 10px 20px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .radio-option input { display: none; }
+    .radio-option.selected, .radio-option:hover {
+      background-color: #FFA500;
+      color: #000;
+      border-color: #FFA500;
+    }
+    
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      background-color: #FFA500;
+      width: 0;
+      z-index: 10;
+      transition: width 0.5s ease;
+    }
+    .error-message {
+      color: #ff4d4d;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    #tdee-result {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #FFA500;
+      margin-top: 20px;
+      animation: fadeIn 1s;
+    }
+
+    /* Laad- en feedbackstijlen voor registratie */
+    #auth-feedback {
+      min-height: 24px;
+      margin-top: 15px;
+    }
+    .loader {
+      display: none; /* Standaard verborgen */
+      width: 24px;
+      height: 24px;
+      border: 3px solid #FFA500;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      margin: 15px auto 0;
+      animation: rotation 1s linear infinite;
+    }
+    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <div class="background-container">
+    <img src="https://via.placeholder.com/1920x1080.png?text=FitWolf+Background" id="bg-image" alt="Achtergrond">
+  </div>
+
+  <div class="scene" id="scene1">
+    <h1>FitWolf</h1>
+    <p>Je voelt je een NPC in je eigen leven. Werk, gezin, afleidingen... ze hebben de controle overgenomen. Het is tijd om de controller terug te pakken. Word weer de Held. Dit is jouw 'Main Quest'.</p>
+    <button class="cta-button" onclick="nextScene(1)">Start Mijn Quest</button>
+  </div>
+
+  <div class="scene hidden" id="scene2">
+    <h2>Wat is je Hoofddoel?</h2>
+    <div class="swiper-container">
+      <div class="swiper-wrapper" id="swiperWrapper">
+        <div class="swiper-slide active" id="slide1" data-goal="monster"></div>
+        <div class="swiper-slide" id="slide2" data-goal="roofdier"></div>
+      </div>
+    </div>
+    <button id="choose-button" class="cta-button" onclick="nextScene(2)">MONSTER - Spiermassa en kracht</button>
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(2)">Terug</button>
+    </div>
+    <p style="margin-top: 15px; font-size: 0.9rem;">Swipe om je doel te kiezen</p>
+  </div>
+
+  <div class="scene hidden" id="scene3">
+    <h2>Deel 1: Je 'Hero Stats'</h2>
+    <div class="input-group">
+      <label for="gender">Ik ben een:</label>
+      <select id="gender" name="gender">
+        <option value="male">Man</option>
+        <option value="female">Vrouw</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="age">Leeftijd:</label>
+      <input type="number" id="age" name="age" placeholder="bijv. 30">
+    </div>
+    <div class="input-group">
+      <label for="height">Lengte (cm):</label>
+      <input type="number" id="height" name="height" placeholder="bijv. 180">
+    </div>
+    <div class="input-group">
+      <label for="weight">Huidig Gewicht (kg):</label>
+      <input type="number" id="weight" name="weight" placeholder="bijv. 85">
+    </div>
+    <div class="error-message" id="error-scene3"></div>
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(3)">Terug</button>
+      <button class="cta-button" onclick="validateScene(3)">Volgende</button>
+    </div>
+  </div>
+
+  <div class="scene hidden" id="scene4">
+    <h2>Deel 2: Je Dagelijkse Strijd</h2>
+    <p>Hoe ziet je dagelijkse leven eruit? (exclusief sport)</p>
+    <div class="radio-group" id="work-activity">
+      <label class="radio-option" data-value="1.2"><input type="radio" name="work" value="1.2"> Zittend (Kantoorbaan)</label>
+      <label class="radio-option" data-value="1.4"><input type="radio" name="work" value="1.4"> Licht Actief (Winkel/Horeca)</label>
+      <label class="radio-option" data-value="1.6"><input type="radio" name="work" value="1.6"> Actief (Bouw/Post)</label>
+      <label class="radio-option" data-value="1.8"><input type="radio" name="work" value="1.8"> Zeer Actief (Extreem fysiek)</label>
+    </div>
+    <div class="error-message" id="error-scene4"></div>
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(4)">Terug</button>
+      <button class="cta-button" onclick="validateScene(4)">Volgende</button>
+    </div>
+  </div>
+
+  <div class="scene hidden" id="scene5">
+    <h2>Deel 3: Je Huidige Training</h2>
+    <p>Hoe vaak per week sport je *momenteel* intensief?</p>
+    <div class="radio-group" id="sport-activity">
+      <label class="radio-option" data-value="0"><input type="radio" name="sport" value="0"> 0 keer (Ik begin nu)</label>
+      <label class="radio-option" data-value="1.5"><input type="radio" name="sport" value="1.5"> 1-2 keer</label>
+      <label class="radio-option" data-value="3.5"><input type="radio" name="sport" value="3.5"> 3-4 keer</label>
+      <label class="radio-option" data-value="5"><input type="radio" name="sport" value="5"> 5+ keer</label>
+    </div>
+    <div class="error-message" id="error-scene5"></div>
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(5)">Terug</button>
+      <button class="cta-button" onclick="validateScene(5)">Volgende</button>
+    </div>
+  </div>
+
+  <div class="scene hidden" id="scene6">
+    <h2>Je 'Onderhoud' Data</h2>
+    <p>Dit is je geschatte dagelijkse energiebehoefte (TDEE) om op je huidige gewicht te blijven. Dit is ons startpunt.</p>
+    <div id="tdee-result">Aan het berekenen...</div>
+    <p style="font-size: 0.9rem; margin-top: 15px;">We gebruiken dit getal om je "Hero Doel" (+300 of -300 kcal) te bepalen, zodra je account is aangemaakt.</p>
+    <div class="error-message" id="error-scene6"></div>
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(6)">Terug</button>
+      <button class="cta-button" onclick="validateScene(6)">Accepteer & Creëer Account</button>
+    </div>
+  </div>
+
+  <div class="scene hidden" id="scene7">
+    <h2>Laatste Stap: Accepteer de Quest</h2>
+    <p>Maak je 'Hero Profiel' aan. Hiermee slaan we je voortgang op en ontgrendel je de volledige "Hero Engine".</p>
+    <div class="input-group">
+      <label for="username">Jouw Heldennaam:</label>
+      <input type="text" id="username" name="username" placeholder="bijv. FitWolf_88">
+    </div>
+    <div class="input-group">
+      <label for="email">E-mailadres:</label>
+      <input type="email" id="email" name="email" placeholder="jouw@email.com">
+    </div>
+    <div class="input-group">
+      <label for="password">Wachtwoord (min. 6 tekens):</label>
+      <input type="password" id="password" name="password" placeholder="••••••••">
+    </div>
+    <div class="input-group">
+      <label for="confirm-password">Herhaal Wachtwoord:</label>
+      <input type="password" id="confirm-password" name="confirm-password" placeholder="••••••••">
+    </div>
+
+    <div id="auth-feedback" class="error-message" style="display:none;"></div>
+    <div class="loader" id="auth-loader"></div>
+
+    <div class="button-container">
+      <button class="nav-button" onclick="prevScene(7)">Terug</section>
+      <button id="register-button" class="cta-button">Start Mijn Transformatie</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // JOUW VOLLEDIGE, AANGEPASTE SCRIPT
+    
+    // --------------------------------------------------------------------
+    // STAP 1: CONFIGUREER JE "BREIN" (FIREBASE)
+    // --------------------------------------------------------------------
+    // Plak hier je Firebase Config-object
+    // Je vindt dit in je Firebase Project > Projectinstellingen > Algemeen > Jouw apps
+    const firebaseConfig = {
+      apiKey: "JOUW_API_KEY", // <-- PLAK HIER
+      authDomain: "JOUW_PROJECT_ID.firebaseapp.com", // <-- PLAK HIER
+      projectId: "JOUW_PROJECT_ID", // <-- PLAK HIER
+      storageBucket: "JOUW_PROJECT_ID.appspot.com", // <-- PLAK HIER
+      messagingSenderId: "JOUW_SENDER_ID", // <-- PLAK HIER
+      appId: "JOUW_APP_ID" // <-- PLAK HIER
+    };
+    
+    // STAP 2: Initialiseer Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --------------------------------------------------------------------
+    // HIER BEGINT JOUW ORIGINELE JAVASCRIPT
+    // --------------------------------------------------------------------
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup radio button 'selected' class
+      const radioGroups = document.querySelectorAll('.radio-group');
+      radioGroups.forEach(group => {
+        group.addEventListener('click', (e) => {
+          let option = e.target.closest('.radio-option');
+          if (!option) return;
+          
+          group.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          option.querySelector('input').checked = true;
+        });
+      });
+      
+      // Setup swipe functionaliteit
+      const wrapper = document.getElementById('swiperWrapper');
+      const slides = wrapper.querySelectorAll('.swiper-slide');
+      const chooseButton = document.getElementById('choose-button');
+      
+      function updateSlideStyles() {
+        slides.forEach((slide, index) => {
+          slide.classList.toggle('active', index === currentIndex);
+        });
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        let goalText = currentIndex === 0 ? 'MONSTER- Spiermassa en kracht' : 'ROOFDIER - Vetverlies en definitie';
+        chooseButton.textContent = goalText;
+        chooseButton.classList.remove('fade-in');
+        void chooseButton.offsetWidth; // Forceer reflow
+        chooseButton.classList.add('fade-in');
+      }
+
+      let currentIndex = 0;
+      let xDown = null, xDiff = 0;
+      wrapper.addEventListener('touchstart', evt => xDown = evt.touches[0].clientX, { passive: true });
+      wrapper.addEventListener('touchend', evt => {
+        if (!xDown) return;
+        const xUp = evt.changedTouches[0].clientX;
+        xDiff = xDown - xUp;
+        if (Math.abs(xDiff) > 60) {
+          currentIndex = currentIndex === 0 ? 1 : 0;
+        }
+        updateSlideStyles();
+        xDown = null;
+      });
+
+      updateSlideStyles(); // Init
+      
+      // Setup 'register-button' listener
+      document.getElementById('register-button').addEventListener('click', () => validateScene(7));
+    });
+
+    let currentScene = 1;
+    const totalScenes = 7;
+    let tdeeResult = 0; // Sla de TDEE op voor later
+    let formData = {}; // Sla alle data op
+
+    function updateProgressBar() {
+      const progress = (currentScene - 1) / (totalScenes - 1) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+    }
+
+    function nextScene(scene) {
+      document.getElementById(`scene${scene}`).classList.add('hidden');
+      currentScene = scene + 1;
+      document.getElementById(`scene${scene + 1}`).classList.remove('hidden');
+      updateProgressBar();
+
+      if (currentScene === 2) {
+        document.getElementById('bg-image').classList.add('fade-out');
+      }
+      if (currentScene === 6) {
+        // Bereken TDEE wanneer we naar scene 6 gaan
+        tdeeResult = calculateTDEE();
+        document.getElementById('tdee-result').textContent = `${Math.round(tdeeResult)} kcal`;
+      }
+    }
+
+    function prevScene(scene) {
+      document.getElementById(`scene${scene}`).classList.add('hidden');
+      currentScene = scene - 1;
+      document.getElementById(`scene${scene - 1}`).classList.remove('hidden');
+      updateProgressBar();
+
+      if (currentScene === 1) {
+        document.getElementById('bg-image').classList.remove('fade-out');
+      }
+    }
+    
+    function validateScene(scene) {
+      let isValid = false;
+      let errorEl;
+
+      switch(scene) {
+        case 1:
+          isValid = true;
+          break;
+        case 2:
+          formData.goal = document.querySelector('#swiperWrapper .swiper-slide.active').dataset.goal;
+          isValid = true;
+          break;
+        case 3:
+          errorEl = document.getElementById('error-scene3');
+          formData.gender = document.getElementById('gender').value;
+          formData.age = parseInt(document.getElementById('age').value);
+          formData.height = parseInt(document.getElementById('height').value);
+          formData.weight = parseInt(document.getElementById('weight').value);
+          
+          if (formData.age > 0 && formData.height > 0 && formData.weight > 0) {
+            isValid = true;
+            errorEl.style.display = 'none';
+          } else {
+            errorEl.textContent = 'Vul alsjeblieft alle velden correct in.';
+            errorEl.style.display = 'block';
+          }
+          break;
+        case 4:
+          errorEl = document.getElementById('error-scene4');
+          const workSelected = document.querySelector('input[name="work"]:checked');
+          if (workSelected) {
+            formData.workActivity = parseFloat(workSelected.value);
+            isValid = true;
+            errorEl.style.display = 'none';
+          } else {
+            errorEl.textContent = 'Maak alsjeblieft een keuze.';
+            errorEl.style.display = 'block';
+          }
+          break;
+        case 5:
+          errorEl = document.getElementById('error-scene5');
+          const sportSelected = document.querySelector('input[name="sport"]:checked');
+          if (sportSelected) {
+            formData.sportActivity = parseFloat(sportSelected.value);
+            isValid = true;
+            errorEl.style.display = 'none';
+          } else {
+            errorEl.textContent = 'Maak alsjeblieft een keuze.';
+            errorEl.style.display = 'block';
+          }
+          break;
+        case 6:
+          isValid = true;
+          break;
+        case 7:
+          errorEl = document.getElementById('auth-feedback');
+          const username = document.getElementById('username').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          const confirmPassword = document.getElementById('confirm-password').value;
+          const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+          if (username.length < 3) {
+            errorEl.textContent = 'Heldennaam moet minimaal 3 tekens lang zijn.';
+            errorEl.style.display = 'block';
+          } else if (!emailValid) {
+            errorEl.textContent = 'Voer een geldig e-mailadres in.';
+            errorEl.style.display = 'block';
+          } else if (password.length < 6) {
+            errorEl.textContent = 'Wachtwoord moet minimaal 6 tekens lang zijn.';
+            errorEl.style.display = 'block';
+          } else if (password !== confirmPassword) {
+            errorEl.textContent = 'Wachtwoorden komen niet overeen.';
+            errorEl.style.display = 'block';
+          } else {
+            isValid = true;
+            errorEl.style.display = 'none';
+            registerHero(); 
+          }
+          break;
+      }
+
+      if (isValid && scene < 7) { 
+        nextScene(scene);
+      }
+    }
+    
+    function calculateTDEE() {
+      let bmr = 0;
+      if (formData.gender === 'male') {
+        bmr = 88.362 + (13.397 * formData.weight) + (4.799 * formData.height) - (5.677 * formData.age);
+      } else {
+        bmr = 447.593 + (9.247 * formData.weight) + (3.098 * formData.height) - (4.330 * formData.age);
+      }
+      const sportFactor = (formData.sportActivity * 0.3) / 7; 
+      const activityFactor = formData.workActivity + sportFactor;
+      return bmr * activityFactor;
+    }
+
+    // --------------------------------------------------------------------
+    // STAP 3: DE "HERO ENGINE" REGISTRATIEFUNCTIE (AANGEPAST)
+    // --------------------------------------------------------------------
+
+    function getHeroData() {
+      const tdee = Math.round(calculateTDEE());
+      const calorieModifier = formData.goal === 'monster' ? 300 : -300;
+      const targetCalories = tdee + calorieModifier;
+
+      return {
+        username: document.getElementById('username').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        goal: formData.goal,
+        stats: {
+          gender: formData.gender,
+          age: formData.age,
+          height: formData.height,
+          startWeight: formData.weight,
+        },
+        activity: {
+          work: formData.workActivity,
+          sport: formData.sportActivity,
+        },
+        heroLevel: 1,
+        heroStreak: 0,
+        lastStreakUpdate: null, 
+        tdee: tdee,
+        targetCalories: targetCalories,
+        
+        // Initialiseer de 'Niet-Onderhandelbaar' velden
+        nonNegotiableShield: null, // "Schild"
+        nonNegotiableKryptonite: null // "Kryptonite"
+      };
+    }
+
+    async function registerHero() {
+      const registerButton = document.getElementById('register-button');
+      const feedbackEl = document.getElementById('auth-feedback');
+      const loader = document.getElementById('auth-loader');
+
+      registerButton.disabled = true;
+      loader.style.display = 'block';
+      feedbackEl.style.display = 'none';
+
+      try {
+        const heroData = getHeroData();
+        const email = heroData.email;
+        const password = document.getElementById('password').value;
+
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        await user.updateProfile({
+          displayName: heroData.username
+        });
+        
+        delete heroData.email; 
+        
+        await db.collection('users').doc(user.uid).set(heroData);
+
+        // SUCCES! Stuur door naar het dashboard.
+        window.location.href = 'dashboard.html'; 
+
+      } catch (error) {
+        loader.style.display = 'none';
+        registerButton.disabled = false;
+        feedbackEl.style.display = 'block';
+
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            feedbackEl.textContent = 'Dit e-mailadres is al in gebruik door een andere Held.';
+            break;
+          case 'auth/weak-password':
+            feedbackEl.textContent = 'Je wachtwoord is te zwak. Kies een sterker wachtwoord.';
+            break;
+          case 'auth/invalid-email':
+            feedbackEl.textContent = 'Dit is geen geldig e-mailadres.';
+            break;
+          default:
+            feedbackEl.textContent = 'Oeps, er ging iets mis. Probeer het opnieuw.';
+        }
+        console.error("Fout bij registreren:", error);
+      }
+    }
+  </script>
+</body>
+</html>

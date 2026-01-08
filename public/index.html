@@ -59,18 +59,18 @@
         transition: opacity 1s ease-out;
         overflow: hidden; /* Hide shards that fly off-screen */
     }
-    .glitch-word {
+    #glitch-words-container .glitch-word {
         font-family: var(--font-data);
-        font-size: 2rem;
+        font-size: 1.5rem; /* Iets kleiner voor betere leesbaarheid bij spam */
         color: rgba(255, 255, 255, 0.7);
         text-transform: uppercase;
-        letter-spacing: 5px;
+        letter-spacing: 3px;
         opacity: 0;
-        margin: 10px 0;
         animation: text-flicker 3s infinite alternate;
-        position: absolute; /* Changed for dynamic positioning */
-        transition: opacity 0.5s ease;
-        display: none; /* Zorgt dat ze compleet onzichtbaar zijn bij het laden */
+        position: absolute;
+        transition: opacity 0.2s ease;
+        display: none;
+        white-space: nowrap;
     }
     #awakening-logo {
         position: absolute;
@@ -147,6 +147,7 @@
       text-align: center;
       padding: 20px;
       transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      overflow: hidden; /* Voorkom overflow van animaties */
     }
 
     .scene.hidden {
@@ -158,6 +159,8 @@
         text-transform: uppercase;
         letter-spacing: 3px;
         margin-bottom: 20px;
+        animation: fadeIn 1s forwards; /* Standaard fade-in voor titels */
+        opacity: 0;
     }
     
     /* Glitch Animation */
@@ -205,6 +208,7 @@
       box-shadow: 0 0 0px var(--color-accent);
       animation: pulseGlow 2s infinite;
       margin-top: 20px;
+      font-size: 1.2rem;
     }
     
     .cta-button:hover {
@@ -218,11 +222,27 @@
         50% { box-shadow: 0 0 20px var(--color-secondary); }
         100% { box-shadow: 0 0 5px var(--color-secondary); }
     }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Scene 1 Extra */
+    #scene1 p {
+        font-family: var(--font-data);
+        opacity: 0;
+        animation: fadeIn 1s forwards 1s;
+    }
+    #scene1 a {
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #scene1 a:hover {
+        text-shadow: 0 0 10px var(--color-accent);
+    }
 
     /* Scene 2 Swiper */
     .swiper-container {
         width: 100%;
-        max-width: 900px; /* Wider to show both slides */
+        max-width: 900px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -241,6 +261,7 @@
         transform: scale(0.85);
         transition: opacity 0.4s ease, transform 0.4s ease;
         cursor: pointer;
+
     }
     .swiper-slide.active {
         opacity: 1;
@@ -269,7 +290,7 @@
         color: var(--color-accent);
     }
     
-    /* Scene 3 Sliders */
+    /* Scene 3 Sliders (Merged) */
     #scene3 video {
         width: 90vw;
         max-width: 250px;
@@ -282,6 +303,7 @@
         font-size: 1.2rem;
         margin-top: 15px;
     }
+
     .slider {
         -webkit-appearance: none;
         width: 80vw;
@@ -301,7 +323,82 @@
         border-radius: 50%;
     }
     
-    /* Scene 4-6 Buttons */
+    /* Scene 4 (Imported from Original) */
+    @keyframes lightningIn {
+      0% { opacity: 0; transform: scale(0.5); filter: brightness(3); }
+      50% { opacity: 1; transform: scale(1.05); filter: brightness(1); }
+      100% { opacity: 1; transform: scale(1); filter: brightness(1); }
+    }
+    @keyframes slideInAndFadeInLeft {
+      0% { opacity: 0; transform: translateX(-100px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInAndFadeInRight {
+      0% { opacity: 0; transform: translateX(100px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    #scene4 .hero-occupation-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+      margin-top: 20px;
+    }
+    #scene4 .hero-occupation-item {
+      background-color: #1a1a1a;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      overflow: hidden;
+      width: 80%;
+      max-width: 350px;
+      position: relative;
+      opacity: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 0;
+    }
+    #scene4 .hero-occupation-item:hover {
+      box-shadow: 0 0 20px rgba(255,0,0,0.8), 0 0 40px rgba(255,0,0,0.4);
+      transform: translateY(-5px) scale(1.03);
+      z-index: 1;
+    }
+    #scene4 .hero-occupation-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0.8);
+      transition: filter 0.3s ease;
+    }
+    #scene4 .hero-occupation-item:hover img {
+      filter: brightness(1.0);
+    }
+    #scene4 .hero-occupation-item h3 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
+      padding: 20px 10px 10px;
+      font-size: 1.2rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px var(--color-accent);
+      margin-bottom: 0;
+      animation: none;
+      opacity: 1;
+      box-sizing: border-box;
+    }
+    /* Animatie vertragingen */
+    .hero-occupation-item:nth-child(1) { animation: slideInAndFadeInLeft 0.8s ease-out forwards; animation-delay: 0.3s; }
+    .hero-occupation-item:nth-child(2) { animation: slideInAndFadeInRight 0.8s ease-out forwards; animation-delay: 0.6s; }
+    .hero-occupation-item:nth-child(3) { animation: lightningIn 0.8s ease-out forwards; animation-delay: 0.9s; }
+
+
+    /* Scene 5-6 Buttons (Using Saga Style) */
     .choice-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -325,7 +422,14 @@
         border-color: var(--color-accent);
     }
     
-    /* Scene 7 Form */
+    /* Scene 7 Form (Styled as Saga) */
+    .scroll-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    /* Removed label[for="gender"] style */
     .scroll-form input {
         width: 100%;
         max-width: 400px;
@@ -336,19 +440,99 @@
         border-bottom: 2px solid var(--color-secondary);
         color: var(--color-secondary);
         font-family: var(--font-data);
-        font-size: 1rem;
+        font-size: 1.2rem; /* Aangepast voor consistentie */
         text-align: center;
+    }
+    .scroll-form input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+        opacity: 1; /* Noodzakelijk voor Firefox */
+        font-family: var(--font-data);
+        font-size: 1.2rem;
+        text-transform: uppercase;
     }
     .scroll-form input:focus {
         outline: none;
         border-bottom-color: var(--color-accent);
     }
-    #confirmation-message {
-        margin-top: 20px;
-        color: var(--color-accent);
+    .scroll-form input:focus::placeholder {
+        color: rgba(255, 255, 255, 0.4); /* Maak placeholder lichter bij focus */
+    }
+
+    .scroll-form select#gender { /* Updated styles for gender select */
+        width: 100%;
+        max-width: 400px;
+        padding: 15px;
+        margin-bottom: 15px; /* Added margin */
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--color-secondary);
+        color: rgba(255, 255, 255, 0.7); /* Placeholder style */
         font-family: var(--font-data);
         font-size: 1.2rem;
+        text-align: center;
+        text-align-last: center; /* Voor Firefox centering */
+        -webkit-appearance: none;
+        appearance: none;
+        text-transform: uppercase;
+        cursor: pointer;
     }
+    .scroll-form select#gender option[value=""] { /* Style for placeholder option */
+        display: none;
+    }
+    .scroll-form select#gender.selected { /* Style when value is selected */
+        color: var(--color-secondary); /* Active style */
+    }
+    .scroll-form select#gender:focus { /* Style on focus */
+        outline: none;
+        border-bottom-color: var(--color-accent);
+        color: var(--color-secondary); /* Ensure text is white on focus */
+    }
+    .scroll-form option { /* Style for options in dropdown */
+        background: var(--color-primary);
+        color: var(--color-secondary);
+        font-family: var(--font-data);
+        text-transform: uppercase;
+    }
+
+    /* --- NIEUWE CSS VOOR TDEE DISPLAY --- */
+    #scene7 h2 {
+        margin-bottom: 10px; /* Minder margin voor de titel */
+    }
+    .tdee-display {
+        font-family: var(--font-data);
+        font-size: 1.5rem; /* Maak het opvallend */
+        color: var(--color-accent); /* Accentkleur */
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards 0.3s;
+        text-shadow: 0 0 10px var(--color-accent);
+    }
+    #tdee-value {
+        font-size: 2rem; /* Maak het getal groter */
+        color: var(--color-secondary);
+        text-shadow: 0 0 15px var(--color-accent);
+    }
+    /* --- EINDE NIEUWE CSS --- */
+
+    .error-message {
+      color: var(--color-accent);
+      font-size: 1rem;
+      margin-top: 10px;
+      font-weight: bold;
+      font-family: var(--font-data);
+    }
+    #auth-feedback { min-height: 24px; }
+    .loader {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--color-accent);
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      margin: 15px auto 0;
+      animation: rotation 1s linear infinite;
+    }
+    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
   </style>
 </head>
@@ -357,11 +541,23 @@
   <div id="main-background"></div>
 
   <div id="awakening-overlay">
-    <div id="glitch-word1" class="glitch-word">Middelmatigheid...</div>
-    <div id="glitch-word2" class="glitch-word">Twijfel...</div>
-    <div id="glitch-word3" class="glitch-word">Uitstel...</div>
-    <div id="glitch-word4" class="glitch-word">Nog een dag...</div>
-    <img src="fenrir_ref_pose01 uitgeknipt.png" id="awakening-logo" alt="FitWolf Logo">
+    <div id="glitch-words-container">
+        <!-- Pool of 25 divs for the word spam effect -->
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div><div class="glitch-word"></div>
+        <div class="glitch-word"></div>
+    </div>
+    <img src="logo-png.png" id="awakening-logo" alt="FitWolf Logo">
   </div>
 
   <div class="saga-progress-container">
@@ -375,6 +571,9 @@
     <h1 class="glitch" data-text="BLIJF GEEN FIGURANT">BLIJF GEEN FIGURANT</h1>
     <h2>Ontwaak je innerlijke wolf!</h2>
     <button class="cta-button" onclick="nextScene()">Start Mijn Verhaal</button>
+    <p style="margin-top: 25px; font-size: 1.2rem; letter-spacing: 0.5px;">
+      Al een Held? <a href="login.html">Log hier in</a>
+    </p>
   </div>
 
   <div id="scene2" class="scene hidden">
@@ -382,18 +581,18 @@
     <div class="swiper-container">
       <div class="swiper-nav" id="prevBtn">&lt;</div>
       <div class="swiper-wrapper" id="swiperWrapper">
-        <div class="swiper-slide active" data-path="Juggernaut" onclick="handleChoiceAndNextScene('path', 'Juggernaut')">
+        <div class="swiper-slide active" data-path="Juggernaut" onclick="choosePathFinal()">
           <img src="Fenrir-aankomen2.png" alt="Juggernaut Pad">
           <p class="path-title">PATH OF THE JUGGERNAUT</p>
         </div>
-        <div class="swiper-slide" data-path="Predator" onclick="handleChoiceAndNextScene('path', 'Predator')">
+        <div class="swiper-slide" data-path="Predator" onclick="choosePathFinal()">
           <img src="Fenrir-afvallen2.png" alt="Predator Pad">
           <p class="path-title">PATH OF THE PREDATOR</p>
         </div>
       </div>
       <div class="swiper-nav" id="nextBtn">&gt;</div>
     </div>
-    <button id="chooseButton" class="cta-button" onclick="handleChoiceAndNextScene('path', getCurrentPath())">SLUIT DIT PAD AF</button>
+    <button id="chooseButton" class="cta-button" onclick="choosePathFinal()">SLUIT HET JUGGERNAUT PAD AF</button>
   </div>
 
   <div id="scene3" class="scene hidden">
@@ -401,106 +600,174 @@
       <video id="bmiVideo" muted playsinline preload="auto">
           <source src="Dun-naar-dik.mp4" type="video/mp4">
       </video>
-      <label>Lengte (cm): <span id="heightVal">175</span></label>
-      <input type="range" class="slider" min="140" max="220" value="175" id="heightSlider">
-      <label>Gewicht (kg): <span id="weightVal">75</span></label>
-      <input type="range" class="slider" min="40" max="150" value="75" id="weightSlider">
-      <button class="cta-button" onclick="registerStatsAndNextScene()">DATA GEREGISTREERD</button>
+
+      <label for="height">Lengte (cm): <span id="heightVal">175</span></label>
+      <input type="range" class="slider" id="height" min="140" max="210" value="175" oninput="updateValue('heightVal', this.value)">
+      
+      <label for="weight">Gewicht (kg): <span id="weightVal">75</span></label>
+      <input type="range" class="slider" id="weight" min="40" max="160" value="75" oninput="updateValue('weightVal', this.value)">
+      
+      <button class="cta-button" onclick="nextScene()">Volgende</button>
   </div>
   
   <div id="scene4" class="scene hidden">
-    <h2>Analyseer je dagelijkse strijd.</h2>
-    <div class="choice-grid" id="work-choices">
-        <button class="choice-btn" data-value="zittend">💼 Zittend werk</button>
-        <button class="choice-btn" data-value="actief">💪 Actief werk</button>
+    <!-- Reset knop van origineel -->
+    <button onclick="resetToStart()" style="opacity: 0.5; position: absolute; top: 20px; right: 20px; z-index: 10; padding: 10px 15px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer;">🔄</button>
+    <h2>Wat voor werk doe je?</h2>
+    <div class="hero-occupation-grid">
+      <div class="hero-occupation-item" onclick="setLifestyle('Zittend', 1.2)">
+        <img src="Zittend-beroep.png" alt="Zittend beroep" class="preloaded-image" data-src="/Fenrir-zittend.png">
+        <h3>Zittend beroep</h3>
+      </div>
+      <div class="hero-occupation-item" onclick="setLifestyle('Staand', 1.4)">
+        <img src="Staand-beroep.png" alt="Staand beroep" class="preloaded-image" data-src="/Fenrir-kok.png">
+        <h3>Staand beroep</h3>
+      </div>
+      <div class="hero-occupation-item" onclick="setLifestyle('Actief', 1.6)">
+        <img src="Actief-beroep.png" alt="Actief beroep" class="preloaded-image" data-src="/Fenrir-bouwvakker.png">
+        <h3>Actief beroep</h3>
+      </div>
     </div>
   </div>
 
   <div id="scene5" class="scene hidden">
     <h2>Evalueer je huidige training.</h2>
     <div class="choice-grid" id="sport-choices">
-        <button class="choice-btn" data-value="geen">❌ Geen sport</button>
-        <button class="choice-btn" data-value="soms">⚽ Af en toe</button>
-        <button class="choice-btn" data-value="regelmatig">🏆 Regelmatig</button>
+        <button class="choice-btn" data-value="0">❌ Geen sport</button>
+        <button class="choice-btn" data-value="1.5">✌️ 1-2x</button>
+        <button class="choice-btn" data-value="3.5">⚽ 3-5x</button>
+        <button class="choice-btn" data-value="5">✨ Elke dag</button>
     </div>
   </div>
 
   <div id="scene6" class="scene hidden">
     <h2>Beoordeel je brandstof.</h2>
     <div class="choice-grid" id="food-choices">
-        <button class="choice-btn" data-value="alles">🍿 Ik eet alles</button>
-        <button class="choice-btn" data-value="beetje">🤔 Ik let een beetje op</button>
-        <button class="choice-btn" data-value="strikt">✅ Ik eet strikt</button>
+        <button class="choice-btn" data-value="Ik eet wat ik wil">🍿 Ik eet alles</button>
+        <button class="choice-btn" data-value="Ik let een beetje op">🤔 Ik let een beetje op</button>
+        <button class="choice-btn" data-value="Ik track alles">✅ Ik track alles</button>
     </div>
   </div>
 
   <div id="scene7" class="scene hidden">
-      <h2>HET TRANSCENDENT SIGIL HEEFT GESPROKEN.</h2>
-      <p style="margin-bottom: 30px;">VUL DE SCROLL OM JE STRIJDPLAN TE ONTVANGEN.</p>
+      <h2>FENRIR HEEFT JE ENERGIE GEANALYSEERD</h2> <!-- NEW TITLE -->
+      <p class="tdee-display">JOUW BEHOEFTE: <span id="tdee-value">...</span> KCAL</p> <!-- NEW TDEE DISPLAY -->
+      <p style="margin-bottom: 30px; opacity: 0; animation: fadeIn 1s forwards 0.5s;">VUL DE SCROLL OM JE STRIJDPLAN TE ONTVANGEN.</p>
+      
       <div class="scroll-form">
-          <input type="text" id="userName" placeholder="> VOORNAAM" required>
-          <input type="email" id="userEmail" placeholder="> E-MAILADRES" required>
+        <input type="text" id="username" placeholder="> JOUW HELDENNAAM" />
+        
+        <select id="gender" name="gender" required onchange="this.classList.add('selected')">
+            <option value="" disabled selected hidden>> GESLACHT</option> <!-- Placeholder -->
+            <option value="male">MAN</option>
+            <option value="female">VROUW</option>
+        </select>
+        
+        <input type="email" id="email" placeholder="> E-MAILADRES" />
+        <input type="password" id="password" placeholder="> WACHTWOORD (MIN. 6 TEKENS)" />
       </div>
-      <button class="cta-button" onclick="submitSaga()">ZEGEL MIJN LOT</button>
-      <div id="confirmation-message"></div>
+
+      <div id="auth-feedback" class="error-message" style="display:none;"></div>
+      <div class="loader" id="auth-loader"></div>
+
+      <button id="register-button" class="cta-button">ZEGEL MIJN LOT</button>
   </div>
 
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // --- AWAKENING INTRO SCRIPT START ---
+    // --------------------------------------------------------------------
+    // STAP 1: CONFIGUREER JE "BREIN" (FIREBASE)
+    // --------------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlimObPICtsa0mnTo1cK12SMp3nhcQuwg", // <-- PLAK HIER
+      authDomain: "fitwolf-engine.firebaseapp.com", // <-- PLAK HIER
+      projectId: "fitwolf-engine", // <-- PLAK HIER
+      storageBucket: "fitwolf-engine.firebasestorage.app", // <-- PLAK HIER
+      messagingSenderId: "974082407299", // <-- PLAK HIER
+      appId: "1:974082407299:web:2980779c10adccd0db54b6" // <-- PLAK HIER
+    };  
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --------------------------------------------------------------------
+    // "SAGA" INTRO & SHATTER LOGICA
+    // --------------------------------------------------------------------
     window.addEventListener('load', () => {
         const overlay = document.getElementById('awakening-overlay');
-        const words = [
-            document.getElementById('glitch-word1'),
-            document.getElementById('glitch-word2'),
-            document.getElementById('glitch-word3'),
-            document.getElementById('glitch-word4')
-        ];
         const logo = document.getElementById('awakening-logo');
         const scene1 = document.getElementById('scene1');
-        const mainBg = document.getElementById('main-background');
+        mainBg = document.getElementById('main-background');
+        
+        const wordList = [
+            "Morgen begin ik echt.", "Vanaf maandag.", "Nog één aflevering.", "Eerst dit even afmaken.", 
+            "Het is al te laat.", "Te moe na werk.", "Geen energie.", "Vandaag even niet.", "Wat is het nut?",
+            "Ik voel me niet gemotiveerd.", "Ik weet niet waar te beginnen.", "Het lukt me toch niet.", 
+            "Iedereen kijkt naar me.", "Dit is wie ik nu eenmaal ben.", "Het zit in mijn genen.", 
+            "Ik verdien dit.", "Eén keer kan geen kwaad.", "Zo slecht is het niet.", "Te veel gedoe.", 
+            "Wat maakt het uit.", "Middelmatigheid...", "Twijfel...", "Uitstel...", "Nog een dag..."
+        ];
+
+        const wordContainer = document.getElementById('glitch-words-container');
+        const wordElements = Array.from(wordContainer.querySelectorAll('.glitch-word'));
+        let wordPoolIndex = 0;
 
         function setRandomPosition(element) {
             let top, left;
             if (Math.random() > 0.5) {
-                top = Math.random() * 30 + 5;
+                top = Math.random() * 35 + 5; // Top 5% to 40%
             } else {
-                top = Math.random() * 30 + 65;
+                top = Math.random() * 35 + 60; // Bottom 60% to 95%
             }
-            if (window.innerWidth > 768) {
-                left = Math.random() > 0.5 ? Math.random() * 30 + 5 : Math.random() * 30 + 65;
-            } else {
-                left = Math.random() * 80 + 10;
-            }
+            left = Math.random() * 80 + 10; // 10% to 90% horizontal
+            
             element.style.top = `${top}vh`;
             element.style.left = `${left}vw`;
-            element.style.transform = 'translate(-50%, -50%)';
+            element.style.transform = `translate(-50%, -50%)`;
         }
 
-        words.forEach((word, index) => {
-            setTimeout(() => {
-                setRandomPosition(word);
-                word.style.display = 'block';
-                setTimeout(() => {
-                    word.style.opacity = '1';
-                }, 20);
-            }, 1000 * (index + 0.5));
-        });
+        function startWordSpam() {
+            const totalDuration = 4000;
+            const minDelay = 60;
+            const maxDelay = 400;
+            let elapsed = 0;
+
+            function scheduleNextWord() {
+                if (elapsed >= totalDuration) return;
+                if (wordPoolIndex >= wordElements.length) wordPoolIndex = 0;
+                const wordElement = wordElements[wordPoolIndex];
+                wordElement.textContent = wordList[Math.floor(Math.random() * wordList.length)];
+                setRandomPosition(wordElement);
+                wordElement.style.display = 'block';
+                setTimeout(() => { wordElement.style.opacity = '1'; }, 20);
+                wordPoolIndex++;
+                const progress = elapsed / totalDuration;
+                const currentDelay = maxDelay - (maxDelay - minDelay) * progress * progress;
+                elapsed += currentDelay;
+                setTimeout(scheduleNextWord, currentDelay);
+            }
+            scheduleNextWord();
+        }
+        startWordSpam();
 
         setTimeout(() => {
             overlay.classList.add('shatter');
             createShatterEffect(overlay);
-            words.forEach(word => {
+            wordElements.forEach(word => {
                 word.style.opacity = '0';
             });
             logo.style.opacity = '1';
             logo.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 5000);
+        }, 4500);
         
         setTimeout(() => {
             overlay.style.opacity = '0';
             overlay.style.pointerEvents = 'none';
-            mainBg.classList.add('visible'); // Fade in main background
+            mainBg.classList.add('visible');
             
             scene1.classList.remove('hidden');
             scene1.style.opacity = '0';
@@ -510,7 +777,7 @@
                 scene1.style.transform = 'translateY(0)';
             }, 50);
 
-        }, 5500);
+        }, 5000);
     });
 
     function createShatterEffect(container) {
@@ -537,21 +804,29 @@
             }, 10); 
         }
     }
-    // --- AWAKENING INTRO SCRIPT END ---
 
+    // --------------------------------------------------------------------
+    // "HERO ENGINE" DATA & SCENE LOGICA
+    // --------------------------------------------------------------------
     let currentScene = 1;
-    const totalScenes = 7;
-    const userData = {
-        path: null,
-        physique: null,
-        work: null,
-        sport: null,
-        food: null,
-        name: null,
-        email: null,
+    const totalScenes = 7; // Aantal scenes in *deze* flow
+    let mainBg; // <-- HIER GLOBAAL GEDECLAREERD
+
+    // Data opslag voor de engine
+    let heroDataStore = {
+      path: 'Juggernaut', // Standaard
+      goal: 'monster', // Standaard
+      gender: '', // Reset gender here or set default 'male'
+      age: 30,
+      height: 175,
+      weight: 75,
+      lifestyle: 1.2, // Werk (Zittend)
+      sport: 0, // Sport (Nooit)
+      nutrition: ''
     };
 
     function updateProgressBar() {
+        // We tellen de intro (scene 1) niet mee in de voortgang
         const progress = currentScene <= 1 ? 0 : ((currentScene -1) / (totalScenes-1)) * 100;
         document.getElementById('saga-progress-fill').style.width = `${progress}%`;
         document.getElementById('progress-text').textContent = `SAGA PROGRESS: ${Math.round(progress)}% COMPLETE`;
@@ -559,6 +834,11 @@
 
     function nextScene() {
       if (currentScene >= totalScenes) return;
+
+      if (currentScene === 1) {
+          mainBg.classList.remove('visible'); // Verberg achtergrond bij verlaten scene 1
+      }
+
       const current = document.getElementById(`scene${currentScene}`);
       current.style.opacity = '0';
       current.style.transform = 'translateY(-20px)';
@@ -577,14 +857,56 @@
             }, 50);
         }
         updateProgressBar();
+
+        // Specifieke acties bij laden van scene
+        if (currentScene === 3) {
+            // Reset sliders en video
+            const video = document.getElementById('bmiVideo');
+            if (video) { video.currentTime = 0; }
+            /* document.getElementById('gender').value = 'male'; // Verplaatst naar Scene 7 */
+            document.getElementById('age').value = 30;
+            document.getElementById('height').value = 175;
+            document.getElementById('weight').value = 75;
+            updateValue('ageVal', 30);
+            updateValue('heightVal', 175);
+            updateValue('weightVal', 75);
+            /* heroDataStore.gender = 'male'; // Verplaatst naar Scene 7 */
+            heroDataStore.age = 30;
+            heroDataStore.height = 175;
+            heroDataStore.weight = 75;
+            updateBmiVisualizer(); // Update video naar startpositie
+        }
+        if (currentScene === 4) {
+            setupScene4(); // Trigger animaties voor "werk"
+        }
+        if (currentScene === 7) {
+            // Reset gender selectie & TDEE
+            document.getElementById('gender').value = ''; // Reset naar placeholder
+            document.getElementById('gender').classList.remove('selected'); // Verwijder selected class
+            heroDataStore.gender = ''; // Reset in data store
+            document.getElementById('tdee-value').textContent = "..."; // Reset TDEE display
+
+            // --- NIEUWE CODE HIER ---
+            // Bereken en toon TDEE
+            try {
+                // We *proberen* TDEE te berekenen, maar gender is misschien nog niet geselecteerd
+                // De echte berekening voor opslag gebeurt bij registratie
+                const tempGender = heroDataStore.gender || 'male'; // Gebruik 'male' als default voor weergave
+                const tdee = Math.round(calculateTDEE(tempGender)); // Geef temp gender mee
+                if (isNaN(tdee) || tdee < 500) {
+                    throw new Error("TDEE calculation failed or was unrealistic.");
+                }
+                document.getElementById('tdee-value').textContent = tdee;
+            } catch (error) {
+                console.error("Error calculating TDEE for display:", error);
+                document.getElementById('tdee-value').textContent = "???"; // Fallback
+            }
+            // --- EINDE NIEUWE CODE ---
+        }
+
       }, 500);
     }
     
-    function handleChoiceAndNextScene(key, value) {
-        userData[key] = value;
-        nextScene();
-    }
-
     // SCENE 2: Swiper Logic
     let currentIndex = 0;
     const wrapper = document.getElementById('swiperWrapper');
@@ -634,19 +956,36 @@
         xDown = null;
     });
 
+    function choosePathFinal() {
+      heroDataStore.path = getCurrentPath();
+      heroDataStore.goal = currentIndex === 0 ? 'monster' : 'roofdier';
+      nextScene();
+    }
+
     // SCENE 3: Body Visualizer Logic
-    const heightSlider = document.getElementById('heightSlider');
-    const weightSlider = document.getElementById('weightSlider');
-    const heightVal = document.getElementById('heightVal');
-    const weightVal = document.getElementById('weightVal');
+    const heightSlider = document.getElementById('height');
+    const weightSlider = document.getElementById('weight');
+    const ageSlider = document.getElementById('age');
+    /* const genderSelect = document.getElementById('gender'); // Verwijderd, zit in Scene 7 */
     const bmiVideo = document.getElementById('bmiVideo');
 
+    function updateValue(id, val) {
+        document.getElementById(id).textContent = val;
+        // Sla de waarde direct op voor de engine
+        if (id === 'ageVal') heroDataStore.age = parseInt(val);
+        if (id === 'heightVal') heroDataStore.height = parseInt(val);
+        if (id === 'weightVal') heroDataStore.weight = parseInt(val);
+        updateBmiVisualizer();
+    }
+    /* Verwijderd, zit in Scene 7
+    genderSelect.addEventListener('change', (e) => {
+      heroDataStore.gender = e.target.value;
+    });
+    */
+
     function updateBmiVisualizer() {
-        if (!heightSlider || !weightSlider) return;
         const height = parseInt(heightSlider.value);
         const weight = parseInt(weightSlider.value);
-        heightVal.textContent = height;
-        weightVal.textContent = weight;
 
         if (bmiVideo && bmiVideo.readyState >= 2) { // Ensure video metadata is loaded
             const bmi = weight / ((height / 100) ** 2);
@@ -657,53 +996,231 @@
             bmiVideo.currentTime = bmiVideo.duration * percentage;
         }
     }
-
-    heightSlider.addEventListener('input', updateBmiVisualizer);
-    weightSlider.addEventListener('input', updateBmiVisualizer);
     
-    function registerStatsAndNextScene() {
-        userData.physique = {
-            height: heightSlider.value,
-            weight: weightSlider.value
-        };
-        nextScene();
+    // SCENE 4: Logic (gekopieerd van origineel)
+    function setLifestyle(val, dataValue) { 
+      heroDataStore.lifestyle = dataValue; 
+      nextScene(); 
     }
+    document.addEventListener('DOMContentLoaded', () => {
+        preloadImages([
+            '/Zittend-beroep.png',
+            '/Fenrir-kok.png',
+            '/Fenrir-bouwvakker.png'
+        ]);
+    });
+    function preloadImages(urls) {
+        urls.forEach(url => { const img = new Image(); img.src = url; });
+    }
+    function setupScene4() {
+        const items = document.querySelectorAll('#scene4 .hero-occupation-item');
+        items.forEach((item, index) => {
+            item.style.opacity = 0; // Reset
+            item.style.animation = 'none'; // Reset
+            void item.offsetWidth; // Trigger reflow
+            if(index === 0) item.style.animation = 'slideInAndFadeInLeft 0.8s ease-out forwards 0.3s';
+            if(index === 1) item.style.animation = 'slideInAndFadeInRight 0.8s ease-out forwards 0.6s';
+            if(index === 2) item.style.animation = 'lightningIn 0.8s ease-out forwards 0.9s';
+        });
+    }
+
     
-    // SCENE 4-6: Choice Logic
+    // SCENE 5-6: Choice Logic (Saga stijl)
     document.querySelectorAll('.choice-grid').forEach(grid => {
         grid.addEventListener('click', (e) => {
             if (e.target.classList.contains('choice-btn')) {
                 [...e.target.parentElement.children].forEach(child => child.classList.remove('selected'));
                 e.target.classList.add('selected');
-                const key = grid.id.split('-')[0];
+                
+                const key = grid.id.split('-')[0]; // 'sport' of 'food'
                 const value = e.target.dataset.value;
-                setTimeout(() => handleChoiceAndNextScene(key, value), 400);
+
+                if (key === 'sport') {
+                    heroDataStore.sport = parseFloat(value);
+                } else if (key === 'food') {
+                    heroDataStore.nutrition = value;
+                }
+                
+                setTimeout(nextScene, 400);
             }
         });
     });
 
-    // SCENE 7: Submission Logic
-    function submitSaga() {
-        const nameInput = document.getElementById('userName');
-        const emailInput = document.getElementById('userEmail');
-        const confirmationMsg = document.getElementById('confirmation-message');
-        
-        if (!nameInput.value || !emailInput.value) {
-            confirmationMsg.textContent = "> VUL ALLE VELDEN IN.";
-            return;
+    // --------------------------------------------------------------------
+    // "HERO ENGINE" REGISTRATIEFUNCTIE
+    // --------------------------------------------------------------------
+    document.getElementById('register-button').addEventListener('click', () => {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const genderSelect = document.getElementById('gender'); // Select element
+        const gender = genderSelect.value; // Get selected value
+        const feedbackEl = document.getElementById('auth-feedback');
+        const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        heroDataStore.gender = gender; // <-- SET GENDER IN DATASTORE NU DEFINITIEF
+
+        if (username.length < 3) {
+            feedbackEl.textContent = 'Heldennaam moet minimaal 3 tekens lang zijn.';
+            feedbackEl.style.display = 'block';
+        } else if (!gender) { // Check if gender is selected
+             feedbackEl.textContent = 'Selecteer alsjeblieft je geslacht.';
+             feedbackEl.style.display = 'block';
+        } else if (!emailValid) {
+            feedbackEl.textContent = 'Voer een geldig e-mailadres in.';
+            feedbackEl.style.display = 'block';
+        } else if (password.length < 6) {
+            feedbackEl.textContent = 'Wachtwoord moet minimaal 6 tekens lang zijn.';
+            feedbackEl.style.display = 'block';
+        } else {
+            feedbackEl.style.display = 'none';
+            registerHero();
         }
-        userData.name = nameInput.value;
-        userData.email = emailInput.value;
-        console.log("--- SAGA GEGEVENS VERZONDEN ---");
-        console.log(userData);
-        confirmationMsg.textContent = `> ${userData.name.toUpperCase()}, JE SAGA IS BEGONNEN. CHECK JE MAIL.`;
+    });
+
+    // Updated calculateTDEE to accept gender override for display purposes
+    function calculateTDEE(genderOverride = null) {
+        const effectiveGender = genderOverride || heroDataStore.gender;
+        const { age, height, weight, lifestyle, sport } = heroDataStore;
         
-        nameInput.disabled = true;
-        emailInput.disabled = true;
-        document.querySelector('#scene7 .cta-button').disabled = true;
+        if (!effectiveGender || isNaN(age) || age <= 0 || isNaN(height) || height <= 0 || isNaN(weight) || weight <= 0 || isNaN(lifestyle) || lifestyle <=0 || isNaN(sport) || sport < 0) {
+            console.error("Ongeldige data voor TDEE berekening:", { ...heroDataStore, gender: effectiveGender });
+            return NaN; // Return NaN on failure
+        }
+
+        let bmr = 0;
+        if (effectiveGender === 'male') {
+            bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+        } else if (effectiveGender === 'female') {
+            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+        } else {
+             console.error("Ongeldig gender voor TDEE:", effectiveGender);
+             return NaN; // Return NaN if gender invalid
+        }
+        
+        const sportFactorMultiplier = 0.05; 
+        const sportFactor = (sport === 0) ? 0 : 
+                           (sport === 1.5) ? 1.5 * sportFactorMultiplier : 
+                           (sport === 3.5) ? 3.5 * sportFactorMultiplier : 
+                           5 * sportFactorMultiplier; 
+
+        const activityFactor = lifestyle + sportFactor;
+        const calculatedTDEE = bmr * activityFactor;
+
+         if (isNaN(calculatedTDEE) || calculatedTDEE < 500 || calculatedTDEE > 10000) {
+            console.error("Onrealistische TDEE berekend:", calculatedTDEE, " BMR:", bmr, " ActivityFactor:", activityFactor);
+            return NaN; // Return NaN if unrealistic
+         }
+        return calculatedTDEE;
     }
 
-    // Initialize
+    function getHeroDataForDatabase() {
+        // Here we use the final gender selected during registration
+        const tdee = Math.round(calculateTDEE()); // No override needed here
+        const calorieModifier = heroDataStore.goal === 'monster' ? 300 : -300;
+        const targetCalories = tdee + calorieModifier;
+
+        if (isNaN(tdee) || isNaN(targetCalories)) {
+            console.error("Fout bij definitieve berekening TDEE of Target Calories:", {tdee, targetCalories, heroData: heroDataStore});
+            throw new Error("Kon calorieën niet definitief berekenen"); 
+        }
+
+        return {
+            username: document.getElementById('username').value.trim(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            path: heroDataStore.path,
+            goal: heroDataStore.goal,
+            stats: {
+                gender: heroDataStore.gender, // Final gender
+                age: heroDataStore.age,
+                height: heroDataStore.height,
+                startWeight: heroDataStore.weight,
+            },
+            activity: {
+                work: heroDataStore.lifestyle,
+                sport: heroDataStore.sport,
+            },
+            nutritionStart: heroDataStore.nutrition,
+            heroLevel: 1,
+            physicalXP: 0,
+            mentalXP: 0,
+            spiritualXP: 0,
+            heroStreak: 0,
+            lastStreakUpdate: null, 
+            tdee: tdee,
+            targetCalories: targetCalories,
+        };
+    }
+
+    async function registerHero() {
+        const registerButton = document.getElementById('register-button');
+        const feedbackEl = document.getElementById('auth-feedback');
+        const loader = document.getElementById('auth-loader');
+
+        registerButton.disabled = true;
+        loader.style.display = 'block';
+        feedbackEl.style.display = 'none';
+
+        try {
+            // Get data AFTER all inputs are validated and final gender is set
+            const heroData = getHeroDataForDatabase(); 
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+
+            await user.updateProfile({
+                displayName: heroData.username
+            });
+            
+            await db.collection('users').doc(user.uid).set(heroData);
+
+            window.location.href = 'dashboard.html'; 
+
+        } catch (error) {
+            loader.style.display = 'none';
+            registerButton.disabled = false;
+            feedbackEl.style.display = 'block';
+            console.error("Fout bij registreren:", error); 
+
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    feedbackEl.textContent = 'Dit e-mailadres is al in gebruik door een andere Held.';
+                    break;
+                case 'auth/weak-password':
+                    feedbackEl.textContent = 'Je wachtwoord is te zwak. Kies een sterker wachtwoord.';
+                    break;
+                case 'auth/invalid-email':
+                    feedbackEl.textContent = 'Dit is geen geldig e-mailadres.';
+                    break;
+                default:
+                    // Show specific error from getHeroDataForDatabase if it failed
+                    if (error.message.includes("calorieën")) {
+                         feedbackEl.textContent = 'Kon je energiebehoefte niet berekenen. Controleer je invoer.';
+                    } else {
+                         feedbackEl.textContent = 'Oeps, er ging iets mis. Probeer het opnieuw.'; 
+                    }
+            }
+        }
+    }
+
+    // --- Reset Functie ---
+    function resetToStart() {
+        currentScene = 1;
+        document.querySelectorAll('.scene').forEach(scene => scene.classList.add('hidden'));
+        document.getElementById('scene1').classList.remove('hidden');
+        mainBg.classList.remove('visible'); // Verberg achtergrond
+        // Reset ook de intro
+        document.getElementById('awakening-overlay').style.opacity = '1';
+        document.getElementById('awakening-overlay').style.pointerEvents = 'auto';
+        // Reset swiper
+        currentIndex = 0;
+        updateSlideStyles();
+        updateProgressBar();
+    }
+    
+    // --- Initialisatie ---
     updateProgressBar();
     updateSlideStyles();
 

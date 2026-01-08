@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Command Center | FitWolf</title>
+    <style>
+        /* Uitgebreide styling voor Dashboard 1.0 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background-color: #0a0a0a; color: #e0e0e0; padding: 20px; }
+
+        /* --- Header --- */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .hero-info h1 { font-size: 1.8rem; color: #ff0000; margin-bottom: 5px; }
+        .hero-info span { font-size: 1rem; color: #aaa; }
+        #hero-level { font-weight: bold; color: #ff0000; }
+        #logout-button {
+            background-color: #333; color: #fff; border: none;
+            padding: 10px 15px; font-size: 0.9rem; font-weight: bold;
+            border-radius: 20px; cursor: pointer; transition: background-color 0.3s ease;
+        }
+        #logout-button:hover { background-color: #ff0000; }
+
+        /* --- Grid Layout --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .grid-item { background-color: #1a1a1a; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+
+        /* --- Streak --- */
+        .streak-container { text-align: center; background: linear-gradient(135deg, #2a0000, #0a0a0a); } /* Donkerrode gradient */
+        #streak-label { font-size: 1rem; margin-bottom: 8px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+        #streak-count { font-size: 3.5rem; font-weight: bold; color: #ff0000; line-height: 1; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+
+        /* --- XP Staven --- */
+        .xp-container h2 { font-size: 1.3rem; color: #ff0000; margin-bottom: 20px; text-align: center; }
+        .xp-bar-group { margin-bottom: 15px; }
+        .xp-label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #bbb; text-transform: uppercase; }
+        .xp-bar-background { background-color: #333; border-radius: 5px; height: 10px; overflow: hidden; }
+        .xp-bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s ease-out; }
+        #xp-fysiek-fill { background-color: #ff4d4d; } /* Lichtrood */
+        #xp-mentaal-fill { background-color: #4d4dff; } /* Blauw */
+        #xp-spiritueel-fill { background-color: #4dff4d; } /* Groen */
+        .xp-values { font-size: 0.8rem; color: #888; text-align: right; margin-top: 3px;}
+
+        /* --- Quests --- */
+        .quest-container h2 { font-size: 1.3rem; color: #ff0000; margin-bottom: 20px; }
+        .quest {
+            display: flex; align-items: center; justify-content: space-between;
+            background-color: #2a2a2a; padding: 15px; border-radius: 10px;
+            margin-bottom: 15px; border-left: 5px solid #444; /* Grijze border standaard */
+            transition: all 0.3s ease;
+        }
+        .quest.pending { border-left-color: #ffae42; } /* Oranje voor nog te doen */
+        .quest.completed { border-left-color: #4CAF50; background-color: #333; opacity: 0.7; } /* Groen voor voltooid */
+        .quest-label { font-size: 1rem; flex-grow: 1; margin-right: 15px; }
+        .quest-label strong { color: #ff0000; }
+        .quest-button {
+            background-color: #ff0000; color: white; border: none; padding: 8px 15px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
+            transition: background-color 0.3s ease; white-space: nowrap; /* Voorkom afbreken */
+        }
+        .quest-button:hover { background-color: #cc0000; }
+        .quest-button:disabled { background-color: #555; cursor: default; }
+        .quest.completed .quest-button { background-color: #4CAF50; } /* Groene knop als voltooid */
+
+        /* --- Modal (Pop-up voor Quests) --- */
+        .modal {
+            display: none; /* Standaard verborgen */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background-color: #1a1a1a; color: #e0e0e0; padding: 30px;
+            border-radius: 15px; max-width: 600px; width: 90%;
+            max-height: 80vh; overflow-y: auto; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeInModal 0.3s ease-out;
+        }
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .modal-close {
+            position: absolute; top: 15px; right: 15px; background: none; border: none;
+            color: #888; font-size: 1.5rem; cursor: pointer; line-height: 1;
+        }
+        .modal-close:hover { color: #ff0000; }
+        .modal h3 { font-size: 1.5rem; color: #ff0000; margin-bottom: 15px; }
+        .modal p, .modal li { font-size: 1rem; margin-bottom: 10px; line-height: 1.6; }
+        .modal ul { list-style: disc; margin-left: 20px; margin-bottom: 20px; }
+        .modal-button-container { text-align: center; margin-top: 25px; }
+        .complete-quest-button {
+            background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none;
+            padding: 12px 30px; font-size: 1.1rem; border-radius: 5px; cursor: pointer;
+            text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+        }
+
+        /* Laadscherm Spinner */
+        #loader { /* Behoud laadscherm voor initiële load */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; display: flex; justify-content: center; align-items: center;
+            z-index: 999;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #ff0000;
+            border-bottom-color: transparent; border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div></div>
+
+    <div id="dashboard-content" style="display: none;">
+        <header class="dashboard-header">
+            <div class="hero-info">
+                <h1 id="hero-name">Wordt geladen...</h1>
+                <span>Level <span id="hero-level">1</span> NPC</span>
+            </div>
+            <button id="logout-button">Uitloggen</button>
+        </header>
+
+        <main class="dashboard-grid">
+            <section class="grid-item streak-container">
+                <div id="streak-label">Huidige Held-Streak</div>
+                <div id="streak-count">0</div>
+            </section>
+
+            <section class="grid-item xp-container">
+                <h2>XP Voortgang</h2>
+                <div class="xp-bar-group">
+                    <span class="xp-label">Fysiek</span>
+                    <div class="xp-bar-background"><div class="xp-bar-fill" id="xp-fysiek-fill" style="width: 0%;"></div></div>
+                    <div class="xp-values"><span id="xp-fysiek-current">0</span> / <span id="xp-fysiek-needed">100</span> XP</div>
+                </div>
+                <div class="xp-bar-group">
+                    <span class="xp-label">Mentaal</span>
+                    <div class="xp-bar-background"><div class="xp-bar-fill" id="xp-mentaal-fill" style="width: 0%;"></div></div>
+                     <div class="xp-values"><span id="xp-mentaal-current">0</span> / <span id="xp-mentaal-needed">50</span> XP</div>
+                </div>
+                <div class="xp-bar-group">
+                    <span class="xp-label">Spiritueel</span>
+                    <div class="xp-bar-background"><div class="xp-bar-fill" id="xp-spiritueel-fill" style="width: 0%;"></div></div>
+                     <div class="xp-values"><span id="xp-spiritueel-current">0</span> / <span id="xp-spiritueel-needed">50</span> XP</div>
+                </div>
+            </section>
+
+            <section class="grid-item quest-container" style="grid-column: span 2;"> <h2>Dagelijkse Quests</h2>
+                <div class="quest pending" id="quest-fysiek">
+                    <span class="quest-label"><strong>[FYSIEK]</strong> Voltooi de 'Vonk' Workout</span>
+                    <button class="quest-button" id="quest-btn-fysiek" data-quest="fysiek" data-xp="100">Start</button>
+                </div>
+                <div class="quest pending" id="quest-mentaal">
+                    <span class="quest-label"><strong>[MENTAAL]</strong> Log je Voeding ('Scouting Missie')</span>
+                    <button class="quest-button" id="quest-btn-mentaal" data-quest="mentaal" data-xp="50">Start</button>
+                </div>
+                <div class="quest pending" id="quest-spiritueel">
+                    <span class="quest-label"><strong>[SPIRITUEEL]</strong> Start de 'Systeemscan'</span>
+                    <button class="quest-button" id="quest-btn-spiritueel" data-quest="spiritueel" data-xp="25">Start</button>
+                </div>
+                 </section>
+
+             </main>
+    </div>
+
+    <div id="quest-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3 id="modal-title">Quest Titel</h3>
+            <div id="modal-body">
+                </div>
+            <div class="modal-button-container">
+                <button id="modal-complete-button" class="complete-quest-button">Quest Voltooid</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // --------------------------------------------------------------------
+        // CONFIGURATIE & INITIALISATIE
+        // --------------------------------------------------------------------
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlimObPICtsa0mnTo1cK12SMp3nhcQuwg", // <-- PLAK HIER
+    authDomain: "fitwolf-engine.firebaseapp.com", // <-- PLAK HIER
+    projectId: "fitwolf-engine", // <-- PLAK HIER
+    storageBucket: "fitwolf-engine.firebasestorage.app", // <-- PLAK HIER
+    messagingSenderId: "974082407299", // <-- PLAK HIER
+    appId: "1:974082407299:web:2980779c10adccd0db54b6" // <-- PLAK HIER
+  };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Globale variabelen
+        let currentUser = null;
+        let heroData = { heroLevel: 1, physicalXP: 0, mentalXP: 0, spiritualXP: 0, heroStreak: 0 }; // Default waarden
+        let dailyQuestStatus = { fysiek: false, mentaal: false, spiritueel: false }; // Status voor vandaag
+        let currentQuest = null; // Houdt bij welke quest actief is in de modal
+
+        // XP benodigd per level (voorbeeld)
+        const xpPerLevel = [0, 200, 500, 1000, 2000]; // Index = Level, Waarde = Totaal XP nodig
+        const xpNeededPerPillar = [0, 100, 250, 500, 1000]; // XP per pijler voor level up
+
+        // Elementen
+        const loaderEl = document.getElementById('loader');
+        const contentEl = document.getElementById('dashboard-content');
+        const heroNameEl = document.getElementById('hero-name');
+        const heroLevelEl = document.getElementById('hero-level');
+        const streakCountEl = document.getElementById('streak-count');
+        const logoutButton = document.getElementById('logout-button');
+        const questButtons = document.querySelectorAll('.quest-button');
+        const modal = document.getElementById('quest-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalCompleteButton = document.getElementById('modal-complete-button');
+
+        // XP Bar Elementen
+        const xpFysiekFill = document.getElementById('xp-fysiek-fill');
+        const xpFysiekCurrent = document.getElementById('xp-fysiek-current');
+        const xpFysiekNeeded = document.getElementById('xp-fysiek-needed');
+        const xpMentaalFill = document.getElementById('xp-mentaal-fill');
+        const xpMentaalCurrent = document.getElementById('xp-mentaal-current');
+        const xpMentaalNeeded = document.getElementById('xp-mentaal-needed');
+        const xpSpiritueelFill = document.getElementById('xp-spiritueel-fill');
+        const xpSpiritueelCurrent = document.getElementById('xp-spiritueel-current');
+        const xpSpiritueelNeeded = document.getElementById('xp-spiritueel-needed');
+
+        // --------------------------------------------------------------------
+        // AUTHENTICATIE & DATA LADEN
+        // --------------------------------------------------------------------
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadHeroData(user.uid);
+                loaderEl.style.display = 'none';
+                contentEl.style.display = 'block';
+            } else {
+                window.location.href = 'login.html'; // Stuur naar login als niet ingelogd
+            }
+        });
+
+        async function loadHeroData(userId) {
+            try {
+                const userRef = db.collection('users').doc(userId);
+                const doc = await userRef.get();
+
+                if (doc.exists) {
+                    // Voeg default XP waarden toe als ze missen
+                    heroData = {
+                        heroLevel: 1, physicalXP: 0, mentalXP: 0, spiritualXP: 0, heroStreak: 0, // Defaults
+                        ...doc.data() // Overschrijf met data uit DB
+                    };
+                    updateUI(); // Update alle UI elementen
+                    await loadDailyQuestStatus(userId); // Laad status voor vandaag
+                } else {
+                    console.error("Geen gebruikersdata gevonden!");
+                    window.location.href = 'index.html'; // Stuur naar intake als data mist
+                }
+            } catch (error) {
+                console.error("Fout bij laden data: ", error);
+            }
+        }
+
+        async function loadDailyQuestStatus(userId) {
+             const today = getTodayString();
+             const questsRef = db.collection('users').doc(userId).collection('dailyQuests').doc(today);
+             const doc = await questsRef.get();
+
+             if (doc.exists) {
+                 dailyQuestStatus = { fysiek: false, mentaal: false, spiritueel: false, ...doc.data() };
+             } else {
+                 // Maak document voor vandaag aan als het niet bestaat
+                 await questsRef.set(dailyQuestStatus);
+             }
+             updateQuestButtons(); // Update knoppen op basis van status
+        }
+
+        // --------------------------------------------------------------------
+        // UI UPDATE FUNCTIES
+        // --------------------------------------------------------------------
+        function updateUI() {
+            heroNameEl.textContent = `Welkom, ${currentUser.displayName || 'Held'}`;
+            heroLevelEl.textContent = heroData.heroLevel;
+            updateStreakUI(heroData.heroStreak);
+            updateXPBars();
+            // (Hier later meer UI updates, bijv. Attribute points)
+        }
+
+        function updateStreakUI(streak) {
+            streakCountEl.textContent = streak;
+        }
+
+        function updateXPBars() {
+             // Bepaal benodigde XP voor *volgende* level per pijler
+             const nextLevel = heroData.heroLevel + 1;
+             const neededXP = xpNeededPerPillar[heroData.heroLevel] || xpNeededPerPillar[xpNeededPerPillar.length - 1]; // XP voor *huidige* level
+             const neededForNext = xpNeededPerPillar[nextLevel] || neededXP * 2; // XP voor *volgende* level (simpele verdubbeling als max bereikt)
+
+             // Bereken voortgang binnen *dit* level
+             const currentLevelBaseXP = xpNeededPerPillar[heroData.heroLevel -1] || 0; // XP nodig voor *vorige* level
+             const totalXPForThisLevel = neededXP - currentLevelBaseXP;
+
+             // Update Fysiek
+             const fysiekXPInLevel = (heroData.physicalXP || 0) - currentLevelBaseXP;
+             const fysiekPercentage = Math.min(100, Math.max(0, (fysiekXPInLevel / totalXPForThisLevel) * 100));
+             xpFysiekFill.style.width = `${fysiekPercentage}%`;
+             xpFysiekCurrent.textContent = Math.round(heroData.physicalXP || 0);
+             xpFysiekNeeded.textContent = neededXP;
+
+             // Update Mentaal
+             const mentaalXPInLevel = (heroData.mentalXP || 0) - currentLevelBaseXP;
+             const mentaalPercentage = Math.min(100, Math.max(0, (mentaalXPInLevel / totalXPForThisLevel) * 100));
+             xpMentaalFill.style.width = `${mentaalPercentage}%`;
+             xpMentaalCurrent.textContent = Math.round(heroData.mentalXP || 0);
+             xpMentaalNeeded.textContent = neededXP;
+
+             // Update Spiritueel
+             const spiritueelXPInLevel = (heroData.spiritualXP || 0) - currentLevelBaseXP;
+             const spiritueelPercentage = Math.min(100, Math.max(0, (spiritueelXPInLevel / totalXPForThisLevel) * 100));
+             xpSpiritueelFill.style.width = `${spiritueelPercentage}%`;
+             xpSpiritueelCurrent.textContent = Math.round(heroData.spiritualXP || 0);
+             xpSpiritueelNeeded.textContent = neededXP;
+        }
+
+
+        function updateQuestButtons() {
+            questButtons.forEach(button => {
+                const questName = button.dataset.quest;
+                const questDiv = document.getElementById(`quest-${questName}`);
+                if (dailyQuestStatus[questName]) {
+                    button.textContent = 'Voltooid';
+                    button.disabled = true;
+                    questDiv.classList.remove('pending');
+                    questDiv.classList.add('completed');
+                } else {
+                    button.textContent = 'Start';
+                    button.disabled = false;
+                    questDiv.classList.remove('completed');
+                    questDiv.classList.add('pending');
+                }
+            });
+        }
+
+        // --------------------------------------------------------------------
+        // QUEST & MODAL LOGICA
+        // --------------------------------------------------------------------
+        questButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentQuest = {
+                    name: button.dataset.quest,
+                    xp: parseInt(button.dataset.xp)
+                };
+                openModal(currentQuest.name);
+            });
+        });
+
+        function openModal(questName) {
+            // Vul modal met content gebaseerd op questName
+            switch(questName) {
+                case 'fysiek':
+                    modalTitle.textContent = "[FYSIEK] De 'Vonk' Workout";
+                    modalBody.innerHTML = `
+                        <p>Focus op consistentie, niet op falen. Voer elke oefening gecontroleerd uit.</p>
+                        <ul>
+                            <li>Warm-up: 5 min lichte cardio (touwtje springen, jumping jacks)</li>
+                            <li>Bodyweight Squats: 3 sets x 10-15 reps</li>
+                            <li>Push-ups (op knieën indien nodig): 3 sets x max reps (stop 2 reps voor falen)</li>
+                            <li>Lunges (per been): 3 sets x 8-12 reps</li>
+                            <li>Plank: 3 sets x 30-60 seconden</li>
+                            <li>Cool-down: 5 min stretchen</li>
+                        </ul>
+                        <p><strong>Beloning:</strong> ${getQuestXP('fysiek')} Fysiek XP</p>
+                    `;
+                    break;
+                case 'mentaal':
+                    modalTitle.textContent = "[MENTAAL] 'Scouting Missie'";
+                    modalBody.innerHTML = `
+                        <p>Een Held kent zijn terrein. Jouw missie vandaag (en de komende 6 dagen) is simpel:</p>
+                        <ul>
+                            <li>Eet normaal, verander niets bewust.</li>
+                            <li>Log ALLES wat je eet en drinkt in een app (zoals MyFitnessPal of een notitieboekje).</li>
+                            <li>Geen oordeel, alleen data verzamelen.</li>
+                        </ul>
+                        <p>Vink deze quest af als je vandaag alles hebt gelogd.</p>
+                         <p><strong>Beloning:</strong> ${getQuestXP('mentaal')} Mentaal XP</p>
+                    `;
+                    break;
+                case 'spiritueel':
+                    modalTitle.textContent = "[SPIRITUEEL] De 'Systeemscan'";
+                    modalBody.innerHTML = `
+                        <p>Neem 5 minuten de tijd, ga rustig zitten of liggen.</p>
+                        <p>Sluit je ogen en breng je aandacht naar je lichaam. Scan langzaam van je tenen tot je kruin.</p>
+                        <ul>
+                            <li>Waar voel je spanning? Adem ernaartoe.</li>
+                            <li>Waar voel je kracht of energie? Erken het.</li>
+                            <li>Waar voel je ongemak? Observeer het zonder oordeel.</li>
+                        </ul>
+                        <p>Dit is geen 'ontspanningsoefening', maar een data-analyse van je avatar. Wat vertelt je lichaam je vandaag?</p>
+                        <p><strong>Beloning:</strong> ${getQuestXP('spiritueel')} Spiritueel XP</p>
+                        `;
+                    break;
+                default:
+                    modalTitle.textContent = "Onbekende Quest";
+                    modalBody.innerHTML = "<p>Content niet gevonden.</p>";
+            }
+            modal.style.display = 'flex'; // Toon de modal
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            currentQuest = null; // Reset actieve quest
+        }
+
+        modalCompleteButton.addEventListener('click', async () => {
+            if (!currentQuest) return;
+            await completeQuest(currentQuest.name, currentQuest.xp);
+            closeModal();
+        });
+
+        // Hulpfunctie om XP op te halen (voor UI in modal)
+        function getQuestXP(questName) {
+            const button = document.getElementById(`quest-btn-${questName}`);
+            return button ? parseInt(button.dataset.xp) : 0;
+        }
+
+        // --------------------------------------------------------------------
+        // CORE ENGINE: QUEST VOLTOOIEN, XP & STREAK UPDATE
+        // --------------------------------------------------------------------
+        async function completeQuest(questName, xpAmount) {
+            if (!currentUser || dailyQuestStatus[questName]) return; // Al voltooid of geen user
+
+            const today = getTodayString();
+            const questRef = db.collection('users').doc(currentUser.uid).collection('dailyQuests').doc(today);
+            const userRef = db.collection('users').doc(currentUser.uid);
+
+            try {
+                // 1. Update quest status voor vandaag
+                await questRef.set({ [questName]: true }, { merge: true });
+                dailyQuestStatus[questName] = true; // Update lokale status
+
+                // 2. Update Totaal XP in hoofd document
+                let xpUpdate = {};
+                let newXP = 0;
+                let xpField = '';
+                switch(questName) {
+                    case 'fysiek':
+                        xpField = 'physicalXP';
+                        newXP = (heroData.physicalXP || 0) + xpAmount;
+                        heroData.physicalXP = newXP; // Update lokaal
+                        xpUpdate[xpField] = newXP;
+                        break;
+                    case 'mentaal':
+                         xpField = 'mentalXP';
+                         newXP = (heroData.mentalXP || 0) + xpAmount;
+                         heroData.mentalXP = newXP; // Update lokaal
+                         xpUpdate[xpField] = newXP;
+                         break;
+                    case 'spiritueel':
+                         xpField = 'spiritualXP';
+                         newXP = (heroData.spiritualXP || 0) + xpAmount;
+                         heroData.spiritualXP = newXP; // Update lokaal
+                         xpUpdate[xpField] = newXP;
+                         break;
+                }
+                await userRef.update(xpUpdate);
+
+                // 3. Update UI (knoppen en XP staven)
+                updateQuestButtons();
+                updateXPBars();
+
+                // 4. Check voor Level Up
+                checkLevelUp();
+
+                // 5. Check of *alle* quests nu voltooid zijn voor de streak
+                await checkStreakCompletion();
+
+            } catch (error) {
+                console.error("Fout bij voltooien quest: ", error);
+                // (Optioneel: UI terugzetten bij fout)
+            }
+        }
+
+        function checkLevelUp() {
+            const currentLevel = heroData.heroLevel;
+            // Vereist dat *alle* XP-pijlers de drempel voor het *volgende* level bereiken
+            const neededXPForNextLevel = xpNeededPerPillar[currentLevel] || xpNeededPerPillar[xpNeededPerPillar.length -1] * 2;
+
+            if ((heroData.physicalXP || 0) >= neededXPForNextLevel &&
+                (heroData.mentalXP || 0) >= neededXPForNextLevel &&
+                (heroData.spiritualXP || 0) >= neededXPForNextLevel &&
+                 currentLevel < xpPerLevel.length -1) // Check of max level bereikt is
+            {
+                 // LEVEL UP!
+                 const newLevel = currentLevel + 1;
+                 heroData.heroLevel = newLevel; // Update lokaal
+
+                 // Update in database
+                 const userRef = db.collection('users').doc(currentUser.uid);
+                 userRef.update({ heroLevel: newLevel }).then(() => {
+                     // Toon Level Up Melding (simpel alert voor nu)
+                     alert(`LEVEL UP! Je bent nu Level ${newLevel}! Je hebt 3 Attribute Points verdiend (functie komt later).`);
+                     updateUI(); // Update level in header etc.
+                 }).catch(error => console.error("Fout bij level up:", error));
+            }
+        }
+
+
+        async function checkStreakCompletion() {
+            // Check of alle *huidige* dagelijkse quests voltooid zijn
+             if (dailyQuestStatus.fysiek && dailyQuestStatus.mentaal && dailyQuestStatus.spiritueel) {
+                 const today = getTodayString();
+
+                 // Check of de streak VANDAAG al is bijgewerkt
+                 if(heroData.lastStreakUpdate === today) {
+                     return; // Al gedaan vandaag
+                 }
+
+                 // Bereken gisteren
+                 const yday = new Date(Date.now() - 86400000);
+                 const yesterdayString = `${yday.getFullYear()}-${String(yday.getMonth() + 1).padStart(2, '0')}-${String(yday.getDate()).padStart(2, '0')}`;
+
+                 let newStreak = 1; // Start op 1 als gebroken
+                 if (heroData.lastStreakUpdate === yesterdayString) {
+                     newStreak = heroData.heroStreak + 1; // Loopt door
+                 }
+
+                 // Update in database
+                 const userRef = db.collection('users').doc(currentUser.uid);
+                 await userRef.update({
+                     heroStreak: newStreak,
+                     lastStreakUpdate: today
+                 });
+
+                 // Update lokaal & UI
+                 heroData.heroStreak = newStreak;
+                 heroData.lastStreakUpdate = today;
+                 updateStreakUI(newStreak);
+             }
+        }
+
+        // --------------------------------------------------------------------
+        // HULPFUNCTIES & UITLOGGEN
+        // --------------------------------------------------------------------
+        function getTodayString() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                // onAuthStateChanged pakt dit op en stuurt naar login.html
+            } catch (error) {
+                console.error("Fout bij uitloggen: ", error);
+            }
+        });
+
+    </script>
+</body>
+</html>
